@@ -23,10 +23,33 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             text-align: center;
-            display: none; /* Hide app and show login by default */
+            display: none; /* Hide app by default */
         }
-        #app:hover, #login:hover {
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        #app.show, #login.show {
+            display: block; /* Show when needed */
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 2px solid #007bff;
+            font-size: 18px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
         }
         #searchResults {
             font-size: 20px;
@@ -57,29 +80,6 @@
             font-size: 16px;
             font-weight: bold;
         }
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            border: 2px solid #007bff;
-            font-size: 18px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
         h2, h3 {
             color: #333;
             font-size: 28px;
@@ -98,10 +98,10 @@
 </head>
 <body>
 
-<div id="login">
+<div id="login" class="show">
     <h2>Login</h2>
-    <input type="text" id="phoneInput" placeholder="Enter your phone number">
-    <input type="password" id="passwordInput" placeholder="Enter your password">
+    <input type="text" id="phoneInput" placeholder="Phone Number">
+    <input type="password" id="passwordInput" placeholder="Password">
     <button id="loginButton">Login</button>
 </div>
 
@@ -114,63 +114,50 @@
 </div>
 
 <script>
-    let database = [];
-    const userData = {};
+    const users = [
+        { phone: '0569813333', password: 'm12345' },
+        { phone: '0569812222', password: 'r12345' }
+    ];
 
-    // Load user data from user.txt
-    fetch('user.txt')
-        .then(response => response.text())
-        .then(content => {
-            const lines = content.split('\n');
-            lines.forEach(line => {
-                const [phone, password] = line.split('/');
-                if (phone && password) {
-                    userData[phone.trim()] = password.trim();
-                }
-            });
-        })
-        .catch(error => {
-            console.error('Error loading user data:', error);
-        });
-
-    // Load the database from test.txt
-    fetch('test.txt')
-        .then(response => response.text())
-        .then(content => {
-            loadFile(content);
-        })
-        .catch(error => {
-            console.error('Error loading the file:', error);
-        });
-
-    function loadFile(content) {
-        database = content.split('\n').map(line => line.split('/'));
+    // Check if user is already logged in
+    if (localStorage.getItem('loggedInUser')) {
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        loadDatabase();
+    } else {
+        document.getElementById('login').style.display = 'block';
     }
 
     document.getElementById('loginButton').addEventListener('click', function() {
-        const phone = document.getElementById('phoneInput').value.trim();
-        const password = document.getElementById('passwordInput').value.trim();
-        
-        if (userData[phone] && userData[phone] === password) {
-            // Store user login state
-            localStorage.setItem('loggedIn', true);
-            localStorage.setItem('userPhone', phone);
-            showApp();
+        const phone = document.getElementById('phoneInput').value;
+        const password = document.getElementById('passwordInput').value;
+
+        const user = users.find(u => u.phone === phone && u.password === password);
+
+        if (user) {
+            localStorage.setItem('loggedInUser', phone);
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            loadDatabase();
         } else {
             alert('Invalid phone number or password');
         }
     });
 
-    function showApp() {
-        document.getElementById('login').style.display = 'none';
-        document.getElementById('app').style.display = 'block';
+    function loadDatabase() {
+        // Load the file directly from GitHub
+        fetch('test.txt')
+            .then(response => response.text())
+            .then(content => {
+                loadFile(content);
+            })
+            .catch(error => {
+                console.error('Error loading the file:', error);
+            });
     }
 
-    // Check if user is already logged in
-    if (localStorage.getItem('loggedIn')) {
-        showApp();
-    } else {
-        document.getElementById('login').style.display = 'block';
+    function loadFile(content) {
+        database = content.split('\n').map(line => line.split('/'));
     }
 
     document.getElementById('searchInput').addEventListener('input', function() {
