@@ -56,7 +56,7 @@
             font-size: 16px;
             font-weight: bold;
         }
-        input[type="file"], input[type="text"] {
+        input[type="text"] {
             width: 100%;
             padding: 15px;
             margin: 10px 0;
@@ -99,7 +99,6 @@
 
 <div id="app">
     <h2>Search Database Program</h2>
-    <input type="file" id="fileInput" accept=".txt" placeholder="Select a text file">
     <input type="text" id="searchInput" placeholder="Type to search...">
     <div id="searchResults"></div>
     <div id="dateTime"></div>
@@ -108,25 +107,16 @@
 
 <script>
     let database = [];
-    let selectedFile = localStorage.getItem('selectedFile') || '';
 
-    // Load the file if it was previously selected
-    if (selectedFile) {
-        loadFile(selectedFile);
-    }
-
-    document.getElementById('fileInput').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                selectedFile = e.target.result;
-                localStorage.setItem('selectedFile', selectedFile);
-                loadFile(selectedFile);
-            };
-            reader.readAsText(file);
-        }
-    });
+    // Load the file directly from GitHub
+    fetch('test.txt')
+        .then(response => response.text())
+        .then(content => {
+            loadFile(content);
+        })
+        .catch(error => {
+            console.error('Error loading the file:', error);
+        });
 
     function loadFile(content) {
         database = content.split('\n').map(line => line.split('/'));
@@ -181,7 +171,6 @@
 
     // Update date and time every second
     setInterval(updateDateTime, 1000);
-
 </script>
 
 </body>
