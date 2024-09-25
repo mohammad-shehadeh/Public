@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Database</title>
     <style>
-        /* Your existing CSS styles */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f0f4f8;
@@ -24,34 +23,10 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             text-align: center;
-            display: none; /* Hide the app initially */
+            display: none; /* Hide app and show login by default */
         }
-        #login {
-            display: flex;
-            flex-direction: column;
-        }
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            border: 2px solid #007bff;
-            font-size: 18px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #0056b3;
+        #app:hover, #login:hover {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
         }
         #searchResults {
             font-size: 20px;
@@ -82,6 +57,33 @@
             font-size: 16px;
             font-weight: bold;
         }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 2px solid #007bff;
+            font-size: 18px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        h2, h3 {
+            color: #333;
+            font-size: 28px;
+        }
         #dateTime {
             margin-top: 10px;
             font-size: 18px;
@@ -101,7 +103,6 @@
     <input type="text" id="phoneInput" placeholder="Enter your phone number">
     <input type="password" id="passwordInput" placeholder="Enter your password">
     <button id="loginButton">Login</button>
-    <div id="loginMessage"></div>
 </div>
 
 <div id="app">
@@ -114,59 +115,62 @@
 
 <script>
     let database = [];
-    let users = [];
-    
-    // Load users from the file
+    const userData = {};
+
+    // Load user data from user.txt
     fetch('user.txt')
         .then(response => response.text())
         .then(content => {
-            loadUsers(content);
+            const lines = content.split('\n');
+            lines.forEach(line => {
+                const [phone, password] = line.split('/');
+                if (phone && password) {
+                    userData[phone.trim()] = password.trim();
+                }
+            });
         })
         .catch(error => {
-            console.error('Error loading the user file:', error);
+            console.error('Error loading user data:', error);
         });
 
-    function loadUsers(content) {
-        users = content.trim().split('\n').map(line => {
-            const [phone, password] = line.split(' ');
-            return { phone, password };
+    // Load the database from test.txt
+    fetch('test.txt')
+        .then(response => response.text())
+        .then(content => {
+            loadFile(content);
+        })
+        .catch(error => {
+            console.error('Error loading the file:', error);
         });
-        showLogin();
-    }
 
-    function showLogin() {
-        document.getElementById('login').style.display = 'flex';
+    function loadFile(content) {
+        database = content.split('\n').map(line => line.split('/'));
     }
 
     document.getElementById('loginButton').addEventListener('click', function() {
         const phone = document.getElementById('phoneInput').value.trim();
         const password = document.getElementById('passwordInput').value.trim();
         
-        const user = users.find(u => u.phone === phone && u.password === password);
-        
-        if (user) {
-            localStorage.setItem('loggedInUser', phone); // Store phone number in local storage
-            document.getElementById('login').style.display = 'none'; // Hide login
-            document.getElementById('app').style.display = 'block'; // Show app
-            loadDatabase(); // Load database after successful login
+        if (userData[phone] && userData[phone] === password) {
+            // Store user login state
+            localStorage.setItem('loggedIn', true);
+            localStorage.setItem('userPhone', phone);
+            showApp();
         } else {
-            document.getElementById('loginMessage').textContent = 'Invalid phone number or password';
+            alert('Invalid phone number or password');
         }
     });
 
-    function loadDatabase() {
-        fetch('test.txt')
-            .then(response => response.text())
-            .then(content => {
-                loadFile(content);
-            })
-            .catch(error => {
-                console.error('Error loading the database file:', error);
-            });
+    function showApp() {
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
     }
 
-    function loadFile(content) {
-        database = content.split('\n').map(line => line.split('/'));
+    // Check if user is already logged in
+    if (localStorage.getItem('loggedIn')) {
+        showApp();
+    } else {
+        document.getElementById('login').style.display = 'block';
     }
 
     document.getElementById('searchInput').addEventListener('input', function() {
@@ -218,7 +222,6 @@
 
     // Update date and time every second
     setInterval(updateDateTime, 1000);
-
 </script>
 
 </body>
