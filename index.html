@@ -102,10 +102,10 @@
     <input type="text" id="phoneInput" placeholder="Phone Number">
     <input type="password" id="passwordInput" placeholder="Password">
     <button id="loginButton">Login</button>
-    <div id="loginMessage"></div>
+    <div id="loginMessage" style="color: red;"></div>
 </div>
 
-<div id="app" style="display: none;">
+<div id="app" style="display:none;">
     <h2>Search Database Program</h2>
     <input type="text" id="searchInput" placeholder="Type to search...">
     <div id="searchResults"></div>
@@ -115,69 +115,64 @@
 
 <script>
     let database = [];
+    const userFileUrl = 'user.txt';
 
-    // Function to load users from user.txt
-    function loadUsers() {
-        return fetch('user.txt')
-            .then(response => response.text())
-            .then(content => content.split('\n').map(line => line.split('/').map(item => item.trim())));
-    }
+    // Load user data
+    fetch(userFileUrl)
+        .then(response => response.text())
+        .then(content => {
+            const users = content.split('\n').map(line => {
+                const userData = {};
+                line.split(' ').forEach(part => {
+                    const [key, value] = part.split(':');
+                    userData[key.trim()] = value.trim();
+                });
+                return userData;
+            });
+            localStorage.setItem('users', JSON.stringify(users));
+        })
+        .catch(error => console.error('Error loading user file:', error));
 
-    // Check if user is already logged in
-    const storedPhone = localStorage.getItem('phone');
-    const storedPassword = localStorage.getItem('password');
-
-    if (storedPhone && storedPassword) {
-        // User is already logged in
-        document.getElementById('login').style.display = 'none';
-        document.getElementById('app').style.display = 'block';
-        loadDatabase();
-    }
-
+    // Handle login
     document.getElementById('loginButton').addEventListener('click', function() {
-        const phone = document.getElementById('phoneInput').value.trim();
-        const password = document.getElementById('passwordInput').value.trim();
+        const phone = document.getElementById('phoneInput').value;
+        const password = document.getElementById('passwordInput').value;
 
-        loadUsers().then(users => {
-            const validUser = users.find(user => user[0] === phone && user[1] === password);
+        const users = JSON.parse(localStorage.getItem('users'));
+        const user = users.find(u => u.ph === phone && u.ps === password);
 
-            if (validUser) {
-                localStorage.setItem('phone', phone);
-                localStorage.setItem('password', password);
-                document.getElementById('login').style.display = 'none';
-                document.getElementById('app').style.display = 'block';
-                loadDatabase();
-            } else {
-                document.getElementById('loginMessage').textContent = 'Invalid phone number or password.';
-            }
-        });
+        if (user) {
+            localStorage.setItem('loggedInUser', JSON.stringify(user));
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            loadDatabase();
+            updateDateTime();
+        } else {
+            document.getElementById('loginMessage').textContent = 'Invalid phone number or password';
+        }
     });
 
-    // Load the database file directly from GitHub
     function loadDatabase() {
+        // Load the database directly from GitHub
         fetch('test.txt')
             .then(response => response.text())
             .then(content => {
-                loadFile(content);
+                database = content.split('\n').map(line => line.split('/'));
             })
             .catch(error => {
-                console.error('Error loading the file:', error);
+                console.error('Error loading the database file:', error);
             });
-    }
 
-    function loadFile(content) {
-        database = content.split('\n').map(line => line.split('/'));
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const query = this.value.trim().toLowerCase().replace(/\s+/g, '');
+            if (query === '') {
+                document.getElementById('searchResults').innerHTML = ''; // Clear results if no input
+            } else {
+                const results = searchDatabase(query).slice(0, 3); // Show only top 3 results
+                displayResults(results);
+            }
+        });
     }
-
-    document.getElementById('searchInput').addEventListener('input', function() {
-        const query = this.value.trim().toLowerCase().replace(/\s+/g, '');
-        if (query === '') {
-            document.getElementById('searchResults').innerHTML = ''; // Clear results if no input
-        } else {
-            const results = searchDatabase(query).slice(0, 3); // Show only top 3 results
-            displayResults(results);
-        }
-    });
 
     function searchDatabase(query) {
         return database.filter(entry => {
