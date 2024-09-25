@@ -15,7 +15,7 @@
             margin: 0;
             flex-direction: column;
         }
-        #app {
+        #app, #login {
             width: 60%;
             background-color: white;
             padding: 30px;
@@ -24,7 +24,7 @@
             transition: all 0.3s ease;
             text-align: center;
         }
-        #app:hover {
+        #app:hover, #login:hover {
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
         }
         #searchResults {
@@ -56,7 +56,7 @@
             font-size: 16px;
             font-weight: bold;
         }
-        input[type="text"] {
+        input[type="text"], input[type="password"] {
             width: 100%;
             padding: 15px;
             margin: 10px 0;
@@ -97,7 +97,15 @@
 </head>
 <body>
 
-<div id="app">
+<div id="login">
+    <h2>Login</h2>
+    <input type="text" id="phoneInput" placeholder="Phone Number">
+    <input type="password" id="passwordInput" placeholder="Password">
+    <button id="loginButton">Login</button>
+    <div id="loginMessage"></div>
+</div>
+
+<div id="app" style="display: none;">
     <h2>Search Database Program</h2>
     <input type="text" id="searchInput" placeholder="Type to search...">
     <div id="searchResults"></div>
@@ -108,15 +116,54 @@
 <script>
     let database = [];
 
-    // Load the file directly from GitHub
-    fetch('test.txt')
-        .then(response => response.text())
-        .then(content => {
-            loadFile(content);
-        })
-        .catch(error => {
-            console.error('Error loading the file:', error);
+    // Function to load users from user.txt
+    function loadUsers() {
+        return fetch('user.txt')
+            .then(response => response.text())
+            .then(content => content.split('\n').map(line => line.split('/')));
+    }
+
+    // Check if user is already logged in
+    const storedPhone = localStorage.getItem('phone');
+    const storedPassword = localStorage.getItem('password');
+
+    if (storedPhone && storedPassword) {
+        // User is already logged in
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        loadDatabase();
+    }
+
+    document.getElementById('loginButton').addEventListener('click', function() {
+        const phone = document.getElementById('phoneInput').value;
+        const password = document.getElementById('passwordInput').value;
+
+        loadUsers().then(users => {
+            const validUser = users.find(user => user[0] === phone && user[1] === password);
+
+            if (validUser) {
+                localStorage.setItem('phone', phone);
+                localStorage.setItem('password', password);
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+                loadDatabase();
+            } else {
+                document.getElementById('loginMessage').textContent = 'Invalid phone number or password.';
+            }
         });
+    });
+
+    // Load the database file directly from GitHub
+    function loadDatabase() {
+        fetch('test.txt')
+            .then(response => response.text())
+            .then(content => {
+                loadFile(content);
+            })
+            .catch(error => {
+                console.error('Error loading the file:', error);
+            });
+    }
 
     function loadFile(content) {
         database = content.split('\n').map(line => line.split('/'));
