@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text File Database App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .result-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 5px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search in Text File</h1>
+    <input type="text" id="search" placeholder="Search..." oninput="searchText()" />
+    <div id="results"></div>
+
+    <script>
+        async function searchText() {
+            const query = document.getElementById('search').value.toLowerCase();
+            const response = await fetch('data.txt');
+            const data = await response.text();
+            const entries = data.split('\n');
+            const results = entries.filter(entry => entry.toLowerCase().includes(query));
+
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            results.slice(0, 3).forEach(result => {
+                const div = document.createElement('div');
+                div.className = 'result-box';
+                div.textContent = result;
+                resultsDiv.appendChild(div);
+            });
+        }
+    </script>
+</body>
+</html>
