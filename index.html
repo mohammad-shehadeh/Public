@@ -120,7 +120,7 @@
     function loadUsers() {
         return fetch('user.txt')
             .then(response => response.text())
-            .then(content => content.split('\n').map(line => line.split('/')));
+            .then(content => content.split('\n').map(line => line.split('/').map(item => item.trim())));
     }
 
     // Check if user is already logged in
@@ -135,8 +135,8 @@
     }
 
     document.getElementById('loginButton').addEventListener('click', function() {
-        const phone = document.getElementById('phoneInput').value;
-        const password = document.getElementById('passwordInput').value;
+        const phone = document.getElementById('phoneInput').value.trim();
+        const password = document.getElementById('passwordInput').value.trim();
 
         loadUsers().then(users => {
             const validUser = users.find(user => user[0] === phone && user[1] === password);
