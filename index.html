@@ -28,9 +28,9 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
         }
         #searchResults {
-            font-size: 20px;
+            font-size: 16px; /* Smaller font size for the search results */
             margin-top: 20px;
-            padding: 20px;
+            padding: 10px; /* Reduced padding for better alignment */
             background-color: #e9f5ff;
             border-radius: 10px;
             border: 2px solid #007bff;
@@ -40,20 +40,20 @@
         .entry {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 5px; /* Smaller gap between boxes */
+            margin-bottom: 10px;
             background-color: #ffffff;
             border: 2px solid #007bff;
             border-radius: 10px;
-            padding: 15px;
+            padding: 10px; /* Reduced padding */
             box-shadow: 0px 4px 12px rgba(0, 123, 255, 0.1);
         }
         .box {
             background-color: #007bff;
             color: white;
-            padding: 10px;
+            padding: 8px; /* Reduced padding */
             border-radius: 8px;
-            font-size: 16px;
+            font-size: 14px; /* Smaller font size */
             font-weight: bold;
         }
         input[type="text"] {
@@ -75,6 +75,7 @@
             font-size: 18px;
             font-weight: bold;
             transition: background-color 0.3s ease;
+            margin-top: 10px; /* Space between input and button */
         }
         button:hover {
             background-color: #0056b3;
@@ -93,13 +94,21 @@
             font-size: 16px;
             color: #007bff;
         }
+        #customTitle {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
 
 <div id="app">
+    <div id="customTitle">صنع بواسطة Shehadeh Center</div>
     <h2>Search Database Program</h2>
     <input type="text" id="searchInput" placeholder="Type to search...">
+    <button onclick="performSearch()">Search</button> <!-- Added search button -->
     <div id="searchResults"></div>
     <div id="dateTime"></div>
     <div id="credits">Program created by Mohammed Shahada</div>
@@ -122,15 +131,15 @@
         database = content.split('\n').map(line => line.split('/'));
     }
 
-    document.getElementById('searchInput').addEventListener('input', function() {
-        const query = this.value.trim().toLowerCase().replace(/\s+/g, '');
+    function performSearch() {
+        const query = document.getElementById('searchInput').value.trim().toLowerCase().replace(/\s+/g, '');
         if (query === '') {
             document.getElementById('searchResults').innerHTML = ''; // Clear results if no input
         } else {
             const results = searchDatabase(query).slice(0, 3); // Show only top 3 results
             displayResults(results);
         }
-    });
+    }
 
     function searchDatabase(query) {
         return database.filter(entry => {
