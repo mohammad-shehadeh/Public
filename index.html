@@ -64,10 +64,31 @@
             background-color: #0056b3;
         }
 
-        /* إخفاء روابط النتائج */
+        /* إخفاء روابط النتائج وأسماء المواقع */
         .gsc-webResult .gsc-url-top, 
         .gsc-url-bottom {
             display: none; 
+        }
+
+        .results {
+            margin-top: 20px;
+            display: none; /* إخفاء النتائج حتى يتم البحث */
+        }
+
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #dc3545;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            display: none; /* إخفاء الزر حتى تظهر النتائج */
+        }
+
+        .back-button:hover {
+            background-color: #c82333;
         }
     </style>
 </head>
@@ -82,10 +103,49 @@
         <div class="gcse-search" style="display: inline-block;"></div>
     </div>
 
-    <h2>نتائج البحث:</h2>
-    <div class="gcse-search-results">
-        <!-- نتائج البحث ستظهر هنا -->
+    <h2>نتيجة البحث:</h2>
+    <div class="results" id="search-results">
+        <p id="result-text">لا توجد نتائج.</p>
     </div>
+
+    <button class="back-button" id="back-button" onclick="goBack()">بحث مرة أخرى</button>
+
+    <script>
+        // التعامل مع ظهور النتائج
+        function displayResult() {
+            const results = document.querySelector('.gsc-webResult');
+            const resultText = document.getElementById('result-text');
+            const searchResultsDiv = document.getElementById('search-results');
+            const backButton = document.getElementById('back-button');
+
+            // التأكد من وجود نتائج
+            if (results) {
+                const resultItem = results.querySelector('.gsc-result');
+                if (resultItem) {
+                    // إظهار نتيجة واحدة فقط
+                    const title = resultItem.querySelector('.gsc-title').innerText;
+                    resultText.innerText = title; // عرض العنوان فقط
+                    searchResultsDiv.style.display = 'block';
+                    backButton.style.display = 'block'; // إظهار زر الرجوع
+                }
+            }
+        }
+
+        // دالة للرجوع للبحث مرة أخرى
+        function goBack() {
+            document.getElementById('search-results').style.display = 'none';
+            document.getElementById('back-button').style.display = 'none';
+            // إعادة تعيين محرك البحث
+            const searchInput = document.querySelector('.gcse-search input[type="text"]');
+            searchInput.value = '';
+        }
+
+        // ربط دالة العرض بنتيجة البحث
+        document.addEventListener("DOMContentLoaded", function() {
+            const searchContainer = document.querySelector('.gcse-search');
+            searchContainer.addEventListener('submit', displayResult);
+        });
+    </script>
 
 </body>
 </html>
