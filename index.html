@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بحث عام باستخدام محرك بحث مخصص</title>
+    <title>صنع بواسطة Shehadeh Center</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -16,6 +16,10 @@
 
         h1 {
             color: #343a40;
+        }
+
+        h2 {
+            color: #007bff;
         }
 
         p {
@@ -59,17 +63,28 @@
         .gcse-search button:hover {
             background-color: #0056b3;
         }
+
+        /* إخفاء روابط النتائج */
+        .gsc-webResult .gsc-url-top, 
+        .gsc-url-bottom {
+            display: none; 
+        }
     </style>
 </head>
 <body>
 
-    <h1>بحث عن أي شيء باستخدام محرك بحث مخصص</h1>
+    <h1>بحث عن أي شيء باستخدام محرك البحث الخاص</h1>
     <p>أدخل أي كلمة أو جملة للبحث:</p>
 
     <div class="search-container">
         <!-- تضمين محرك البحث المخصص -->
         <script async src="https://cse.google.com/cse.js?cx=b284a81d633f74a1b"></script>
         <div class="gcse-search" style="display: inline-block;"></div>
+    </div>
+
+    <h2>نتائج البحث:</h2>
+    <div class="gcse-search-results">
+        <!-- نتائج البحث ستظهر هنا -->
     </div>
 
 </body>
