@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صنع بواسطة Shehadeh Center</title>
+    <title>Shehadeh AI</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -34,7 +34,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             display: inline-block;
             width: 100%;
-            max-width: 600px;
+            max-width: 800px; /* تكبير العرض */
         }
 
         .gcse-search {
@@ -43,20 +43,20 @@
 
         .gcse-search input[type="text"] {
             border: 1px solid #ced4da;
-            padding: 10px;
+            padding: 15px; /* تكبير الحواف */
             border-radius: 5px;
-            width: calc(100% - 22px);
-            font-size: 16px;
+            width: calc(100% - 30px); /* ضبط العرض */
+            font-size: 18px;
             background-color: #fff;
         }
 
         .gcse-search button {
-            padding: 10px 15px;
+            padding: 12px 18px;
             border: none;
             border-radius: 5px;
             background-color: #007bff;
             color: white;
-            font-size: 16px;
+            font-size: 18px;
             cursor: pointer;
         }
 
@@ -71,12 +71,12 @@
 
         .back-button {
             margin-top: 20px;
-            padding: 10px 15px;
+            padding: 12px 18px;
             border: none;
             border-radius: 5px;
             background-color: #dc3545;
             color: white;
-            font-size: 16px;
+            font-size: 18px;
             cursor: pointer;
             display: none; /* إخفاء الزر حتى تظهر النتائج */
         }
@@ -87,21 +87,16 @@
 
         .result-box {
             background-color: #fff;
-            padding: 15px;
+            padding: 20px;
             border: 1px solid #ddd;
             margin-bottom: 10px;
             border-radius: 5px;
             text-align: left;
+            font-size: 18px;
         }
 
         .header-container {
             margin-bottom: 20px;
-        }
-
-        .header-container img {
-            width: 120px;
-            height: auto;
-            margin-top: 10px;
         }
 
     </style>
@@ -109,15 +104,10 @@
 <body>
 
     <div class="header-container">
-        <h1>صنع بواسطة</h1>
+        <h1>ابحث عن اي شيء يخص الهواتف باستخدام برنامج الذكاء الصناعي الخاص ب شحادة سنتر</h1>
         <br>
-        <h1>Shehadeh Center</h1>
-        <!-- إدراج الصورة من المشروع على GitHub -->
-        <img src="/Users/msh/Desktop/sourcecode/Shehadeh AI/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png" alt="Shehadeh Center Logo">
+        <h1>Shehadeh AI</h1>
     </div>
-
-    <h1>بحث عن أي شيء باستخدام محرك البحث الخاص</h1>
-    <p>أدخل أي كلمة أو جملة للبحث:</p>
 
     <div class="search-container">
         <input type="text" id="search-input" placeholder="اكتب للبحث..." />
