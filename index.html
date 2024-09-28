@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>صنع بواسطة Shehadeh Center</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,6 +47,7 @@
             border-radius: 5px;
             width: calc(100% - 22px);
             font-size: 16px;
+            background-color: #fff;
         }
 
         .gcse-search button {
@@ -62,12 +62,6 @@
 
         .gcse-search button:hover {
             background-color: #0056b3;
-        }
-
-        /* إخفاء روابط النتائج وأسماء المواقع */
-        .gsc-webResult .gsc-url-top, 
-        .gsc-url-bottom {
-            display: none; 
         }
 
         .results {
@@ -90,6 +84,16 @@
         .back-button:hover {
             background-color: #c82333;
         }
+
+        .result-box {
+            background-color: #fff;
+            padding: 15px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            text-align: left;
+        }
+
     </style>
 </head>
 <body>
@@ -98,36 +102,52 @@
     <p>أدخل أي كلمة أو جملة للبحث:</p>
 
     <div class="search-container">
-        <!-- تضمين محرك البحث المخصص -->
-        <script async src="https://cse.google.com/cse.js?cx=b284a81d633f74a1b"></script>
-        <div class="gcse-search" style="display: inline-block;"></div>
+        <input type="text" id="search-input" placeholder="اكتب للبحث..." />
+        <button onclick="performSearch()">بحث</button>
     </div>
 
     <h2>نتيجة البحث:</h2>
     <div class="results" id="search-results">
-        <p id="result-text">لا توجد نتائج.</p>
+        <div id="result-box"></div>
     </div>
 
     <button class="back-button" id="back-button" onclick="goBack()">بحث مرة أخرى</button>
 
     <script>
-        // التعامل مع ظهور النتائج
-        function displayResult() {
-            const results = document.querySelector('.gsc-webResult');
-            const resultText = document.getElementById('result-text');
-            const searchResultsDiv = document.getElementById('search-results');
-            const backButton = document.getElementById('back-button');
+        const apiKey = 'AIzaSyChpW-IrDjJAvB-s7J8HNMGn_SiumvMb8U';
+        const searchEngineId = 'b284a81d633f74a1b';  // تأكد من استخدام الـ cx الخاص بك
 
-            // التأكد من وجود نتائج
-            if (results) {
-                const resultItem = results.querySelector('.gsc-result');
-                if (resultItem) {
-                    // إظهار نتيجة واحدة فقط
-                    const title = resultItem.querySelector('.gsc-title').innerText;
-                    resultText.innerText = title; // عرض العنوان فقط
-                    searchResultsDiv.style.display = 'block';
-                    backButton.style.display = 'block'; // إظهار زر الرجوع
-                }
+        // دالة لتنفيذ البحث
+        function performSearch() {
+            const query = document.getElementById('search-input').value;
+            const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&key=${apiKey}&cx=${searchEngineId}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    displayResult(data);
+                })
+                .catch(error => console.error('حدث خطأ:', error));
+        }
+
+        // دالة لعرض النتائج
+        function displayResult(data) {
+            const searchResultsDiv = document.getElementById('search-results');
+            const resultBox = document.getElementById('result-box');
+            const backButton = document.getElementById('back-button');
+            searchResultsDiv.style.display = 'block';
+            backButton.style.display = 'block';
+
+            if (data.items && data.items.length > 0) {
+                const firstResult = data.items[0]; // الحصول على أول نتيجة فقط
+                resultBox.innerHTML = `
+                    <div class="result-box">
+                        <h3>${firstResult.title}</h3>
+                        <p>${firstResult.snippet}</p>
+                    </div>
+                `;
+            } else {
+                resultBox.innerHTML = '<p>لا توجد نتائج.</p>';
             }
         }
 
@@ -135,16 +155,9 @@
         function goBack() {
             document.getElementById('search-results').style.display = 'none';
             document.getElementById('back-button').style.display = 'none';
-            // إعادة تعيين محرك البحث
-            const searchInput = document.querySelector('.gcse-search input[type="text"]');
+            const searchInput = document.getElementById('search-input');
             searchInput.value = '';
         }
-
-        // ربط دالة العرض بنتيجة البحث
-        document.addEventListener("DOMContentLoaded", function() {
-            const searchContainer = document.querySelector('.gcse-search');
-            searchContainer.addEventListener('submit', displayResult);
-        });
     </script>
 
 </body>
