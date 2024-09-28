@@ -279,36 +279,6 @@ function displayResult(data) {
             document.getElementById('search-input').value = ''; // مسح حقل البحث
             document.getElementById('selection-message').textContent = ''; // مسح رسالة الإختيار
         }
-        // دالة لضبط الأبعاد تلقائيًا عند تغيير حجم النافذة
-function adjustLayout() {
-    const buttons = document.querySelectorAll('.button-options button');
-    const searchInput = document.getElementById('search-input');
-    
-    if (window.innerWidth < 768) {
-        // إعدادات للأجهزة المحمولة
-        buttons.forEach(button => {
-            button.style.width = '100%'; // جعل عرض الزر 100%
-            button.style.fontSize = '14px'; // تخفيض حجم الخط
-        });
-        searchInput.style.width = '100%'; // جعل عرض مربع البحث 100%
-        searchInput.style.fontSize = '14px'; // تخفيض حجم خط مربع البحث
-    } else {
-        // إعدادات للأجهزة الكبيرة
-        buttons.forEach(button => {
-            button.style.width = 'auto'; // عرض تلقائي
-            button.style.fontSize = '18px'; // زيادة حجم الخط
-        });
-        searchInput.style.width = 'auto'; // عرض تلقائي
-        searchInput.style.fontSize = '18px'; // زيادة حجم خط مربع البحث
-    }
-}
-
-// استدعاء دالة ضبط التخطيط عند تحميل الصفحة
-window.onload = adjustLayout;
-
-// استدعاء دالة ضبط التخطيط عند تغيير حجم النافذة
-window.onresize = adjustLayout;
-
     </script>
 </body>
 </html>
