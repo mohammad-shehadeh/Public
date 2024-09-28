@@ -172,6 +172,7 @@
 
     <button class="back-button" id="back-button" onclick="goBack()">بحث مرة أخرى</button>
 
+    
     <script>
         const apiKey = 'AIzaSyANq87OyuJUq6bt1uFVKQC7VaklCV6eOkk';
         const searchEngineId = 'b284a81d633f74a1b';
@@ -266,42 +267,65 @@ function displayResult(data) {
     }
 }
 
-        // دالة للعودة للبحث مرة أخرى
-        function goBack() {
-            const searchResultsDiv = document.getElementById('search-results');
-            const resultBox = document.getElementById('result-box');
-            const backButton = document.getElementById('back-button');
-            searchResultsDiv.style.display = 'none';
-            resultBox.innerHTML = ''; // مسح النتائج
-            backButton.style.display = 'none';
-            optionSelected = false; // إعادة تعيين الحالة
-            hiddenText = ''; // مسح النص المخفي
-            document.getElementById('search-input').value = ''; // مسح حقل البحث
-            document.getElementById('selection-message').textContent = ''; // مسح رسالة الإختيار
-        }
-        // دالة لضبط الأبعاد تلقائيًا عند تغيير حجم النافذة
+// دالة للعودة للبحث مرة أخرى
+function goBack() {
+    const searchResultsDiv = document.getElementById('search-results');
+    const resultBox = document.getElementById('result-box');
+    const backButton = document.getElementById('back-button');
+    const activeButton = document.querySelector('.active'); // البحث عن الزر النشط
+
+    searchResultsDiv.style.display = 'none';
+    resultBox.innerHTML = ''; // مسح النتائج
+    backButton.style.display = 'none';
+    optionSelected = false; // إعادة تعيين الحالة
+    hiddenText = ''; // مسح النص المخفي
+    document.getElementById('search-input').value = ''; // مسح حقل البحث
+    document.getElementById('selection-message').textContent = ''; // مسح رسالة الإختيار
+
+    if (activeButton) {
+        activeButton.classList.remove('active'); // إزالة تمييز الزر النشط السابق
+    }
+
+    // هنا يمكنك تعيين الزر الجديد كما يلي:
+    const button = document.getElementById('your-button-id'); // حدد معرف الزر الجديد هنا
+    button.classList.add('active'); // تمييز الزر النشط الجديد
+}
+// دالة لضبط الأبعاد تلقائيًا عند تغيير حجم النافذة
 function adjustLayout() {
     const buttons = document.querySelectorAll('.button-options button');
     const searchInput = document.getElementById('search-input');
-    
+
+    // التحقق من حجم النافذة وتطبيق التعديلات بناءً عليه
     if (window.innerWidth < 768) {
         // إعدادات للأجهزة المحمولة
         buttons.forEach(button => {
-            button.style.width = '100%'; // جعل عرض الزر 100%
+            button.style.width = '70%'; // جعل عرض الزر 70%
             button.style.fontSize = '14px'; // تخفيض حجم الخط
+            button.style.padding = '10px'; // ضبط الحشوة الداخلية للأزرار
+            button.style.margin = '5px 0'; // إضافة مسافة بين الأزرار
         });
-        searchInput.style.width = '100%'; // جعل عرض مربع البحث 100%
+        searchInput.style.width = '70%'; // جعل عرض مربع البحث 100%
         searchInput.style.fontSize = '14px'; // تخفيض حجم خط مربع البحث
+        searchInput.style.padding = '10px'; // ضبط الحشوة الداخلية لمربع البحث
     } else {
         // إعدادات للأجهزة الكبيرة
         buttons.forEach(button => {
-            button.style.width = 'auto'; // عرض تلقائي
-            button.style.fontSize = '18px'; // زيادة حجم الخط
+            button.style.width = 'auto'; // عرض تلقائي للأزرار
+            button.style.fontSize = '18px'; // زيادة حجم الخط للأزرار
+            button.style.padding = '10px 20px'; // زيادة الحشوة الداخلية للأزرار
+            button.style.margin = '5px'; // ضبط المسافة بين الأزرار
         });
-        searchInput.style.width = 'auto'; // عرض تلقائي
-        searchInput.style.fontSize = '18px'; // زيادة حجم خط مربع البحث
+        searchInput.style.width = 'auto'; // عرض تلقائي لمربع البحث
+        searchInput.style.fontSize = '18px'; // زيادة حجم الخط في مربع البحث
+        searchInput.style.padding = '12px'; // ضبط الحشوة الداخلية لمربع البحث
     }
 }
+
+// استدعاء دالة ضبط التخطيط عند تحميل الصفحة
+window.onload = adjustLayout;
+
+// استدعاء دالة ضبط التخطيط عند تغيير حجم النافذة
+window.onresize = adjustLayout;
 
 // استدعاء دالة ضبط التخطيط عند تحميل الصفحة
 window.onload = adjustLayout;
