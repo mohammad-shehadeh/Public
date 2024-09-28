@@ -5,20 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shehadeh AI</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto Mono', monospace;
             text-align: center;
             margin: 0;
             padding: 20px;
-            background-color: #f8f9fa;
+            background-image: url('https://png.pngtree.com/thumb_back/fw800/background/20190223/ourmid/pngtree-artificial-intelligence-future-technology-background-technology-backgroundtechnology-backgroundtechnology-image_72686.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
         }
 
         h1 {
-            color: #343a40;
+            font-size: 24px;
+            color: white;
         }
 
         h2 {
-            color: #007bff;
+            color: white;
+            font-size: 22px;
         }
 
         p {
@@ -30,11 +38,11 @@
             margin: 20px auto;
             padding: 10px;
             border-radius: 5px;
-            background-color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.8);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             display: inline-block;
             width: 100%;
-            max-width: 800px; /* تكبير العرض */
+            max-width: 800px;
         }
 
         .gcse-search {
@@ -43,9 +51,9 @@
 
         .gcse-search input[type="text"] {
             border: 1px solid #ced4da;
-            padding: 15px; /* تكبير الحواف */
+            padding: 15px;
             border-radius: 5px;
-            width: calc(100% - 30px); /* ضبط العرض */
+            width: calc(100% - 30px);
             font-size: 18px;
             background-color: #fff;
         }
@@ -66,7 +74,7 @@
 
         .results {
             margin-top: 20px;
-            display: none; /* إخفاء النتائج حتى يتم البحث */
+            display: none;
         }
 
         .back-button {
@@ -78,7 +86,7 @@
             color: white;
             font-size: 18px;
             cursor: pointer;
-            display: none; /* إخفاء الزر حتى تظهر النتائج */
+            display: none;
         }
 
         .back-button:hover {
@@ -110,7 +118,7 @@
     </div>
 
     <div class="search-container">
-        <input type="text" id="search-input" placeholder="اكتب للبحث..." />
+        <input type="text" id="search-input" placeholder="اكتب للبحث..." onkeypress="restrictInput(event)" />
         <button onclick="performSearch()">بحث</button>
     </div>
 
@@ -123,11 +131,20 @@
 
     <script>
         const apiKey = 'AIzaSyChpW-IrDjJAvB-s7J8HNMGn_SiumvMb8U';
-        const searchEngineId = 'b284a81d633f74a1b';  // تأكد من استخدام الـ cx الخاص بك
+        const searchEngineId = 'b284a81d633f74a1b';
+
+        // دالة لمنع إدخال الحروف غير الإنجليزية
+        function restrictInput(event) {
+            const char = String.fromCharCode(event.which);
+            if (!/^[A-Za-z0-9\s]+$/.test(char)) {
+                event.preventDefault();
+            }
+        }
 
         // دالة لتنفيذ البحث
         function performSearch() {
             const query = document.getElementById('search-input').value;
+
             const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&key=${apiKey}&cx=${searchEngineId}`;
 
             fetch(url)
