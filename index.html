@@ -56,6 +56,7 @@
             width: calc(100% - 30px);
             font-size: 18px;
             background-color: #fff;
+            color: black; /* جعل النص مرئيًا */
         }
 
         .gcse-search button {
@@ -101,12 +102,45 @@
             border-radius: 5px;
             text-align: left;
             font-size: 18px;
+            color: black; /* تغيير لون النص إلى الأسود */
         }
 
         .header-container {
             margin-bottom: 20px;
         }
 
+        .button-options {
+            margin-bottom: 15px;
+        }
+
+        .button-options button {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .button-options button.active {
+            background-color: #ff6f00; /* لون مميز للزر النشط */
+            box-shadow: 0 0 10px rgba(255, 111, 0, 0.5); /* تأثير الإضاءة */
+        }
+
+        .button-options button:hover {
+            background-color: #138496;
+        }
+
+        .selection-message {
+            margin-bottom: 10px;
+            font-size: 22px; /* تكبير حجم الخط */
+            color: #ffcc00; /* لون الرسالة */
+            background-color: rgba(0, 0, 0, 0.5); /* خلفية للنص */
+            padding: 10px;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -117,8 +151,17 @@
         <h1>Shehadeh AI</h1>
     </div>
 
+    <div class="button-options">
+        <button onclick="insertText('نوع البطارية', this)">نوع البطارية</button>
+        <button onclick="insertText('نوع الهاتف', this)">نوع الهاتف</button>
+        <button onclick="insertText('مواصفات هاتف', this)">مواصفات هاتف</button>
+        <button onclick="insertText('صورة قاعدة الشاحن', this)">صورة قاعدة الشاحن</button>
+    </div>
+
+    <div class="selection-message" id="selection-message"></div> <!-- رسالة الإختيار -->
+
     <div class="search-container">
-        <input type="text" id="search-input" placeholder="اكتب للبحث..." onkeypress="restrictInput(event)" />
+        <input type="text" id="search-input" placeholder="اكتب للبحث..." onkeypress="restrictInput(event)" readonly />
         <button onclick="performSearch()">بحث</button>
     </div>
 
@@ -132,20 +175,62 @@
     <script>
         const apiKey = 'AIzaSyChpW-IrDjJAvB-s7J8HNMGn_SiumvMb8U';
         const searchEngineId = 'b284a81d633f74a1b';
+        let optionSelected = false;
+        let insertedText = '';  // لحفظ النص المدخل من الأزرار
+        let hiddenText = '';    // لحفظ النص المخفي
 
         // دالة لمنع إدخال الحروف غير الإنجليزية
         function restrictInput(event) {
-            const char = String.fromCharCode(event.which);
-            if (!/^[A-Za-z0-9\s]+$/.test(char)) {
+            // السماح بالأرقام والحروف الإنجليزية فقط
+            if (!optionSelected) {
                 event.preventDefault();
+                alert('يرجى اختيار أحد الخيارات للبدء بالبحث.'); // تنبيه المستخدم
+            } else if (!/^[a-zA-Z0-9\s]*$/.test(event.key)) {
+                event.preventDefault();
+                alert('يرجى إدخال نص باللغة الإنجليزية أو الأرقام فقط.'); // تنبيه المستخدم
             }
+        }
+
+        // دالة لإدراج النص من الأزرار إلى مربع البحث والانتقال إليه
+        function insertText(text, button) {
+            // إزالة تمييز الزر النشط من جميع الأزرار
+            document.querySelectorAll('.button-options button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // تمييز الزر النشط
+            button.classList.add('active');
+
+            const searchInput = document.getElementById('search-input');
+            const messageDiv = document.getElementById('selection-message');
+            hiddenText = text; // حفظ النص في الذاكرة
+            searchInput.value = '';  // عدم عرض النص المخفي للمستخدم
+            searchInput.readOnly = false;  // السماح بتحرير النص بعد اختيار الزر
+            searchInput.focus();
+
+            messageDiv.textContent = `You selected: ${text}`; // رسالة الإختيار بالإنجليزية
+            optionSelected = true;  // تم اختيار خيار
         }
 
         // دالة لتنفيذ البحث
         function performSearch() {
-            const query = document.getElementById('search-input').value;
+            const searchInput = document.getElementById('search-input');
+            const query = searchInput.value.trim();
 
-            const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&key=${apiKey}&cx=${searchEngineId}`;
+            if (!optionSelected) {
+                alert('يرجى اختيار أحد الخيارات للبحث.');
+                return;
+            }
+
+            if (query === '') {
+                alert('يرجى إدخال نص للبحث.');
+                return;
+            }
+
+            // دمج النص المخفي مع النص المكتوب
+            const finalQuery = hiddenText + ' ' + query;
+
+            const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(finalQuery)}&key=${apiKey}&cx=${searchEngineId}`;
 
             fetch(url)
                 .then(response => response.json())
@@ -155,35 +240,45 @@
                 .catch(error => console.error('حدث خطأ:', error));
         }
 
-        // دالة لعرض النتائج
-        function displayResult(data) {
+// دالة لعرض النتائج
+function displayResult(data) {
+    const searchResultsDiv = document.getElementById('search-results');
+    const resultBox = document.getElementById('result-box');
+    const backButton = document.getElementById('back-button');
+    searchResultsDiv.style.display = 'block';
+    backButton.style.display = 'block';
+
+    if (data.items && data.items.length > 0) {
+        const firstResult = data.items[0]; // الحصول على أول نتيجة فقط
+
+        // إزالة اسم المتجر من النص
+        const cleanedSnippet = firstResult.snippet.replace(/لـ.*?(،|\.)/, ''); // إزالة النص بعد "لـ"
+
+        resultBox.innerHTML = `
+            <div class="result-box">
+                <h3>${firstResult.title}</h3>
+                <p>${cleanedSnippet}</p>
+                <p style="display: none;">رابط: ${firstResult.link}</p> <!-- إخفاء الرابط -->
+            </div>
+        `;
+    } else {
+        resultBox.innerHTML = '<p>لا توجد نتائج.</p>';
+    }
+}
+
+        // دالة للعودة للبحث مرة أخرى
+        function goBack() {
             const searchResultsDiv = document.getElementById('search-results');
             const resultBox = document.getElementById('result-box');
             const backButton = document.getElementById('back-button');
-            searchResultsDiv.style.display = 'block';
-            backButton.style.display = 'block';
-
-            if (data.items && data.items.length > 0) {
-                const firstResult = data.items[0]; // الحصول على أول نتيجة فقط
-                resultBox.innerHTML = `
-                    <div class="result-box">
-                        <h3>${firstResult.title}</h3>
-                        <p>${firstResult.snippet}</p>
-                    </div>
-                `;
-            } else {
-                resultBox.innerHTML = '<p>لا توجد نتائج.</p>';
-            }
-        }
-
-        // دالة للرجوع للبحث مرة أخرى
-        function goBack() {
-            document.getElementById('search-results').style.display = 'none';
-            document.getElementById('back-button').style.display = 'none';
-            const searchInput = document.getElementById('search-input');
-            searchInput.value = '';
+            searchResultsDiv.style.display = 'none';
+            resultBox.innerHTML = ''; // مسح النتائج
+            backButton.style.display = 'none';
+            optionSelected = false; // إعادة تعيين الحالة
+            hiddenText = ''; // مسح النص المخفي
+            document.getElementById('search-input').value = ''; // مسح حقل البحث
+            document.getElementById('selection-message').textContent = ''; // مسح رسالة الإختيار
         }
     </script>
-
 </body>
 </html>
