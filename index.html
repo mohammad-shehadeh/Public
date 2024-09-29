@@ -38,11 +38,11 @@
             margin: 20px auto;
             padding: 10px;
             border-radius: 5px;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(15, 15, 15, 0.57);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             display: inline-block;
             width: 100%;
-            max-width: 400px;
+            max-width: 300px;
         }
 
         .gcse-search {
@@ -146,9 +146,9 @@
 <body>
 
     <div class="header-container">
-        <h1>ابحث عن اي شيء يخص الهواتف باستخدام برنامج الذكاء الصناعي الخاص ب شحادة سنتر</h1>
+        <h1 style="font-size: 24px; color: white; background: rgba(0, 0, 0, 0.5); padding: 10px; border-radius: 8px; box-shadow: 0 0 30px #00ffea, 0 0 40px #00ffea, 0 0 60px #00ffea;">ابحث عن اي شيء يخص الهواتف باستخدام برنامج الذكاء الصناعي الخاص ب شحادة سنتر</h1>
         <br>
-        <h1>Shehadeh AI</h1>
+        <h1 style="font-size: 28px; color: #ffffff; text-shadow: 0 0 10px #00ffea, 0 0 20px #00ffea, 0 0 30px #00ffea; letter-spacing: 6px; font-weight: bold;">Shehadeh AI</h1>
     </div>
 
     <div class="button-options">
@@ -163,7 +163,7 @@
     <div class="search-container">
         <input type="text" id="search-input" placeholder="اكتب للبحث..." onkeypress="restrictInput(event)" readonly />
         <br><br>
-   <button style="font-size: 17px; padding: 15px 30px;" onclick="performSearch()">بحث</button>
+   <button style="font-size: 18px; padding: 15px 30px;" onclick="performSearch()">بحث</button>
     </div>
 
     <h2>نتيجة البحث:</h2>
@@ -254,11 +254,22 @@ function displayResult(data) {
         const firstResult = data.items[0]; // الحصول على أول نتيجة فقط
 
         // إزالة اسم المتجر من النص
-        const cleanedSnippet = firstResult.snippet.replace(/لـ.*?(،|\.)/, ''); // إزالة النص بعد "لـ"
+        let cleanedSnippet = firstResult.snippet.replace(/لـ.*?(،|\.)/, ''); // إزالة النص بعد "لـ"
+        let cleanedTitle = firstResult.title;
+
+        // قائمة المواقع التي نريد إخفاءها أو تظليلها
+        const websitesToHide = ['amazon.com', 'aliexpress.com', 'ebay.com', 'alibaba.com', 'verizon.com'];
+
+        // استبدال أسماء المواقع بالتظليل أو إخفائها في النص
+        websitesToHide.forEach(website => {
+            const regex = new RegExp(website, 'gi');
+            cleanedSnippet = cleanedSnippet.replace(regex, `<span style="background-color: white; color: white;">${website}</span>`);
+            cleanedTitle = cleanedTitle.replace(regex, `<span style="background-color: white; color: white;">${website}</span>`);
+        });
 
         resultBox.innerHTML = `
             <div class="result-box">
-                <h3>${firstResult.title}</h3>
+                <h3>${cleanedTitle}</h3>
                 <p>${cleanedSnippet}</p>
                 <p style="display: none;">رابط: ${firstResult.link}</p> <!-- إخفاء الرابط -->
             </div>
