@@ -54,10 +54,10 @@
         const form = document.getElementById('uploadForm');
         const imageInput = document.getElementById('imageInput');
 
-        // الاستماع إلى حدث اختيار صورة
-        imageInput.addEventListener('change', (e) => {
-            const file = imageInput.files[0];
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
 
+            const file = imageInput.files[0];
             if (!file) {
                 alert("Please upload an image first.");
                 return;
@@ -68,16 +68,11 @@
             reader.onload = () => {
                 const imageURL = reader.result;
 
-                // يتم فتح بحث Google Lens في نافذة جديدة تلقائياً بعد تحميل الصورة
-                window.open(`https://www.google.com/searchbyimage?image_url=${encodeURIComponent(imageURL)}`, '_blank');
+                // يتم فتح بحث Google Lens في نافذة جديدة
+                window.open(`https://lens.google.com/uploadbyurl?url=${encodeURIComponent(imageURL)}`, '_blank');
             };
 
             reader.readAsDataURL(file);
-        });
-
-        // الاستماع إلى الحدث عند إرسال النموذج
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
         });
     </script>
 
