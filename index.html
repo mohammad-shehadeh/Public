@@ -14,7 +14,7 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 600px; /* تعديل الحجم ليتناسب مع شاشة 6.7 إنش */
             margin: auto;
             background: white;
             padding: 20px;
@@ -47,6 +47,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            font-size: 14px; /* تصغير حجم الخط */
         }
 
         th, td {
@@ -254,8 +255,9 @@
             const date = row.cells[6].innerText;
             const problem = row.cells[3].innerText;
             const notes = row.cells[5].innerText;
+            const status = selectElement.value;
 
-            const message = `أهلاً ${name}!\nتم تحديث حالة هاتفك ${phoneType} رقم ${serialNumber}.\n\nالتاريخ: ${date}\nالمشكلة: ${problem}\nملاحظات: ${notes}`;
+            const message = `أهلاً ${name}!\nتم تحديث حالة هاتفك ${phoneType} رقم ${serialNumber} إلى ${status}.\n\nالتاريخ: ${date}\nالمشكلة: ${problem}\nملاحظات: ${notes}`;
             sendMessage(phone, message);
         }
 
