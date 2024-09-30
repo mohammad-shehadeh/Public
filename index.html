@@ -44,7 +44,7 @@
 
         /* تنسيقات الجدول */
         table {
-            width: 100%;
+            width: 140%;
             border-collapse: collapse;
             margin-top: 20px;
             font-size: 14px; /* تصغير حجم الخط */
@@ -136,6 +136,7 @@
                     <th>ملاحظات</th>
                     <th>التاريخ</th>
                     <th>الأيام</th>
+                    <th>الشركة</th>
                     <th>الحالة</th>
                 </tr>
             </thead>
@@ -169,6 +170,18 @@
                 <label for="notes">ملاحظات:</label>
                 <textarea id="notes"></textarea>
 
+                <label for="problem">الشركة:</label>
+                <select id="company" required>
+                    <option value="">اختر الشركة</option>
+                    <option value="icell pex">icell pex</option>
+                    <option value="drive">drive</option>
+                    <option value="tele link">tele link</option>
+                    <option value="BCI">BCI</option>
+                    <option value="go toch">go toch</option>
+                    <option value="أخرى">أخرى</option>
+                </select>
+                <input type="text" id="customCompany" placeholder="اكتب اسم الشركة إذا لم تكن موجودة">
+                                
                 <button type="submit">حفظ</button>
             </form>
         </div>
@@ -210,6 +223,7 @@
             const problem = document.getElementById("problem").value;
             const phone = document.getElementById("phone").value;
             const notes = document.getElementById("notes").value;
+            const company = document.getElementById("company").value;
     
             const today = new Date();
             const date = today.toLocaleDateString('ar-EG');
@@ -226,6 +240,7 @@
                     <td>${notes}</td>
                     <td>${date}</td>
                     <td>${daysDiff} يوم</td>
+                    <td>${company} الشركة</td>
                     <td>
                         <select onchange="changeStatus(this)">
                             <option value="تم التسجيل">تم التسجيل</option>
@@ -238,7 +253,7 @@
             document.getElementById("dataBody").insertAdjacentHTML('afterbegin', newRow); // تعديل هنا
     
             // حفظ البيانات في localStorage
-            saveToLocal(name, phoneType, serialNumber, problem, phone, notes, date, daysDiff);
+            saveToLocal(name, phoneType, serialNumber, problem, phone, notes, date, daysDiff, company);
     
             // إرسال رسالة للزبون باستخدام تطبيق الرسائل
             const message = `مرحبا بك ${name}!\nلقد تم تسجيل هاتفك في الضمان.\n\nبيانات التسجيل:\nنوع الجهاز: ${phoneType}\nالرقم التسلسلي: ${serialNumber}\nالتاريخ: ${date}\nالمشكلة: ${problem}\nرقم الهاتف: ${phone}\nملاحظات: ${notes}`;
@@ -261,6 +276,9 @@
             const problem = row.cells[3].innerText;
             const notes = row.cells[5].innerText;
             const status = selectElement.value;
+    
+            // حفظ الحالة في localStorage
+            updateStatusInLocal(serialNumber, status);
     
             if (status === "تم الاستلام") {
                 // إرسال الرسالة عند تغيير الحالة
@@ -287,8 +305,8 @@
         }
     
         // دالة لحفظ البيانات في localStorage
-        function saveToLocal(name, phoneType, serialNumber, problem, phone, notes, date, daysDiff) {
-            const customerData = { name, phoneType, serialNumber, problem, phone, notes, date, daysDiff };
+        function saveToLocal(name, phoneType, serialNumber, problem, phone, notes, date, daysDiff, company) {
+            const customerData = { name, phoneType, serialNumber, problem, phone, notes, date, daysDiff, company, status: "تم التسجيل" };
             let customers = JSON.parse(localStorage.getItem("customers")) || [];
             customers.unshift(customerData);
             localStorage.setItem("customers", JSON.stringify(customers));
@@ -312,17 +330,28 @@
                         <td>${customer.notes}</td>
                         <td>${customer.date}</td>
                         <td>${customer.daysDiff} يوم</td>
+                        <td>${customer.company} الشركة</td>
                         <td>
-                            <select onchange="changeStatus(this)">
-                                <option value="تم التسجيل">تم التسجيل</option>
-                                <option value="تم الوصول">تم الوصول</option>
-                                <option value="تم الاستلام">تم الاستلام</option>
+                            <select onchange="changeStatus(this)" value="${customer.status}">
+                                <option value="تم التسجيل" ${customer.status === 'تم التسجيل' ? 'selected' : ''}>تم التسجيل</option>
+                                <option value="تم الوصول" ${customer.status === 'تم الوصول' ? 'selected' : ''}>تم الوصول</option>
+                                <option value="تم الاستلام" ${customer.status === 'تم الاستلام' ? 'selected' : ''}>تم الاستلام</option>
                             </select>
                         </td>
                     </tr>
                 `;
                 document.getElementById("dataBody").insertAdjacentHTML('beforeend', newRow);
             });
+        }
+    
+        // دالة لحفظ الحالة في localStorage
+        function updateStatusInLocal(serialNumber, status) {
+            let customers = JSON.parse(localStorage.getItem("customers")) || [];
+            const customer = customers.find(c => c.serialNumber === serialNumber);
+            if (customer) {
+                customer.status = status; // تحديث الحالة
+                localStorage.setItem("customers", JSON.stringify(customers));
+            }
         }
     
         // دالة لحذف البيانات من localStorage
