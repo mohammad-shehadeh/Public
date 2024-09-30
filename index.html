@@ -20,6 +20,7 @@
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: auto; /* لتجنب التداخل */
         }
 
         h1 {
@@ -79,6 +80,7 @@
             padding: 20px;
             border: 1px solid #888;
             width: 80%;
+            max-width: 600px; /* حد أقصى للعرض */
             border-radius: 8px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
@@ -193,53 +195,54 @@
             }
         }
 
-// إضافة البيانات إلى الجدول وحفظها في localStorage
-document.getElementById("customerForm").onsubmit = function(event) {
-    event.preventDefault(); // منع إعادة تحميل الصفحة
-    const name = document.getElementById("name").value;
-    const phoneType = document.getElementById("phoneType").value;
-    const serialNumber = document.getElementById("serialNumber").value;
-    const problem = document.getElementById("problem").value;
-    const phone = document.getElementById("phone").value;
-    const notes = document.getElementById("notes").value;
+        // إضافة البيانات إلى الجدول وحفظها في localStorage
+        document.getElementById("customerForm").onsubmit = function(event) {
+            event.preventDefault(); // منع إعادة تحميل الصفحة
+            const name = document.getElementById("name").value;
+            const phoneType = document.getElementById("phoneType").value;
+            const serialNumber = document.getElementById("serialNumber").value;
+            const problem = document.getElementById("problem").value;
+            const phone = document.getElementById("phone").value;
+            const notes = document.getElementById("notes").value;
 
-    const today = new Date();
-    const date = today.toLocaleDateString('ar-EG');
-    const daysDiff = Math.floor((Date.now() - today.setHours(0, 0, 0, 0)) / (1000 * 60 * 60 * 24));
+            const today = new Date();
+            const date = today.toLocaleDateString('ar-EG');
+            const daysDiff = Math.floor((Date.now() - today.setHours(0, 0, 0, 0)) / (1000 * 60 * 60 * 24));
 
-    // إضافة البيانات إلى الجدول في أعلى الجدول
-    const newRow = `
-        <tr>
-            <td>${phoneType}</td>
-            <td>${name}</td>
-            <td>${serialNumber}</td>
-            <td>${problem}</td>
-            <td>${phone}</td>
-            <td>${notes}</td>
-            <td>${date}</td>
-            <td>${daysDiff} يوم</td>
-            <td>
-                <select onchange="changeStatus(this)">
-                    <option value="تم التسجيل">تم التسجيل</option>
-                    <option value="تم الوصول">تم الوصول</option>
-                    <option value="تم الاستلام">تم الاستلام</option>
-                </select>
-            </td>
-        </tr>
-    `;
-    document.getElementById("dataBody").insertAdjacentHTML('afterbegin', newRow); // تعديل هنا
+            // إضافة البيانات إلى الجدول في أعلى الجدول
+            const newRow = `
+                <tr>
+                    <td>${phoneType}</td>
+                    <td>${name}</td>
+                    <td>${serialNumber}</td>
+                    <td>${problem}</td>
+                    <td>${phone}</td>
+                    <td>${notes}</td>
+                    <td>${date}</td>
+                    <td>${daysDiff} يوم</td>
+                    <td>
+                        <select onchange="changeStatus(this)">
+                            <option value="تم التسجيل">تم التسجيل</option>
+                            <option value="تم الوصول">تم الوصول</option>
+                            <option value="تم الاستلام">تم الاستلام</option>
+                        </select>
+                    </td>
+                </tr>
+            `;
+            document.getElementById("dataBody").insertAdjacentHTML('afterbegin', newRow); // تعديل هنا
 
-    // حفظ البيانات في localStorage
-    saveToLocal(name, phoneType, serialNumber, problem, phone, notes, date, daysDiff);
+            // حفظ البيانات في localStorage
+            saveToLocal(name, phoneType, serialNumber, problem, phone, notes, date, daysDiff);
 
-    // إرسال رسالة للزبون
-    alert(`مرحبا بك ${name}!\nلقد تم تسجيل هاتفك في الضمان.\n\nبيانات التسجيل:\nنوع الجهاز: ${phoneType}\nالرقم التسلسلي: ${serialNumber}\nالتاريخ: ${date}\nالمشكلة: ${problem}\nرقم الهاتف: ${phone}\nملاحظات: ${notes}`);
+            // إرسال رسالة للزبون باستخدام تطبيق الرسائل
+            const message = `مرحبا بك ${name}!\nلقد تم تسجيل هاتفك في الضمان.\n\nبيانات التسجيل:\nنوع الجهاز: ${phoneType}\nالرقم التسلسلي: ${serialNumber}\nالتاريخ: ${date}\nالمشكلة: ${problem}\nرقم الهاتف: ${phone}\nملاحظات: ${notes}`;
+            sendMessage(phone, message);
 
-    // إغلاق النافذة
-    modal.style.display = "none";
-    // إعادة تعيين النموذج
-    document.getElementById("customerForm").reset();
-}
+            // إغلاق النافذة
+            modal.style.display = "none";
+            // إعادة تعيين النموذج
+            document.getElementById("customerForm").reset();
+        }
 
         // دالة لتغيير الحالة وإرسال الرسالة عند التغيير
         function changeStatus(selectElement) {
@@ -252,54 +255,26 @@ document.getElementById("customerForm").onsubmit = function(event) {
             const problem = row.cells[3].innerText;
             const notes = row.cells[5].innerText;
 
-            const status = selectElement.value;
-            const message = `مرحبا بك ${name}!\nلقد تم تغيير حالة تسجيل هاتفك إلى ${status}.\n\nبيانات التسجيل:\nنوع الجهاز: ${phoneType}\nالرقم التسلسلي: ${serialNumber}\nالتاريخ: ${date}\nالمشكلة: ${problem}\nرقم الهاتف: ${phone}\nملاحظات: ${notes}`;
-            alert(message);
+            const message = `أهلاً ${name}!\nتم تحديث حالة هاتفك ${phoneType} رقم ${serialNumber}.\n\nالتاريخ: ${date}\nالمشكلة: ${problem}\nملاحظات: ${notes}`;
+            sendMessage(phone, message);
         }
 
-        // حفظ البيانات في localStorage
+        // دالة لإرسال الرسالة
+        function sendMessage(phone, message) {
+            const encodedMessage = encodeURIComponent(message);
+            window.location.href = `sms:${phone}?body=${encodedMessage}`;
+        }
+
+        // دالة لحفظ البيانات في localStorage
         function saveToLocal(name, phoneType, serialNumber, problem, phone, notes, date, daysDiff) {
-            let customers = JSON.parse(localStorage.getItem('customers')) || [];
-            const newCustomer = { name, phoneType, serialNumber, problem, phone, notes, date, daysDiff };
-            customers.push(newCustomer);
-            localStorage.setItem('customers', JSON.stringify(customers));
-            showSuccessMessage();
-        }
-
-        // إظهار رسالة النجاح
-        function showSuccessMessage() {
-            const message = document.getElementById("successMessage");
-            message.style.display = "block";
+            const customerData = { name, phoneType, serialNumber, problem, phone, notes, date, daysDiff };
+            let customers = JSON.parse(localStorage.getItem("customers")) || [];
+            customers.push(customerData);
+            localStorage.setItem("customers", JSON.stringify(customers));
+            document.getElementById("successMessage").style.display = "block";
             setTimeout(() => {
-                message.style.display = "none";
-            }, 3000);
-        }
-
-        // استعادة البيانات من localStorage عند تحميل الصفحة
-        window.onload = function() {
-            const customers = JSON.parse(localStorage.getItem('customers')) || [];
-            customers.forEach(customer => {
-                const newRow = `
-                    <tr>
-                        <td>${customer.phoneType}</td>
-                        <td>${customer.name}</td>
-                        <td>${customer.serialNumber}</td>
-                        <td>${customer.problem}</td>
-                        <td>${customer.phone}</td>
-                        <td>${customer.notes}</td>
-                        <td>${customer.date}</td>
-                        <td>${customer.daysDiff} يوم</td>
-                        <td>
-                            <select onchange="changeStatus(this)">
-                                <option value="تم التسجيل">تم التسجيل</option>
-                                <option value="تم الوصول">تم الوصول</option>
-                                <option value="تم الاستلام">تم الاستلام</option>
-                            </select>
-                        </td>
-                    </tr>
-                `;
-                document.getElementById("dataBody").insertAdjacentHTML('beforeend', newRow);
-            });
+                document.getElementById("successMessage").style.display = "none";
+            }, 2000);
         }
     </script>
 </body>
