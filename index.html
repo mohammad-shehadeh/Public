@@ -3,348 +3,304 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shehadeh AI</title>
+    <title>برنامج تسجيل الكفالات</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
-
+        /* تنسيقات عامة للصفحة */
         body {
-            font-family: 'Roboto Mono', monospace;
-            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #e9ecef;
             margin: 0;
             padding: 20px;
-            background-image: url('https://png.pngtree.com/thumb_back/fw800/background/20190223/ourmid/pngtree-artificial-intelligence-future-technology-background-technology-backgroundtechnology-backgroundtechnology-image_72686.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: white;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
-            font-size: 24px;
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        button {
+            background-color: #4CAF50;
             color: white;
-        }
-
-        h2 {
-            color: white;
-            font-size: 22px;
-        }
-
-        p {
-            font-size: 18px;
-            color: #6c757d;
-        }
-
-        .search-container {
-            margin: 20px auto;
-            padding: 10px;
+            padding: 10px 20px;
+            border: none;
             border-radius: 5px;
-            background-color: rgba(15, 15, 15, 0.57);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            display: inline-block;
-            width: 100%;
-            max-width: 300px;
-        }
-
-        .gcse-search {
+            cursor: pointer;
             margin-top: 10px;
         }
 
-        .gcse-search input[type="text"] {
-            border: 1px solid #ced4da;
-            padding: 15px;
-            border-radius: 5px;
-            width: calc(100% - 30px);
-            font-size: 18px;
-            background-color: #fff;
-            color: black; /* جعل النص مرئيًا */
+        button:hover {
+            background-color: #45a049;
         }
 
-        .gcse-search button {
-            padding: 12px 18px;
-            border: none;
-            border-radius: 5px;
-            background-color: #007bff;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        .gcse-search button:hover {
-            background-color: #0056b3;
-        }
-
-        .results {
+        /* تنسيقات الجدول */
+        table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 20px;
-            display: none;
         }
 
-        .back-button {
-            margin-top: 20px;
-            padding: 12px 18px;
-            border: none;
-            border-radius: 5px;
-            background-color: #dc3545;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            display: none;
-        }
-
-        .back-button:hover {
-            background-color: #c82333;
-        }
-
-        .result-box {
-            background-color: #fff;
-            padding: 20px;
+        th, td {
             border: 1px solid #ddd;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            text-align: left;
-            font-size: 18px;
-            color: black; /* تغيير لون النص إلى الأسود */
+            padding: 8px;
+            text-align: center;
         }
 
-        .header-container {
-            margin-bottom: 20px;
-        }
-
-        .button-options {
-            margin-bottom: 15px;
-        }
-
-        .button-options button {
-            margin: 5px;
-            padding: 10px 20px;
-            background-color: #17a2b8;
+        th {
+            background-color: #4CAF50;
             color: white;
-            border: none;
-            border-radius: 5px;
+        }
+
+        /* تنسيقات نافذة التسجيل */
+        .modal {
+            display: none; /* مخفي بشكل افتراضي */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); /* خلفية شفافة */
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
             cursor: pointer;
-            font-size: 16px;
         }
 
-        .button-options button.active {
-            background-color: #ff6f00; /* لون مميز للزر النشط */
-            box-shadow: 0 0 10px rgba(255, 111, 0, 0.5); /* تأثير الإضاءة */
+        select, input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
 
-        .button-options button:hover {
-            background-color: #138496;
-        }
-
-        .selection-message {
-            margin-bottom: 10px;
-            font-size: 22px; /* تكبير حجم الخط */
-            color: #ffcc00; /* لون الرسالة */
-            background-color: rgba(0, 0, 0, 0.5); /* خلفية للنص */
+        /* تنسيق الرسالة */
+        .message {
+            display: none;
+            background-color: #dff0d8;
+            color: #3c763d;
             padding: 10px;
             border-radius: 5px;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-
-    <div class="header-container">
-        <h1 style="font-size: 15px; color: white; background: rgba(0, 0, 0, 0.5); padding: 10px; border-radius: 8px; box-shadow: 0 0 20px #00ffea, 0 0 40px #00ffea, 0 0 60px #00ffea;">ابحث عن اي شيء يخص الهواتف باستخدام برنامج الذكاء الصناعي الخاص ب شحادة سنتر</h1>
-        <br>
-        <h1 style="font-size: 28px; color: #ffffff; text-shadow: 0 0 10px #00ffea, 0 0 20px #00ffea, 0 0 30px #00ffea; letter-spacing: 6px; font-weight: bold;">Shehadeh AI</h1>
+    <div class="container">
+        <h1>برنامج تسجيل الكفالات</h1>
+        <button id="registerButton">تسجيل زبائن جدد</button>
+        
+        <!-- جدول البيانات المسجلة -->
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>نوع الهاتف</th>
+                    <th>الاسم</th>
+                    <th>الرقم التسلسلي</th>
+                    <th>المشكلة</th>
+                    <th>رقم الهاتف</th>
+                    <th>ملاحظات</th>
+                    <th>التاريخ</th>
+                    <th>الأيام</th>
+                    <th>الحالة</th>
+                </tr>
+            </thead>
+            <tbody id="dataBody">
+                <!-- البيانات ستضاف هنا -->
+            </tbody>
+        </table>
     </div>
 
-    <div class="button-options">
-        <button onclick="insertText('Battery type', this)">نوع البطارية</button>
-        <button onclick="insertText('Phone type', this)">نوع الهاتف</button>
-        <button onclick="insertText('Phone specifications', this)">مواصفات هاتف</button>
-        <button onclick="insertText('Flex charger image', this)">صورة قاعدة الشاحن</button>
+    <!-- نافذة تسجيل الزبائن -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>تسجيل زبائن جدد</h2>
+            <form id="customerForm">
+                <label for="phoneType">نوع الهاتف:</label>
+                <input type="text" id="phoneType" required>
+
+                <label for="name">الاسم:</label>
+                <input type="text" id="name" required>
+
+                <label for="serialNumber">الرقم التسلسلي:</label>
+                <input type="text" id="serialNumber" required>
+
+                <label for="problem">المشكلة:</label>
+                <input type="text" id="problem" required>
+
+                <label for="phone">رقم الهاتف (10 أرقام):</label>
+                <input type="text" id="phone" pattern="\d{10}" required>
+
+                <label for="notes">ملاحظات:</label>
+                <textarea id="notes"></textarea>
+
+                <button type="submit">حفظ</button>
+            </form>
+        </div>
     </div>
 
-    <div class="selection-message" id="selection-message"></div> <!-- رسالة الإختيار -->
+    <div class="message" id="successMessage">تم تسجيل البيانات بنجاح!</div>
 
-    <div class="search-container">
-        <input type="text" id="search-input" placeholder="اكتب للبحث..." onkeypress="restrictInput(event)" readonly />
-        <br><br>
-   <button style="font-size: 18px; padding: 15px 30px;" onclick="performSearch()">بحث</button>
-    </div>
-
-    <h2>نتيجة البحث:</h2>
-    <div class="results" id="search-results">
-        <div id="result-box"></div>
-    </div>
-
-    <button class="back-button" id="back-button" onclick="goBack()">بحث مرة أخرى</button>
-
-    
     <script>
-        const apiKey = 'AIzaSyANq87OyuJUq6bt1uFVKQC7VaklCV6eOkk';
-        const searchEngineId = 'b284a81d633f74a1b';
-        let optionSelected = false;
-        let insertedText = '';  // لحفظ النص المدخل من الأزرار
-        let hiddenText = '';    // لحفظ النص المخفي
+        // فتح وإغلاق نافذة التسجيل
+        const modal = document.getElementById("modal");
+        const btn = document.getElementById("registerButton");
+        const span = document.getElementsByClassName("close")[0];
 
-        // دالة لمنع إدخال الحروف غير الإنجليزية
-        function restrictInput(event) {
-            // السماح بالأرقام والحروف الإنجليزية فقط
-            if (!optionSelected) {
-                event.preventDefault();
-                alert('يرجى اختيار أحد الخيارات للبدء بالبحث.'); // تنبيه المستخدم
-            } else if (!/^[a-zA-Z0-9\s]*$/.test(event.key)) {
-                event.preventDefault();
-                alert('يرجى إدخال نص باللغة الإنجليزية أو الأرقام فقط.'); // تنبيه المستخدم
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
             }
         }
 
-        // دالة لإدراج النص من الأزرار إلى مربع البحث والانتقال إليه
-        function insertText(text, button) {
-            // إزالة تمييز الزر النشط من جميع الأزرار
-            document.querySelectorAll('.button-options button').forEach(btn => {
-                btn.classList.remove('active');
+// إضافة البيانات إلى الجدول وحفظها في localStorage
+document.getElementById("customerForm").onsubmit = function(event) {
+    event.preventDefault(); // منع إعادة تحميل الصفحة
+    const name = document.getElementById("name").value;
+    const phoneType = document.getElementById("phoneType").value;
+    const serialNumber = document.getElementById("serialNumber").value;
+    const problem = document.getElementById("problem").value;
+    const phone = document.getElementById("phone").value;
+    const notes = document.getElementById("notes").value;
+
+    const today = new Date();
+    const date = today.toLocaleDateString('ar-EG');
+    const daysDiff = Math.floor((Date.now() - today.setHours(0, 0, 0, 0)) / (1000 * 60 * 60 * 24));
+
+    // إضافة البيانات إلى الجدول في أعلى الجدول
+    const newRow = `
+        <tr>
+            <td>${phoneType}</td>
+            <td>${name}</td>
+            <td>${serialNumber}</td>
+            <td>${problem}</td>
+            <td>${phone}</td>
+            <td>${notes}</td>
+            <td>${date}</td>
+            <td>${daysDiff} يوم</td>
+            <td>
+                <select onchange="changeStatus(this)">
+                    <option value="تم التسجيل">تم التسجيل</option>
+                    <option value="تم الوصول">تم الوصول</option>
+                    <option value="تم الاستلام">تم الاستلام</option>
+                </select>
+            </td>
+        </tr>
+    `;
+    document.getElementById("dataBody").insertAdjacentHTML('afterbegin', newRow); // تعديل هنا
+
+    // حفظ البيانات في localStorage
+    saveToLocal(name, phoneType, serialNumber, problem, phone, notes, date, daysDiff);
+
+    // إرسال رسالة للزبون
+    alert(`مرحبا بك ${name}!\nلقد تم تسجيل هاتفك في الضمان.\n\nبيانات التسجيل:\nنوع الجهاز: ${phoneType}\nالرقم التسلسلي: ${serialNumber}\nالتاريخ: ${date}\nالمشكلة: ${problem}\nرقم الهاتف: ${phone}\nملاحظات: ${notes}`);
+
+    // إغلاق النافذة
+    modal.style.display = "none";
+    // إعادة تعيين النموذج
+    document.getElementById("customerForm").reset();
+}
+
+        // دالة لتغيير الحالة وإرسال الرسالة عند التغيير
+        function changeStatus(selectElement) {
+            const row = selectElement.parentNode.parentNode;
+            const name = row.cells[1].innerText;
+            const phone = row.cells[4].innerText;
+            const phoneType = row.cells[0].innerText;
+            const serialNumber = row.cells[2].innerText;
+            const date = row.cells[6].innerText;
+            const problem = row.cells[3].innerText;
+            const notes = row.cells[5].innerText;
+
+            const status = selectElement.value;
+            const message = `مرحبا بك ${name}!\nلقد تم تغيير حالة تسجيل هاتفك إلى ${status}.\n\nبيانات التسجيل:\nنوع الجهاز: ${phoneType}\nالرقم التسلسلي: ${serialNumber}\nالتاريخ: ${date}\nالمشكلة: ${problem}\nرقم الهاتف: ${phone}\nملاحظات: ${notes}`;
+            alert(message);
+        }
+
+        // حفظ البيانات في localStorage
+        function saveToLocal(name, phoneType, serialNumber, problem, phone, notes, date, daysDiff) {
+            let customers = JSON.parse(localStorage.getItem('customers')) || [];
+            const newCustomer = { name, phoneType, serialNumber, problem, phone, notes, date, daysDiff };
+            customers.push(newCustomer);
+            localStorage.setItem('customers', JSON.stringify(customers));
+            showSuccessMessage();
+        }
+
+        // إظهار رسالة النجاح
+        function showSuccessMessage() {
+            const message = document.getElementById("successMessage");
+            message.style.display = "block";
+            setTimeout(() => {
+                message.style.display = "none";
+            }, 3000);
+        }
+
+        // استعادة البيانات من localStorage عند تحميل الصفحة
+        window.onload = function() {
+            const customers = JSON.parse(localStorage.getItem('customers')) || [];
+            customers.forEach(customer => {
+                const newRow = `
+                    <tr>
+                        <td>${customer.phoneType}</td>
+                        <td>${customer.name}</td>
+                        <td>${customer.serialNumber}</td>
+                        <td>${customer.problem}</td>
+                        <td>${customer.phone}</td>
+                        <td>${customer.notes}</td>
+                        <td>${customer.date}</td>
+                        <td>${customer.daysDiff} يوم</td>
+                        <td>
+                            <select onchange="changeStatus(this)">
+                                <option value="تم التسجيل">تم التسجيل</option>
+                                <option value="تم الوصول">تم الوصول</option>
+                                <option value="تم الاستلام">تم الاستلام</option>
+                            </select>
+                        </td>
+                    </tr>
+                `;
+                document.getElementById("dataBody").insertAdjacentHTML('beforeend', newRow);
             });
-
-            // تمييز الزر النشط
-            button.classList.add('active');
-
-            const searchInput = document.getElementById('search-input');
-            const messageDiv = document.getElementById('selection-message');
-            hiddenText = text; // حفظ النص في الذاكرة
-            searchInput.value = '';  // عدم عرض النص المخفي للمستخدم
-            searchInput.readOnly = false;  // السماح بتحرير النص بعد اختيار الزر
-            searchInput.focus();
-
-            messageDiv.textContent = `You selected: ${text}`; // رسالة الإختيار بالإنجليزية
-            optionSelected = true;  // تم اختيار خيار
         }
-
-        // دالة لتنفيذ البحث
-        function performSearch() {
-            const searchInput = document.getElementById('search-input');
-            const query = searchInput.value.trim();
-
-            if (!optionSelected) {
-                alert('يرجى اختيار أحد الخيارات للبحث.');
-                return;
-            }
-
-            if (query === '') {
-                alert('يرجى إدخال نص للبحث.');
-                return;
-            }
-
-            // دمج النص المخفي مع النص المكتوب
-            const finalQuery = hiddenText + ' ' + query;
-
-            const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(finalQuery)}&key=${apiKey}&cx=${searchEngineId}`;
-
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    displayResult(data);
-                })
-                .catch(error => console.error('حدث خطأ:', error));
-        }
-
-// دالة لعرض النتائج
-function displayResult(data) {
-    const searchResultsDiv = document.getElementById('search-results');
-    const resultBox = document.getElementById('result-box');
-    const backButton = document.getElementById('back-button');
-    searchResultsDiv.style.display = 'block';
-    backButton.style.display = 'block';
-
-    if (data.items && data.items.length > 0) {
-        const firstResult = data.items[0]; // الحصول على أول نتيجة فقط
-
-        // إزالة اسم المتجر من النص
-        let cleanedSnippet = firstResult.snippet.replace(/لـ.*?(،|\.)/, ''); // إزالة النص بعد "لـ"
-        let cleanedTitle = firstResult.title;
-
-        // قائمة المواقع التي نريد إخفاءها أو تظليلها
-        const websitesToHide = ['amazon.com', 'aliexpress.com', 'ebay.com', 'alibaba.com', 'verizon.com', 'aliexpress', 'free', 'free shipping'];
-
-        // استبدال أسماء المواقع بالتظليل أو إخفائها في النص
-        websitesToHide.forEach(website => {
-            const regex = new RegExp(website, 'gi');
-            cleanedSnippet = cleanedSnippet.replace(regex, `<span style="background-color: white; color: white;">${website}</span>`);
-            cleanedTitle = cleanedTitle.replace(regex, `<span style="background-color: white; color: white;">${website}</span>`);
-        });
-
-        resultBox.innerHTML = `
-            <div class="result-box">
-                <h3>${cleanedTitle}</h3>
-                <p>${cleanedSnippet}</p>
-                <p style="display: none;">رابط: ${firstResult.link}</p> <!-- إخفاء الرابط -->
-            </div>
-        `;
-    } else {
-        resultBox.innerHTML = '<p>لا توجد نتائج.</p>';
-    }
-}
-
-// دالة للعودة للبحث مرة أخرى
-function goBack() {
-    const searchResultsDiv = document.getElementById('search-results');
-    const resultBox = document.getElementById('result-box');
-    const backButton = document.getElementById('back-button');
-    const activeButton = document.querySelector('.active'); // البحث عن الزر النشط
-
-    searchResultsDiv.style.display = 'none';
-    resultBox.innerHTML = ''; // مسح النتائج
-    backButton.style.display = 'none';
-    optionSelected = false; // إعادة تعيين الحالة
-    hiddenText = ''; // مسح النص المخفي
-    document.getElementById('search-input').value = ''; // مسح حقل البحث
-    document.getElementById('selection-message').textContent = ''; // مسح رسالة الإختيار
-
-    if (activeButton) {
-        activeButton.classList.remove('active'); // إزالة تمييز الزر النشط السابق
-    }
-
-    // هنا يمكنك تعيين الزر الجديد كما يلي:
-    const button = document.getElementById('your-button-id'); // حدد معرف الزر الجديد هنا
-    button.classList.add('active'); // تمييز الزر النشط الجديد
-}
-// دالة لضبط الأبعاد تلقائيًا عند تغيير حجم النافذة
-function adjustLayout() {
-    const buttons = document.querySelectorAll('.button-options button');
-    const searchInput = document.getElementById('search-input');
-
-    // التحقق من حجم النافذة وتطبيق التعديلات بناءً عليه
-    if (window.innerWidth < 768) {
-        // إعدادات للأجهزة المحمولة
-        buttons.forEach(button => {
-            button.style.width = '70%'; // جعل عرض الزر 70%
-            button.style.fontSize = '14px'; // تخفيض حجم الخط
-            button.style.padding = '10px'; // ضبط الحشوة الداخلية للأزرار
-            button.style.margin = '5px 0'; // إضافة مسافة بين الأزرار
-        });
-        searchInput.style.width = '70%'; // جعل عرض مربع البحث 100%
-        searchInput.style.fontSize = '14px'; // تخفيض حجم خط مربع البحث
-        searchInput.style.padding = '10px'; // ضبط الحشوة الداخلية لمربع البحث
-    } else {
-        // إعدادات للأجهزة الكبيرة
-        buttons.forEach(button => {
-            button.style.width = 'auto'; // عرض تلقائي للأزرار
-            button.style.fontSize = '18px'; // زيادة حجم الخط للأزرار
-            button.style.padding = '10px 20px'; // زيادة الحشوة الداخلية للأزرار
-            button.style.margin = '5px'; // ضبط المسافة بين الأزرار
-        });
-        searchInput.style.width = 'auto'; // عرض تلقائي لمربع البحث
-        searchInput.style.fontSize = '18px'; // زيادة حجم الخط في مربع البحث
-        searchInput.style.padding = '12px'; // ضبط الحشوة الداخلية لمربع البحث
-    }
-}
-
-// استدعاء دالة ضبط التخطيط عند تحميل الصفحة
-window.onload = adjustLayout;
-
-// استدعاء دالة ضبط التخطيط عند تغيير حجم النافذة
-window.onresize = adjustLayout;
-
-// استدعاء دالة ضبط التخطيط عند تحميل الصفحة
-window.onload = adjustLayout;
-
-// استدعاء دالة ضبط التخطيط عند تغيير حجم النافذة
-window.onresize = adjustLayout;
-
     </script>
 </body>
 </html>
