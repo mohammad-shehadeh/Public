@@ -181,21 +181,26 @@
         const modal = document.getElementById("modal");
         const btn = document.getElementById("registerButton");
         const span = document.getElementsByClassName("close")[0];
-
+    
         btn.onclick = function() {
             modal.style.display = "block";
         }
-
+    
         span.onclick = function() {
             modal.style.display = "none";
         }
-
+    
         window.onclick = function(event) {
             if (event.target == modal) {
                 modal.style.display = "none";
             }
         }
-
+    
+        // تحميل البيانات من localStorage عند تحميل الصفحة
+        window.onload = function() {
+            loadFromLocal();
+        };
+    
         // إضافة البيانات إلى الجدول وحفظها في localStorage
         document.getElementById("customerForm").onsubmit = function(event) {
             event.preventDefault(); // منع إعادة تحميل الصفحة
@@ -205,11 +210,11 @@
             const problem = document.getElementById("problem").value;
             const phone = document.getElementById("phone").value;
             const notes = document.getElementById("notes").value;
-
+    
             const today = new Date();
             const date = today.toLocaleDateString('ar-EG');
             const daysDiff = Math.floor((Date.now() - today.setHours(0, 0, 0, 0)) / (1000 * 60 * 60 * 24));
-
+    
             // إضافة البيانات إلى الجدول في أعلى الجدول
             const newRow = `
                 <tr>
@@ -231,20 +236,20 @@
                 </tr>
             `;
             document.getElementById("dataBody").insertAdjacentHTML('afterbegin', newRow); // تعديل هنا
-
+    
             // حفظ البيانات في localStorage
             saveToLocal(name, phoneType, serialNumber, problem, phone, notes, date, daysDiff);
-
+    
             // إرسال رسالة للزبون باستخدام تطبيق الرسائل
             const message = `مرحبا بك ${name}!\nلقد تم تسجيل هاتفك في الضمان.\n\nبيانات التسجيل:\nنوع الجهاز: ${phoneType}\nالرقم التسلسلي: ${serialNumber}\nالتاريخ: ${date}\nالمشكلة: ${problem}\nرقم الهاتف: ${phone}\nملاحظات: ${notes}`;
             sendMessage(phone, message);
-
+    
             // إغلاق النافذة
             modal.style.display = "none";
             // إعادة تعيين النموذج
             document.getElementById("customerForm").reset();
         }
-
+    
         // دالة لتغيير الحالة وإرسال الرسالة عند التغيير
         function changeStatus(selectElement) {
             const row = selectElement.parentNode.parentNode;
@@ -256,28 +261,75 @@
             const problem = row.cells[3].innerText;
             const notes = row.cells[5].innerText;
             const status = selectElement.value;
-
+    
+            if (status === "تم الاستلام") {
+                // إرسال الرسالة عند تغيير الحالة
+                const message = `أهلاً ${name}!\nتم تحديث حالة هاتفك ${phoneType} رقم ${serialNumber} إلى تم الاستلام.\n\nالتاريخ: ${date}\nالمشكلة: ${problem}\nملاحظات: ${notes}`;
+                sendMessage(phone, message);
+                
+                // حذف الصف من الجدول بعد فترة قصيرة
+                setTimeout(() => {
+                    row.remove();
+                    // حذف البيانات من localStorage
+                    deleteFromLocal(serialNumber);
+                }, 1000); // يمكنك تعديل الفترة الزمنية (1000 ملي ثانية = 1 ثانية)
+                return; // إنهاء الدالة بعد الحذف
+            }
+    
             const message = `أهلاً ${name}!\nتم تحديث حالة هاتفك ${phoneType} رقم ${serialNumber} إلى ${status}.\n\nالتاريخ: ${date}\nالمشكلة: ${problem}\nملاحظات: ${notes}`;
             sendMessage(phone, message);
         }
-
+    
         // دالة لإرسال الرسالة
         function sendMessage(phone, message) {
             const encodedMessage = encodeURIComponent(message);
             window.location.href = `sms:${phone}?body=${encodedMessage}`;
         }
-
+    
         // دالة لحفظ البيانات في localStorage
         function saveToLocal(name, phoneType, serialNumber, problem, phone, notes, date, daysDiff) {
             const customerData = { name, phoneType, serialNumber, problem, phone, notes, date, daysDiff };
             let customers = JSON.parse(localStorage.getItem("customers")) || [];
-            customers.push(customerData);
+            customers.unshift(customerData);
             localStorage.setItem("customers", JSON.stringify(customers));
             document.getElementById("successMessage").style.display = "block";
             setTimeout(() => {
                 document.getElementById("successMessage").style.display = "none";
             }, 2000);
         }
+    
+        // دالة لتحميل البيانات من localStorage
+        function loadFromLocal() {
+            const customers = JSON.parse(localStorage.getItem("customers")) || [];
+            customers.forEach(customer => {
+                const newRow = `
+                    <tr>
+                        <td>${customer.phoneType}</td>
+                        <td>${customer.name}</td>
+                        <td>${customer.serialNumber}</td>
+                        <td>${customer.problem}</td>
+                        <td>${customer.phone}</td>
+                        <td>${customer.notes}</td>
+                        <td>${customer.date}</td>
+                        <td>${customer.daysDiff} يوم</td>
+                        <td>
+                            <select onchange="changeStatus(this)">
+                                <option value="تم التسجيل">تم التسجيل</option>
+                                <option value="تم الوصول">تم الوصول</option>
+                                <option value="تم الاستلام">تم الاستلام</option>
+                            </select>
+                        </td>
+                    </tr>
+                `;
+                document.getElementById("dataBody").insertAdjacentHTML('beforeend', newRow);
+            });
+        }
+    
+        // دالة لحذف البيانات من localStorage
+        function deleteFromLocal(serialNumber) {
+            let customers = JSON.parse(localStorage.getItem("customers")) || [];
+            customers = customers.filter(customer => customer.serialNumber !== serialNumber);
+            localStorage.setItem("customers", JSON.stringify(customers));
+        }
     </script>
-</body>
-</html>
+    
