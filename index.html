@@ -3,348 +3,1396 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shehadeh AI</title>
+    <title>نظام محاسبة ونقطة بيع متكامل</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
-
+        /* إعدادات عامة للصفحة */
         body {
-            font-family: 'Roboto Mono', monospace;
+            font-family: 'Arial', sans-serif;
+            direction: rtl;
             text-align: center;
             margin: 0;
-            padding: 20px;
-            background-image: url('https://png.pngtree.com/thumb_back/fw800/background/20190223/ourmid/pngtree-artificial-intelligence-future-technology-background-technology-backgroundtechnology-backgroundtechnology-image_72686.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: white;
+            padding: 0;
+            background-color: #f4f4f4;
         }
-
-        h1 {
-            font-size: 24px;
-            color: white;
-        }
-
-        h2 {
-            color: white;
-            font-size: 22px;
-        }
-
-        p {
-            font-size: 18px;
-            color: #6c757d;
-        }
-
-        .search-container {
-            margin: 20px auto;
-            padding: 10px;
-            border-radius: 5px;
-            background-color: rgba(15, 15, 15, 0.57);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            display: inline-block;
-            width: 100%;
-            max-width: 300px;
-        }
-
-        .gcse-search {
-            margin-top: 10px;
-        }
-
-        .gcse-search input[type="text"] {
-            border: 1px solid #ced4da;
-            padding: 15px;
-            border-radius: 5px;
-            width: calc(100% - 30px);
-            font-size: 18px;
-            background-color: #fff;
-            color: black; /* جعل النص مرئيًا */
-        }
-
-        .gcse-search button {
-            padding: 12px 18px;
-            border: none;
-            border-radius: 5px;
+    
+        /* تصميم رأس الصفحة */
+        header {
             background-color: #007bff;
             color: white;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+    
+        header p {
+            margin: 0;
             font-size: 18px;
+            margin-top: 5px;
+        }
+    
+        /* تصميم شريط التنقل */
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background-color: #343a40;
+            overflow: hidden;
+        }
+    
+        nav ul li {
+            display: inline-block;
+        }
+    
+        nav ul li a {
+            display: inline-block;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: white;
+            background-color: #343a40;
+            transition: background-color 0.3s ease;
+        }
+    
+        nav ul li a:hover {
+            background-color: #007bff;
+        }
+    
+        /* تصميم الأقسام */
+        section {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+    
+        section.active {
+            display: block;
+        }
+    
+        section h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+    
+        /* تصميم الحقول والنماذج */
+        input[type="text"],
+        input[type="number"],
+        input[type="file"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
         }
-
-        .gcse-search button:hover {
+    
+        button:hover {
             background-color: #0056b3;
         }
-
-        .results {
+    
+        /* تصميم الجدول */
+        table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 20px;
-            display: none;
         }
-
-        .back-button {
-            margin-top: 20px;
-            padding: 12px 18px;
-            border: none;
-            border-radius: 5px;
-            background-color: #dc3545;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            display: none;
-        }
-
-        .back-button:hover {
-            background-color: #c82333;
-        }
-
-        .result-box {
-            background-color: #fff;
-            padding: 20px;
+    
+        table th, table td {
             border: 1px solid #ddd;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            text-align: left;
-            font-size: 18px;
-            color: black; /* تغيير لون النص إلى الأسود */
-        }
-
-        .header-container {
-            margin-bottom: 20px;
-        }
-
-        .button-options {
-            margin-bottom: 15px;
-        }
-
-        .button-options button {
-            margin: 5px;
-            padding: 10px 20px;
-            background-color: #17a2b8;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .button-options button.active {
-            background-color: #ff6f00; /* لون مميز للزر النشط */
-            box-shadow: 0 0 10px rgba(255, 111, 0, 0.5); /* تأثير الإضاءة */
-        }
-
-        .button-options button:hover {
-            background-color: #138496;
-        }
-
-        .selection-message {
-            margin-bottom: 10px;
-            font-size: 22px; /* تكبير حجم الخط */
-            color: #ffcc00; /* لون الرسالة */
-            background-color: rgba(0, 0, 0, 0.5); /* خلفية للنص */
             padding: 10px;
-            border-radius: 5px;
+            text-align: right;
+        }
+    
+        table th {
+            background-color: #007bff;
+            color: white;
+        }
+    
+        tfoot td {
+            font-weight: bold;
+        }
+    
+        .pos-buttons button {
+            margin: 5px;
+        }
+    
+/* تنسيق صندوق الإجمالي */
+.total-container {
+    display: flex; /* استخدام Flexbox */
+    flex-direction: row; /* تحديد الاتجاه الأفقي */
+    justify-content: space-between; /* توزيع العناصر بالتساوي */
+    align-items: center; /* محاذاة العناصر في المنتصف */
+    font-size: 18px; /* حجم خط إجمالي الفاتورة */
+    font-weight: bold; /* وزن خط إجمالي الفاتورة */
+    margin: 10px auto;
+    padding: 10px;
+    background-color: #e7f1ff;
+    border: 1px solid #007bff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* تنسيق عدد الأصناف ومجموع الكميات */
+.item-count, .total-quantity {
+    font-size: 16px; /* حجم خط عدد الأصناف ومجموع الكميات */
+    font-weight: normal; /* وزن خط عدد الأصناف ومجموع الكميات */
+}
+    
+        /* تنسيق مربع إدخال اسم الزبون */
+        .customer-name-input input[type="text"] {
+            width: calc(100% - 20px);
+            max-width: 250px;
+            margin: 10px auto;
+        }
+    
+        /* تصميم مربع البحث العصري */
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+    
+        .search-container input[type="text"] {
+            width: 100%;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    
+        .search-container input[type="text"]:focus {
+            border-color: #007BFF;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+    
+        .search-container input[type="text"]::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+    
+        /* تصميم أيقونة البحث داخل مربع البحث */
+        .search-container .search-icon {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: #aaa;
+            pointer-events: none;
+        }
+    
+        /* تأثير النبض حول مربع البحث عند التركيز */
+        .search-container input[type="text"]:focus::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50px;
+            background: rgba(0, 123, 255, 0.1);
+            animation: pulse 0.7s infinite ease-in-out;
+        }
+    
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1.1);
+                opacity: 0;
+            }
         }
     </style>
-</head>
+    
+    </head>
 <body>
 
-    <div class="header-container">
-        <h1 style="font-size: 15px; color: white; background: rgba(0, 0, 0, 0.5); padding: 10px; border-radius: 8px; box-shadow: 0 0 20px #00ffea, 0 0 40px #00ffea, 0 0 60px #00ffea;">ابحث عن اي شيء يخص الهواتف باستخدام برنامج الذكاء الصناعي الخاص ب شحادة سنتر</h1>
-        <br>
-        <h1 style="font-size: 28px; color: #ffffff; text-shadow: 0 0 10px #00ffea, 0 0 20px #00ffea, 0 0 30px #00ffea; letter-spacing: 6px; font-weight: bold;">Shehadeh AI</h1>
+    <!-- رأس الصفحة -->
+    <header>
+        <h1>Shehadeh Center </h1>
+        <p id="current-date"></p>
+    </header>
+
+    <!-- شريط التنقل بين الصفحات -->
+    <nav>
+        <ul>
+            <li><a href="#" onclick="showSection('pos')">نقطة البيع</a></li>
+            <li><a href="#" onclick="showSection('items')">إضافة الأصناف</a></li>
+            <li><a href="#" onclick="showSection('customers')">إضافة الزبائن</a></li>
+            <li><a href="#" onclick="showSection('settings')">الإعدادات</a></li>
+            <li><a href="#" onclick="showSection('sales')">الفواتير</a></li>
+            <li><a href="#" onclick="showSection('PRW')">PRW</a></li>
+        </ul>
+    </nav>
+
+    <!-- الأقسام المختلفة للصفحات -->
+
+<!-- قسم نقطة البيع -->
+<section id="pos" class="active">
+    <h2>نقطة البيع</h2>
+
+    <!-- أزرار التحكم -->
+    <div class="pos-buttons">
+        <button id="print-invoice-btn">طباعة وحفظ الفاتورة</button>
+        <button id="prev-invoice-btn">تعديل الفاتورة السابقة</button>
+        <button id="edit-invoice-btn">تهيئة الفاتورة</button>
+        <button id="add-item-function-btn">اضافة صنف</button>
+
+        <!-- النافذة المنبثقة لإدخال الصنف الجديد -->
+        <div id="new-item-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0, 0, 0, 0.5);">
+            <div style="position:relative; margin:10% auto; padding:20px; background:white; width:300px;">
+                <h3>إضافة صنف جديد</h3>
+                <label for="new-item-name">اسم الصنف:</label>
+                <input type="text" id="new-item-name" required><br><br>
+        
+                <label for="new-item-quantity">العدد:</label>
+                <input type="number" id="new-item-quantity" min="1" required><br><br>
+        
+                <label for="new-item-price">السعر:</label>
+                <input type="number" id="new-item-price" min="0" step="0.01" required><br><br>
+        
+                <button id="cancel-new-item-btn">إلغاء</button>
+                <button id="add-new-item-btn">إضافة</button>
+            </div>
+        </div>
+                
+    <!-- إدخال اسم الزبون -->
+    <div class="customer-name-input">
+        <label for="customer-name">اسم الزبون:</label>
+        <input type="text" id="customer-name" placeholder="أدخل اسم الزبون" required style="width: 200px;">
     </div>
 
-    <div class="button-options">
-        <button onclick="insertText('Battery type', this)">نوع البطارية</button>
-        <button onclick="insertText('Phone type', this)">نوع الهاتف</button>
-        <button onclick="insertText('Phone specifications', this)">مواصفات هاتف</button>
-        <button onclick="insertText('Flex charger image', this)">صورة قاعدة الشاحن</button>
+    <!-- مربع إدخال الباركود -->
+    <div class="barcode-input">
+        <label for="barcode-input">إدخال باركود:</label>
+        <input type="text" id="barcode-input" placeholder="أدخل الباركود هنا">
+        <!-- الزر تمت إزالته -->
     </div>
 
-    <div class="selection-message" id="selection-message"></div> <!-- رسالة الإختيار -->
+<!-- إجمالي الفاتورة -->
+<div class="total-container">
+    <h3>الإجمالي: <span id="total-price">0</span></h3>
+    <h3>عدد الأصناف: <span id="item-count" class="item-count">0</span></h3>
+    <h3>مجموع الكميات: <span id="total-quantity" class="total-quantity">0</span></h3>
+</div>
 
-    <div class="search-container">
-        <input type="text" id="search-input" placeholder="اكتب للبحث..." onkeypress="restrictInput(event)" readonly />
-        <br><br>
-   <button style="font-size: 18px; padding: 15px 30px;" onclick="performSearch()">بحث</button>
+    <!-- جدول الأصناف المضافة -->
+    <table id="invoice-table">
+        <thead>
+            <tr>
+                <th>اسم الصنف</th>
+                <th>العدد</th>
+                <th>السعر</th>
+                <th>المجموع</th>
+            </tr>
+        </thead>
+        <tbody id="invoice-items">
+            <!-- سيتم إضافة الأصناف هنا -->
+        </tbody>
+    </table>
+</section>
+<!-- قسم إضافة الأصناف -->
+<section id="items">
+    <h2>إضافة الأصناف</h2>
+
+    <!-- نموذج إضافة صنف جديد -->
+    <div class="add-item-form">
+        <label for="item-name">اسم الصنف:</label>
+        <input type="text" id="item-name" placeholder="أدخل اسم الصنف">
+
+        <label for="item-price">السعر:</label>
+        <input type="number" id="item-price" placeholder="أدخل السعر" min="0" step="0.01">
+
+        <label for="item-barcode">الباركود (افصل بين الباركودات باستخدام فاصلة):</label>
+        <input type="text" id="item-barcode" placeholder="أدخل الباركودات">
+
+        <button id="add-item-btn">إضافة الصنف</button>
+        <button id="update-item-btn" style="display:none;">تعديل الصنف</button>
     </div>
 
-    <h2>نتيجة البحث:</h2>
-    <div class="results" id="search-results">
-        <div id="result-box"></div>
-    </div>
+    <!-- جدول الأصناف -->
+    <h3>جدول الأصناف</h3>
 
-    <button class="back-button" id="back-button" onclick="goBack()">بحث مرة أخرى</button>
+<!-- مربع البحث -->
+<div class="search-container">
+    <i class="search-icon fas fa-search"></i>
+    <input type="text" id="search-input" placeholder="ابحث عن صنف بالاسم أو الباركود" oninput="searchItems()">
+</div>
 
+<!-- عرض قائمة الأصناف -->
+<table>
+    <thead>
+      <tr>
+        <th>اسم الصنف</th>
+        <th>السعر</th>
+        <th>الباركودات</th>
+        <th>الإجراء</th>
+      </tr>
+    </thead>
+    <tbody id="items-list">
+      <!-- سيتم إضافة الأصناف هنا -->
+    </tbody>
+</table>
+      </section>
+    <!-- قسم إضافة الزبائن -->
+    <section id="customers">
+        <h2>إضافة الزبائن</h2>
+
+        <!-- نموذج إضافة زبون جديد -->
+        <div class="add-customer-form">
+            <label for="customer-name-input">اسم الزبون:</label>
+            <input type="text" id="customer-name-input" placeholder="أدخل اسم الزبون">
+
+            <label for="customer-phone-input">رقم الهاتف:</label>
+            <input type="text" id="customer-phone-input" placeholder="أدخل رقم الهاتف">
+
+            <button id="add-customer-btn">إضافة الزبون</button>
+        </div>
+
+        <!-- جدول الزبائن -->
+        <h3>جدول الزبائن</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>اسم الزبون</th>
+                    <th>رقم الهاتف</th>
+                </tr>
+            </thead>
+            <tbody id="customers-list">
+                <!-- سيتم إضافة الزبائن هنا -->
+            </tbody>
+        </table>
+    </section>
+
+    <!-- قسم الإعدادات -->
+    <section id="settings">
+        <h2>الإعدادات</h2>
+
+        <!-- إعدادات الأصوات -->
+        <div class="sound-settings">
+            <label for="correct-sound">صوت القراءة الصحيحة:</label>
+            <input type="file" id="correct-sound" accept="audio/*">
+
+            <label for="error-sound">صوت القراءة الخاطئة:</label>
+            <input type="file" id="error-sound" accept="audio/*">
+        </div>
+    
+        <label for="company-logo">شعار الشركة:</label>
+        <input type="file" id="company-logo" accept="image/*">
+           
+        <label for="custom-title">تعديل العنوان:</label>
+<input type="text" id="custom-title" placeholder="أدخل النص هنا">
+
+        <!-- إعدادات إضافية مستقبلية -->
+        <div class="additional-settings">
+            <h3>إعدادات إضافية</h3>
+            <!-- يمكنك إضافة إعدادات أخرى هنا -->
+        </div>
+    </section>
+
+<!-- قسم إجمالي المبيعات والفواتير -->
+<section id="sales">
+    <h2>الفواتير</h2>
+    <!-- زر تحديث الفواتير -->
+    <button id="refresh-sales-btn">تحديث الفواتير</button>
+    <!-- سيتم عرض الفواتير والمبيعات هنا -->
+    <table>            <thead>
+                <tr>
+                    <th>إسم الزبون</th>
+                    <th>قيمة الفاتورة</th>
+                    <th>التاريخ</th>
+                    <th>الإجراء</th>
+                </tr>
+            </thead>
+            <tbody id="sales-list">
+                <!-- سيتم إضافة الفواتير هنا -->
+            </tbody>
+        </table>
+    </section>
     
     <script>
-        const apiKey = 'AIzaSyANq87OyuJUq6bt1uFVKQC7VaklCV6eOkk';
-        const searchEngineId = 'b284a81d633f74a1b';
-        let optionSelected = false;
-        let insertedText = '';  // لحفظ النص المدخل من الأزرار
-        let hiddenText = '';    // لحفظ النص المخفي
+            // دالة البحث عن الأصناف
+            function filterItems() {
+    const searchTerm = document.getElementById('search').value.trim().toLowerCase();
 
-        // دالة لمنع إدخال الحروف غير الإنجليزية
-        function restrictInput(event) {
-            // السماح بالأرقام والحروف الإنجليزية فقط
-            if (!optionSelected) {
-                event.preventDefault();
-                alert('يرجى اختيار أحد الخيارات للبدء بالبحث.'); // تنبيه المستخدم
-            } else if (!/^[a-zA-Z0-9\s]*$/.test(event.key)) {
-                event.preventDefault();
-                alert('يرجى إدخال نص باللغة الإنجليزية أو الأرقام فقط.'); // تنبيه المستخدم
-            }
-        }
+    // فلترة العناصر باستخدام الاسم أو الباركود
+    filteredItems = items.filter(item => 
+        item.name.toLowerCase().includes(searchTerm) || 
+        item.barcodes.some(barcode => barcode.toLowerCase().includes(searchTerm))
+    );
 
-        // دالة لإدراج النص من الأزرار إلى مربع البحث والانتقال إليه
-        function insertText(text, button) {
-            // إزالة تمييز الزر النشط من جميع الأزرار
-            document.querySelectorAll('.button-options button').forEach(btn => {
-                btn.classList.remove('active');
+    // إعادة تحميل العناصر المفلترة
+    if (filteredItems.length > 0) {
+        loadFilteredItems();
+    } else {
+        itemsList.innerHTML = '<tr><td colspan="4">لا توجد أصناف مطابقة للبحث</td></tr>';
+    }
+}
+
+// تحديث التاريخ عند تحميل الصفحة
+function updateDate() {
+    const dateElement = document.getElementById('current-date');
+    dateElement.textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric' });
+}
+    
+        // وظيفة لإظهار القسم المحدد وإخفاء البقية
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                section.classList.remove('active');
             });
+            document.getElementById(sectionId).classList.add('active');
+        }
+    
+        // تخزين وإدارة الأصناف
+        let items = JSON.parse(localStorage.getItem('items')) || [];
+        const itemsList = document.getElementById('items-list');
+        let currentEditIndex = null;
+    
+// إضافة مستمع للزر الخاص بإضافة صنف
+document.getElementById('add-item-btn').addEventListener('click', handleItemAction);
+document.getElementById('update-item-btn').addEventListener('click', handleItemAction);
 
-            // تمييز الزر النشط
-            button.classList.add('active');
+function handleItemAction(event) {
+    const itemName = document.getElementById('item-name').value.trim();
+    const itemPrice = parseFloat(document.getElementById('item-price').value);
+    const barcodesInput = document.getElementById('item-barcode').value.trim();
+    
+    // تحويل الباركود إلى مصفوفة باستخدام الفواصل
+    const barcodes = barcodesInput.split(',').map(b => b.trim()).filter(b => b);
 
-            const searchInput = document.getElementById('search-input');
-            const messageDiv = document.getElementById('selection-message');
-            hiddenText = text; // حفظ النص في الذاكرة
-            searchInput.value = '';  // عدم عرض النص المخفي للمستخدم
-            searchInput.readOnly = false;  // السماح بتحرير النص بعد اختيار الزر
-            searchInput.focus();
+    // تحقق من صحة البيانات المدخلة
+    if (itemName && !isNaN(itemPrice) && barcodes.length > 0) {
+        const newItem = { name: itemName, price: itemPrice, barcodes: barcodes };
 
-            messageDiv.textContent = `You selected: ${text}`; // رسالة الإختيار بالإنجليزية
-            optionSelected = true;  // تم اختيار خيار
+        if (event.currentTarget.id === 'add-item-btn') {
+            // تحقق من عدم وجود صنف بنفس الباركود
+            if (!items.find(item => item.barcodes.some(barcode => newItem.barcodes.includes(barcode)))) {
+                items.unshift(newItem); // إضافة العنصر الجديد في بداية المصفوفة
+                alert('تم إضافة الصنف بنجاح');
+            } else {
+                alert('يوجد صنف بنفس الباركود!');
+            }
+        } else if (event.currentTarget.id === 'update-item-btn') {
+            items[currentEditIndex] = newItem; // تعديل الصنف
+            alert('تم تعديل الصنف بنجاح');
+            currentEditIndex = null;
+            enterAddMode(); // العودة لوضع الإضافة بعد التعديل
         }
 
-        // دالة لتنفيذ البحث
-        function performSearch() {
-            const searchInput = document.getElementById('search-input');
-            const query = searchInput.value.trim();
+        // تخزين البيانات في localStorage
+        localStorage.setItem('items', JSON.stringify(items));
+        loadItems();  // إعادة تحميل الأصناف
+        clearItemInputs();  // مسح المدخلات
+    } else {
+        alert('الرجاء إدخال جميع البيانات الصحيحة');
+    }
+}
 
-            if (!optionSelected) {
-                alert('يرجى اختيار أحد الخيارات للبحث.');
-                return;
-            }
+// دالة لتفعيل وضع إضافة الأصناف
+function enterAddMode() {
+    clearItemInputs();
+    toggleUpdateButtons(false); // إخفاء زر التعديل
+    document.getElementById('add-item-btn').style.display = 'block'; // إظهار زر الإضافة
+}
 
-            if (query === '') {
-                alert('يرجى إدخال نص للبحث.');
-                return;
-            }
+// وظيفة لإخفاء زر الإضافة وعرض زر التعديل عند تعديل الصنف
+function toggleUpdateButtons(isEditing) {
+    document.getElementById('add-item-btn').style.display = isEditing ? 'none' : 'block'; // إخفاء زر الإضافة إذا كان في وضع التعديل
+    document.getElementById('update-item-btn').style.display = isEditing ? 'block' : 'none'; // إظهار زر التعديل إذا كان في وضع التعديل
+}
 
-            // دمج النص المخفي مع النص المكتوب
-            const finalQuery = hiddenText + ' ' + query;
+// تحميل صنف للتعديل
+function loadItemForEditing(index) {
+    currentEditIndex = index;
+    const item = items[index];
 
-            const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(finalQuery)}&key=${apiKey}&cx=${searchEngineId}`;
+    // ملء الحقول بالبيانات الحالية للصنف
+    document.getElementById('item-name').value = item.name;
+    document.getElementById('item-price').value = item.price;
+    document.getElementById('item-barcode').value = item.barcodes.join(', ');
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    displayResult(data);
-                })
-                .catch(error => console.error('حدث خطأ:', error));
-        }
+    // عرض زر التعديل بدلاً من زر الإضافة
+    toggleUpdateButtons(true);
+    
+    // الانتقال إلى قسم تسجيل الأصناف
+    scrollToTop(); // تمرير الصفحة إلى أعلى عند التحويل
+}
 
-// دالة لعرض النتائج
-function displayResult(data) {
-    const searchResultsDiv = document.getElementById('search-results');
-    const resultBox = document.getElementById('result-box');
-    const backButton = document.getElementById('back-button');
-    searchResultsDiv.style.display = 'block';
-    backButton.style.display = 'block';
+// مسح المدخلات بعد الإضافة أو التعديل
+function clearItemInputs() {
+    document.getElementById('item-name').value = '';
+    document.getElementById('item-price').value = '';
+    document.getElementById('item-barcode').value = '';
+}
 
-    if (data.items && data.items.length > 0) {
-        const firstResult = data.items[0]; // الحصول على أول نتيجة فقط
+// دالة تأكيد التعديل
+function confirmEdit(index) {
+    const item = items[index];
+    
+    // إظهار رسالة التأكيد
+    const confirmation = confirm(`هل تريد تعديل الصنف "${item.name}"؟`);
+    
+    // إذا وافق المستخدم على التعديل
+    if (confirmation) {
+        loadItemForEditing(index); // تحميل البيانات للتعديل
+    }
+}
 
-        // إزالة اسم المتجر من النص
-        let cleanedSnippet = firstResult.snippet.replace(/لـ.*?(،|\.)/, ''); // إزالة النص بعد "لـ"
-        let cleanedTitle = firstResult.title;
+// تحديث الأصناف عند التحميل
+window.onload = function() {
+    loadItems(); // عرض جميع الأصناف
+    enterAddMode(); // تفعيل وضع الإضافة عند تحميل الصفحة
+};
 
-        // قائمة المواقع التي نريد إخفاءها أو تظليلها
-        const websitesToHide = ['amazon.com', 'aliexpress.com', 'ebay.com', 'alibaba.com', 'verizon.com'];
-
-        // استبدال أسماء المواقع بالتظليل أو إخفائها في النص
-        websitesToHide.forEach(website => {
-            const regex = new RegExp(website, 'gi');
-            cleanedSnippet = cleanedSnippet.replace(regex, `<span style="background-color: white; color: white;">${website}</span>`);
-            cleanedTitle = cleanedTitle.replace(regex, `<span style="background-color: white; color: white;">${website}</span>`);
-        });
-
-        resultBox.innerHTML = `
-            <div class="result-box">
-                <h3>${cleanedTitle}</h3>
-                <p>${cleanedSnippet}</p>
-                <p style="display: none;">رابط: ${firstResult.link}</p> <!-- إخفاء الرابط -->
-            </div>
+// تحميل الأصناف وعرضها في الجدول
+function loadItems() {
+    itemsList.innerHTML = ''; // تفريغ الجدول قبل إعادة تحميل العناصر
+    items.forEach((item, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${item.name}</td>
+            <td>${item.price.toFixed(2)} ₪</td>
+            <td>${item.barcodes.join(', ')}</td>
+            <td>
+                <button class="edit-item-btn" data-index="${index}">تعديل</button>
+            </td>
         `;
-    } else {
-        resultBox.innerHTML = '<p>لا توجد نتائج.</p>';
-    }
+        itemsList.appendChild(row);
+    });
+    addEditAndDeleteListeners();
 }
 
-// دالة للعودة للبحث مرة أخرى
-function goBack() {
-    const searchResultsDiv = document.getElementById('search-results');
-    const resultBox = document.getElementById('result-box');
-    const backButton = document.getElementById('back-button');
-    const activeButton = document.querySelector('.active'); // البحث عن الزر النشط
-
-    searchResultsDiv.style.display = 'none';
-    resultBox.innerHTML = ''; // مسح النتائج
-    backButton.style.display = 'none';
-    optionSelected = false; // إعادة تعيين الحالة
-    hiddenText = ''; // مسح النص المخفي
-    document.getElementById('search-input').value = ''; // مسح حقل البحث
-    document.getElementById('selection-message').textContent = ''; // مسح رسالة الإختيار
-
-    if (activeButton) {
-        activeButton.classList.remove('active'); // إزالة تمييز الزر النشط السابق
-    }
-
-    // هنا يمكنك تعيين الزر الجديد كما يلي:
-    const button = document.getElementById('your-button-id'); // حدد معرف الزر الجديد هنا
-    button.classList.add('active'); // تمييز الزر النشط الجديد
-}
-// دالة لضبط الأبعاد تلقائيًا عند تغيير حجم النافذة
-function adjustLayout() {
-    const buttons = document.querySelectorAll('.button-options button');
-    const searchInput = document.getElementById('search-input');
-
-    // التحقق من حجم النافذة وتطبيق التعديلات بناءً عليه
-    if (window.innerWidth < 768) {
-        // إعدادات للأجهزة المحمولة
-        buttons.forEach(button => {
-            button.style.width = '70%'; // جعل عرض الزر 70%
-            button.style.fontSize = '14px'; // تخفيض حجم الخط
-            button.style.padding = '10px'; // ضبط الحشوة الداخلية للأزرار
-            button.style.margin = '5px 0'; // إضافة مسافة بين الأزرار
+// إضافة مستمعات للأزرار الخاصة بالتعديل والحذف
+function addEditAndDeleteListeners() {
+    document.querySelectorAll('.edit-item-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const index = parseInt(this.getAttribute('data-index'));
+            confirmEdit(index); // عرض رسالة التأكيد عند الضغط على زر التعديل
         });
-        searchInput.style.width = '70%'; // جعل عرض مربع البحث 100%
-        searchInput.style.fontSize = '14px'; // تخفيض حجم خط مربع البحث
-        searchInput.style.padding = '10px'; // ضبط الحشوة الداخلية لمربع البحث
-    } else {
-        // إعدادات للأجهزة الكبيرة
-        buttons.forEach(button => {
-            button.style.width = 'auto'; // عرض تلقائي للأزرار
-            button.style.fontSize = '18px'; // زيادة حجم الخط للأزرار
-            button.style.padding = '10px 20px'; // زيادة الحشوة الداخلية للأزرار
-            button.style.margin = '5px'; // ضبط المسافة بين الأزرار
+    });
+
+    document.querySelectorAll('.delete-item-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const index = parseInt(this.getAttribute('data-index'));
+            deleteItem(index);
         });
-        searchInput.style.width = 'auto'; // عرض تلقائي لمربع البحث
-        searchInput.style.fontSize = '18px'; // زيادة حجم الخط في مربع البحث
-        searchInput.style.padding = '12px'; // ضبط الحشوة الداخلية لمربع البحث
-    }
+    });
 }
 
-// استدعاء دالة ضبط التخطيط عند تحميل الصفحة
-window.onload = adjustLayout;
+// دالة للتمرير إلى أعلى الصفحة
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // لجعل التمرير سلسًا
+    });
+}
 
-// استدعاء دالة ضبط التخطيط عند تغيير حجم النافذة
-window.onresize = adjustLayout;
+// تحديث التاريخ على الصفحة
+function updateDate() {
+    const dateElement = document.getElementById('date');
+    const currentDate = new Date().toLocaleDateString('he-IL'); // تحديد اللغة العبرية (إسرائيل) لتنسيق التاريخ
+    dateElement.textContent = currentDate;
+}
 
-// استدعاء دالة ضبط التخطيط عند تحميل الصفحة
-window.onload = adjustLayout;
-
-// استدعاء دالة ضبط التخطيط عند تغيير حجم النافذة
-window.onresize = adjustLayout;
-
+// تحميل الأصناف عند تحميل الصفحة
+loadItems();
+updateDate();
+showSection('pos'); // إظهار قسم نقطة البيع بشكل افتراضي عند التحميل
     </script>
+                    
+
+<script>
+    // تخزين وإدارة الزبائن
+    let customers = JSON.parse(localStorage.getItem('customers')) || [];
+    const customersList = document.getElementById('customers-list');
+
+    document.getElementById('add-customer-btn').addEventListener('click', function() {
+        const customerName = document.getElementById('customer-name-input').value.trim();
+        const customerPhone = document.getElementById('customer-phone-input').value.trim();
+
+        if (customerName && customerPhone) {
+            const newCustomer = { name: customerName, phone: customerPhone };
+            customers.push(newCustomer);
+            localStorage.setItem('customers', JSON.stringify(customers));
+            loadCustomers();
+            clearCustomerInputs();
+        } else {
+            alert('الرجاء إدخال جميع البيانات');
+        }
+    });
+
+    function clearCustomerInputs() {
+        document.getElementById('customer-name-input').value = '';
+        document.getElementById('customer-phone-input').value = '';
+    }
+
+    function loadCustomers() {
+        customersList.innerHTML = '';
+        customers.forEach(customer => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${customer.name}</td>
+                <td>${customer.phone}</td>
+                <td><button class="delete-customer-btn">حذف</button></td>
+            `;
+            customersList.appendChild(row);
+        });
+        addDeleteCustomerEventListeners();
+    }
+
+    function addDeleteCustomerEventListeners() {
+        const deleteButtons = document.querySelectorAll('.delete-customer-btn');
+        deleteButtons.forEach((button, index) => {
+            button.addEventListener('click', function() {
+                customers.splice(index, 1);
+                localStorage.setItem('customers', JSON.stringify(customers));
+                loadCustomers();
+            });
+        });
+    }
+
+    loadCustomers();
+
+    // تخزين وإدارة الفواتير
+    let invoiceItems = [];
+    let totalPrice = 0;
+
+// إضافة مستمع لحدث "keypress" لحقل الإدخال
+document.getElementById('barcode-input').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        // استدعاء دالة إضافة الباركود هنا
+        addBarcode();
+    }
+});
+
+// الدالة لحفظ الملف في التخزين المحلي
+function saveSoundToLocalStorage(inputId) {
+    const soundInput = document.getElementById(inputId);
+    if (soundInput.files.length > 0) {
+        const file = soundInput.files[0];
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            localStorage.setItem(inputId, event.target.result);
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+// استرجاع الصوت من التخزين المحلي عند تحميل الصفحة
+function loadSoundFromLocalStorage(inputId) {
+    const soundInput = document.getElementById(inputId);
+    const soundData = localStorage.getItem(inputId);
+    if (soundData) {
+        const audio = new Audio(soundData);
+        soundInput.dataset.audioSrc = soundData; // تخزين مصدر الصوت
+    }
+}
+
+function addBarcode() {
+    const barcodeInput = document.getElementById('barcode-input').value.trim();
+
+    // التحقق مما إذا كان حقل الباركود فارغًا
+    if (barcodeInput === '') {
+        return; // الخروج إذا كان فارغًا
+    }
+
+    const foundItem = items.find(item => item.barcodes.includes(barcodeInput));
+
+    if (foundItem) {
+        const existingItem = invoiceItems.find(item => item.barcodes.includes(barcodeInput));
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            invoiceItems.push({ ...foundItem, quantity: 1 });
+        }
+
+
+        // تشغيل صوت النجاح بعد إضافة الصنف
+        const correctSoundData = localStorage.getItem('correct-sound');
+        if (correctSoundData) {
+            const correctSound = new Audio(correctSoundData);
+            correctSound.play().catch(error => {
+                console.error('فشل تشغيل الصوت:', error);
+            });
+        }
+
+        updateInvoiceTable();
+        document.getElementById('barcode-input').value = '';
+    } else {
+        // تشغيل صوت الخطأ فوراً قبل عرض الرسالة
+        const errorSoundData = localStorage.getItem('error-sound');
+        if (errorSoundData) {
+            const errorSound = new Audio(errorSoundData);
+            errorSound.play().then(() => {
+                alert('الصنف غير موجود');
+            }).catch(error => {
+                console.error('فشل تشغيل الصوت:', error);
+                alert('الصنف غير موجود');
+            });
+        } else {
+            alert('الصنف غير موجود');
+        }
+    }
+}
+
+// إضافة حدث لتخزين الصوت عند تغييره
+document.getElementById('correct-sound').addEventListener('change', function() {
+    saveSoundToLocalStorage('correct-sound');
+});
+document.getElementById('error-sound').addEventListener('change', function() {
+    saveSoundToLocalStorage('error-sound');
+});
+
+// تحميل الأصوات من التخزين المحلي عند تحميل الصفحة
+window.onload = function() {
+    loadSoundFromLocalStorage('correct-sound');
+    loadSoundFromLocalStorage('error-sound');
+};
+
+function updateInvoiceTable() {
+    const invoiceTable = document.getElementById('invoice-items');
+    const totalElement = document.getElementById('total-price');
+    const itemCountElement = document.getElementById('item-count');
+    const totalQuantityElement = document.getElementById('total-quantity');
+    
+    invoiceTable.innerHTML = '';
+    totalPrice = 0;
+    let totalQuantity = 0; // متغير جديد لمجموع الكميات
+    let itemCount = 0; // متغير جديد لعدد الأصناف
+
+    // عرض العناصر بنفس الترتيب، الأحدث أولاً
+    invoiceItems.slice().reverse().forEach((item, index) => {
+        const reverseIndex = invoiceItems.length - 1 - index;
+    const itemTotal = item.price * item.quantity;
+    totalPrice += itemTotal;
+    totalQuantity += item.quantity; // حساب مجموع الكميات
+    itemCount += 1; // حساب عدد الأصناف
+
+    const row = document.createElement('tr');
+row.innerHTML = `
+    <td>${item.name}</td>
+    <td>
+        <input type="number" value="${item.quantity}" min="1" 
+               onchange="updateQuantity(${reverseIndex}, this.value)" 
+               onclick="this.select()" 
+               onkeydown="if(event.key === 'Enter') { updateQuantity(${reverseIndex}, this.value); document.getElementById('barcode-input').focus(); }">
+    </td>
+    <td>
+        <input type="number" value="${item.price.toFixed(2)}" min="0" step="0.01" 
+               onchange="updatePrice(${reverseIndex}, this.value)" 
+               onclick="this.select()" 
+               onkeydown="if(event.key === 'Enter') { updatePrice(${reverseIndex}, this.value); document.getElementById('barcode-input').focus(); }">
+    </td>
+    <td>${itemTotal.toFixed(2)} ₪</td>
+    <td>
+        <button class="remove-invoice-item-btn">حذف</button>
+    </td>
+`;
+    invoiceTable.appendChild(row);
+});
+
+    // تحديث عناصر الإجمالي
+    totalElement.textContent = totalPrice.toFixed(2) + ' ₪';
+    itemCountElement.textContent = itemCount; // تحديث عدد الأصناف
+    totalQuantityElement.textContent = totalQuantity; // تحديث مجموع الكميات
+
+    addRemoveInvoiceItemEventListeners();
+}
+
+function updateQuantity(index, newQuantity) {
+    const quantityValue = Math.max(1, parseInt(newQuantity)); // التأكد من أن الكمية لا تقل عن 1
+    invoiceItems[index].quantity = quantityValue;
+    updateInvoiceTable(); // تحديث الجدول بعد تغيير الكمية
+    
+    // نقل التركيز إلى حقل الباركود
+    document.getElementById('barcode-input').focus();
+}
+
+function updatePrice(index, newPrice) {
+    invoiceItems[index].price = parseFloat(newPrice);
+    updateInvoiceTable(); // تحديث الجدول بعد تغيير السعر
+    
+    // نقل التركيز إلى حقل الباركود
+    document.getElementById('barcode-input').focus();
+}
+
+function updatePrice(index, newPrice) {
+    invoiceItems[index].price = parseFloat(newPrice);
+    updateInvoiceTable(); // تحديث الجدول بعد تغيير السعر
+}
+
+function addRemoveInvoiceItemEventListeners() {
+    const removeButtons = document.querySelectorAll('.remove-invoice-item-btn');
+    removeButtons.forEach((button, index) => {
+        button.addEventListener('click', function() {
+            const itemToRemove = invoiceItems[invoiceItems.length - 1 - index];
+            
+            // عرض رسالة تأكيد مع اسم الصنف
+            const confirmation = confirm(`هل تريد حذف الصنف "${itemToRemove.name}"؟`);
+            
+            if (confirmation) {
+                // حذف الصنف إذا أكد المستخدم
+                invoiceItems.splice(invoiceItems.length - 1 - index, 1);
+                updateInvoiceTable();
+            }
+        });
+    });
+}
+
+// عند الضغط على زر "إضافة صنف" تظهر النافذة المنبثقة
+document.getElementById('add-item-function-btn').addEventListener('click', function() {
+    document.getElementById('new-item-modal').style.display = 'block';
+});
+
+// عند الضغط على زر "إلغاء"، تغلق النافذة المنبثقة
+document.getElementById('cancel-new-item-btn').addEventListener('click', function() {
+    document.getElementById('new-item-modal').style.display = 'none';
+});
+
+// عند الضغط على زر "إضافة"، يتم إضافة الصنف إلى الفاتورة
+document.getElementById('add-new-item-btn').addEventListener('click', function() {
+    const itemName = document.getElementById('new-item-name').value.trim();
+    const itemQuantity = parseInt(document.getElementById('new-item-quantity').value);
+    const itemPrice = parseFloat(document.getElementById('new-item-price').value);
+
+    if (itemName && itemQuantity > 0 && itemPrice >= 0) {
+        // إنشاء عنصر جديد للصنف المُدخل
+        const newItem = {
+            name: itemName,
+            quantity: itemQuantity,
+            price: itemPrice,
+            barcodes: [] // الصنف لا يحتوي على باركود
+        };
+
+        // إضافة الصنف إلى قائمة الفاتورة
+        invoiceItems.push(newItem);
+
+        // تحديث جدول الفاتورة
+        updateInvoiceTable();
+
+        // إغلاق النافذة المنبثقة
+        document.getElementById('new-item-modal').style.display = 'none';
+
+        // إعادة تعيين حقول الإدخال
+        document.getElementById('new-item-name').value = '';
+        document.getElementById('new-item-quantity').value = '';
+        document.getElementById('new-item-price').value = '';
+    } else {
+        alert('يرجى تعبئة جميع الحقول بشكل صحيح.');
+    }
+});
+
+</script>
+
+<script>
+// حفظ صورة الشعار في التخزين المحلي
+document.getElementById('company-logo').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            localStorage.setItem('companyLogo', e.target.result);
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// طباعة الفاتورة وحفظها
+document.getElementById('print-invoice-btn').addEventListener('click', function() {
+    const customerName = document.getElementById('customer-name').value.trim();
+    if (!customerName || invoiceItems.length === 0) {
+        alert('الرجاء إدخال اسم الزبون ');
+        return;
+    }
+
+    const invoice = {
+        customer: customerName,
+        items: invoiceItems,
+        total: totalPrice,
+        date: new Date(),
+    };
+
+    let sales = JSON.parse(localStorage.getItem('sales')) || [];
+    sales.push(invoice);
+    localStorage.setItem('sales', JSON.stringify(sales));
+
+    // حساب عدد الأصناف ومجموع الكميات
+    const itemCount = invoiceItems.length;
+    const totalQuantity = invoiceItems.reduce((sum, item) => sum + item.quantity, 0);
+
+// تنسيق التاريخ
+const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Jerusalem' };
+const formattedDate = invoice.date.toLocaleString('en-US', options);
+
+    // استرجاع شعار الشركة من التخزين المحلي
+    const logoImage = localStorage.getItem('companyLogo') || ''; // استخدم شعار الشركة المحفوظ أو اتركه فارغًا
+    const invoiceContent = `
+        <div style="text-align: center; font-family: Arial, sans-serif; width: 100%;">
+            ${logoImage ? `<img src="${logoImage}" alt="شعار" style="width: 80px; margin-bottom: 10px;">` : ''}
+          <h1 id="invoice-title" style="margin-bottom: 5px;">فاتورة</h1>  
+          <p style="font-size: 14px; margin: 5px 0;">اسم الزبون: ${customerName}</p>
+            <p style="font-size: 14px; margin: 5px 0;">التاريخ: ${formattedDate}</p>
+            <table style="margin: auto; border-collapse: collapse; width: 100%; font-size: 12px;">
+                <thead>
+                    <tr>
+                        <th style="border: 1px solid #000; padding: 8px;">اسم الصنف</th>
+                        <th style="border: 1px solid #000; padding: 8px;">الكمية</th>
+                        <th style="border: 1px solid #000; padding: 8px;">السعر</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${invoiceItems.map(item => `
+                        <tr>
+                            <td style="border: 1px solid #000; padding: 8px;">${item.name}</td>
+                            <td style="border: 1px solid #000; padding: 8px;">${item.quantity}</td>
+                            <td style="border: 1px solid #000; padding: 8px;">${item.price} ₪</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            <div style="margin-top: 15px;">
+                <div style="display: flex; justify-content: center; align-items: center; border: 2px solid #000; border-radius: 10px; padding: 10px;">
+                    <div style="text-align: center; width: 40%;">
+                        <h3 style="margin: 0;">الإجمالي: <span style="font-weight: bold;">${totalPrice} ₪</span></h3>
+                    </div>
+                    <div style="text-align: center; width: 20%; font-size: 10px;">
+                        <h3 style="margin: 0;">عدد الأصناف: <span>${itemCount}</span></h3>
+                        <h3 style="margin: 0;">مجموع الكميات: <span>${totalQuantity}</span></h3>
+                    </div>
+                </div>
+            </div>
+            <hr style="border-top: 1px dashed #000; margin: 20px 0;">
+            <p style="font-size: 12px;">شكرا لتعاملكم معنا!</p>
+        </div>
+    `;
+
+// إنشاء نافذة جديدة للطباعة
+const printWindow = window.open('', '', 'height=600,width=800');
+printWindow.document.write(`
+    <html>
+        <head>
+            <title>طباعة الفاتورة</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    direction: rtl;
+                    text-align: right;
+                    margin: 0;
+                    padding: 10px;
+                }
+            </style>
+        </head>
+        <body>
+            ${invoiceContent}
+        </body>
+    </html>
+`);
+
+printWindow.document.close(); // تأكد من إغلاق تدفق الكتابة
+
+// استخدم setTimeout لضمان أن الصفحة جاهزة للطباعة
+printWindow.focus(); // تأكد من أن النافذة الجديدة مركزة
+setTimeout(() => {
+    printWindow.print();
+    printWindow.close();
+}, 500); // التأخير بمقدار نصف ثانية قبل الطباعة
+    
+    // إعادة ضبط الفاتورة
+    invoiceItems = [];
+    updateInvoiceTable();
+    document.getElementById('customer-name').value = '';
+});
+
+const salesList = document.getElementById('sales-list');
+
+function loadSales() {
+    let sales = JSON.parse(localStorage.getItem('sales')) || [];
+    salesList.innerHTML = '';
+
+    // عكس ترتيب الفواتير
+    sales = sales.reverse();
+
+    // الحصول على أحدث 10 فواتير فقط
+    const recentSales = sales.slice(0, 10);
+
+    recentSales.forEach((sale, index) => {
+        const row = document.createElement('tr');
+        const originalIndex = sales.length - 1 - index; // الحصول على الفهرس الأصلي
+        row.innerHTML = `
+            <td>${sale.customer}</td>
+            <td>${sale.total.toFixed(2)} ₪</td>
+            <td>${sale.date}</td>
+            <td>
+                <button class="reopen-invoice-btn" data-index="${originalIndex}">تعديل الفاتورة</button>
+                <button class="view-invoice-btn" data-index="${originalIndex}">عرض الفاتورة</button>
+            </td>
+        `;
+        salesList.appendChild(row);
+    });
+    addViewInvoiceEventListeners();
+    addReopenInvoiceEventListeners();
+}
+
+// إضافة مستمع للأزرار "عرض الفاتورة"
+function addViewInvoiceEventListeners() {
+    const viewButtons = document.querySelectorAll('.view-invoice-btn');
+    viewButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const index = this.getAttribute('data-index');
+            viewInvoice(index);
+        });
+    });
+}
+
+// الدالة لعرض الفاتورة
+function viewInvoice(index) {
+    let sales = JSON.parse(localStorage.getItem('sales')) || [];
+    const sale = sales[index]; // استخدم الفهرس الأصلي
+
+    // عرض تفاصيل الفاتورة (يمكنك تخصيص ذلك حسب احتياجاتك)
+    console.log('عرض الفاتورة:', sale);
+    // يمكنك تنفيذ أي إجراءات أخرى هنا مثل فتح نافذة أو تحديث واجهة المستخدم
+}
+
+// إضافة مستمع للأزرار "إعادة عرض الفاتورة"
+function addReopenInvoiceEventListeners() {
+    const reopenButtons = document.querySelectorAll('.reopen-invoice-btn');
+    reopenButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const index = this.getAttribute('data-index');
+            reopenInvoice(index);
+        });
+    });
+}
+
+// الدالة لإعادة عرض الفاتورة وحذفها من السجل
+function reopenInvoice(index) {
+    let sales = JSON.parse(localStorage.getItem('sales')) || [];
+    const sale = sales[index]; // استخدم الفهرس الأصلي
+
+    // نسخ بيانات الفاتورة إلى نقطة البيع
+    document.getElementById('customer-name').value = sale.customer; // نسخ اسم الزبون
+    invoiceItems = sale.items.map(item => ({ ...item })); // نسخ الأصناف والكميات
+    totalPrice = sale.total; // نسخ إجمالي الفاتورة
+
+    // تحديث جدول الأصناف في نقطة البيع
+    updateInvoiceTable();
+
+    // حذف الفاتورة من سجل الفواتير
+    sales.splice(index, 1); // حذف الفاتورة
+    localStorage.setItem('sales', JSON.stringify(sales)); // تحديث التخزين المحلي
+
+    // تحديث واجهة المستخدم بعد حذف الفاتورة
+    loadSales(); // إعادة تحميل جدول الفواتير
+
+    // انتقل إلى صفحة نقطة البيع
+    showSection('pos');
+}
+// إضافة مستمع لزر التحديث
+document.getElementById('refresh-sales-btn').addEventListener('click', loadSales);
+
+// تحميل الفواتير عند تحميل الصفحة
+loadSales();
+
+
+function addViewInvoiceEventListeners() {
+    const viewButtons = document.querySelectorAll('.view-invoice-btn');
+    viewButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const index = button.getAttribute('data-index');
+            const sales = JSON.parse(localStorage.getItem('sales')) || [];
+            if (sales[index]) {
+                displayInvoice(sales[index]);
+            } else {
+                alert('لا توجد فواتير سابقة');
+            }
+        });
+    });
+}
+
+function displayInvoice(sale) {
+    const { customer, date, items, total } = sale;
+    const formattedDate = new Date(date).toLocaleDateString(); // تنسيق التاريخ
+
+    // حساب إجمالي عدد الأصناف ومجموع الكميات
+    const itemCount = items.length;
+    const totalQuantity = items.reduce((acc, item) => acc + item.quantity, 0);
+
+    let invoiceHtml = `
+       <h1 style="margin-bottom: 5px;">كشف مراجعة فاتورة</h1>
+        <p style="font-size: 14px; margin: 5px 0;">اسم الزبون: ${customer}</p>
+        <p style="font-size: 14px; margin: 5px 0;">التاريخ: ${formattedDate}</p>
+        <table style="margin: auto; border-collapse: collapse; width: 100%; font-size: 12px;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #000; padding: 8px;">اسم الصنف</th>
+                    <th style="border: 1px solid #000; padding: 8px;">الكمية</th>
+                    <th style="border: 1px solid #000; padding: 8px;">السعر</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${items.map(item => `
+                    <tr>
+                        <td style="border: 1px solid #000; padding: 8px;">${item.name}</td>
+                        <td style="border: 1px solid #000; padding: 8px;">${item.quantity}</td>
+                        <td style="border: 1px solid #000; padding: 8px;">${item.price} ₪</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+        <div style="margin-top: 15px;">
+            <div style="display: flex; justify-content: center; align-items: center; border: 2px solid #000; border-radius: 10px; padding: 10px;">
+                <div style="text-align: center; width: 40%;">
+                    <h3 style="margin: 0;">الإجمالي: <span style="font-weight: bold;">${total.toFixed(2)} ₪</span></h3>
+                </div>
+                <div style="text-align: center; width: 20%; font-size: 10px;">
+                    <h3 style="margin: 0;">عدد الأصناف: <span>${itemCount}</span></h3>
+                    <h3 style="margin: 0;">مجموع الكميات: <span>${totalQuantity}</span></h3>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // عرض الفاتورة في نافذة جديدة
+    const newWindow = window.open();
+    newWindow.document.write(invoiceHtml);
+    newWindow.document.close();
+}
+
+loadSales();
+
+// تحميل الفاتورة السابقة
+document.getElementById('prev-invoice-btn').addEventListener('click', function() {
+    let sales = JSON.parse(localStorage.getItem('sales')) || [];
+    if (sales.length > 0) {
+        const confirmation = confirm("سوف يتم حذف الفاتورة ووضعها للتعديل. هل تريد الاستمرار؟");
+        if (confirmation) {
+            const lastInvoice = sales.pop(); // الحصول على آخر فاتورة وحذفها من السجل
+
+            // استرجاع الأصناف والكميات والأسعار
+            invoiceItems = lastInvoice.items.map(item => ({
+                ...item,
+                quantity: item.quantity || 1 // تأكد من وجود قيمة للكمية
+            }));
+
+            totalPrice = lastInvoice.total;
+            document.getElementById('customer-name').value = lastInvoice.customer;
+
+            // تحديث جدول الفاتورة
+            updateInvoiceTable();
+
+            // حفظ الفواتير المحدثة في التخزين المحلي
+            localStorage.setItem('sales', JSON.stringify(sales));
+
+            alert(`تم إعادة عرض الفاتورة السابقة بنجاح.`);
+
+            // تعطيل زر الرجوع للفاتورة السابقة
+            this.disabled = true;
+        }
+    } else {
+        alert('لا توجد فواتير سابقة');
+    }
+});
+
+// زر طباعة وحفظ الفاتورة
+document.getElementById('print-invoice-btn').addEventListener('click', function() {
+    // هنا ضع الكود الخاص بطباعة وحفظ الفاتورة
+
+    // تفعيل زر الرجوع للفاتورة السابقة مرة أخرى
+    document.getElementById('prev-invoice-btn').disabled = false;
+});
+
+    // تحديث التاريخ عند تحميل الصفحة
+    updateDate();
+
+  <!-- كود JavaScript -->
+    // فتح نافذة إدخال البيانات
+    function openModal() {
+      document.getElementById('itemModal').style.display = 'block';
+    }
+
+    // إغلاق نافذة إدخال البيانات
+    function closeModal() {
+      document.getElementById('itemModal').style.display = 'none';
+    }
+
+    // إضافة الصنف إلى Local Storage
+    function addItem() {
+      const name = document.getElementById('itemName').value;
+      const barcode = document.getElementById('itemBarcode').value;
+      const price = document.getElementById('itemPrice').value;
+
+      // استرجاع الأصناف من Local Storage أو إنشاء مصفوفة جديدة إذا كانت فارغة
+      let items = JSON.parse(localStorage.getItem('items')) || [];
+
+      // إضافة الصنف الجديد
+      items.push({ name, barcode, price });
+
+      // تخزين البيانات في Local Storage
+      localStorage.setItem('items', JSON.stringify(items));
+
+      // إعادة تحديث قائمة الأصناف المعروضة
+      displayItems();
+
+      // إغلاق النافذة بعد الإضافة
+      closeModal();
+    }
+
+    // عرض الأصناف المخزنة في Local Storage
+    function displayItems() {
+      const items = JSON.parse(localStorage.getItem('items')) || [];
+      const itemsList = document.getElementById('items-list');
+      itemsList.innerHTML = '';
+
+      // عرض كل صنف باستخدام الجدول
+      items.forEach((item, index) => {
+        itemsList.innerHTML += `
+          <tr>
+            <td>${item.name}</td>
+            <td>${item.price}</td>
+<td>${item.barcodes.join(', ')}</td>
+            <td>
+              <button onclick="editItem(${index})">تعديل</button>
+              <button onclick="deleteItem(${index})">حذف</button>
+            </td>
+          </tr>`;
+      });
+    }
+
+// تعديل صنف
+function editItem(index) {
+  const items = JSON.parse(localStorage.getItem('items')) || [];
+  
+  const item = items[index];
+
+  // ملء الحقول بالقيم الحالية
+  document.getElementById('itemName').value = item.name;
+  document.getElementById('itemBarcode').value = item.barcodes.join(', ');
+  document.getElementById('itemPrice').value = item.price;
+
+  // حذف الصنف القديم مؤقتاً حتى يتم التعديل وحفظه مجدداً
+  items.splice(index, 1);
+  localStorage.setItem('items', JSON.stringify(items));
+
+  // فتح نافذة التعديل
+  openModal();
+}
+
+// حذف صنف
+function deleteItem(index) {
+  let items = JSON.parse(localStorage.getItem('items')) || [];
+
+  // حذف الصنف من المصفوفة
+  items.splice(index, 1);
+
+  // تحديث Local Storage
+  localStorage.setItem('items', JSON.stringify(items));
+
+  // إعادة تحديث قائمة الأصناف
+  displayItems();
+}
+
+// عرض الأصناف عند تحميل الصفحة
+window.onload = displayItems;
+
+// دالة لعرض العناصر المفلترة مع الفهرس الأصلي
+function displayFilteredItems(filteredItems, originalIndexes) {
+  itemsList.innerHTML = ''; // تفريغ الجدول قبل عرض العناصر الجديدة
+  filteredItems.forEach((item, i) => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${item.name}</td>
+      <td>${item.price.toFixed(2)} ₪</td>
+      <td>${item.barcodes.join(', ')}</td>
+      <td>
+        <button class="edit-item-btn" data-index="${originalIndexes[i]}">تعديل</button>
+        <button class="delete-item-btn" data-index="${originalIndexes[i]}">حذف</button>
+      </td>
+    `;
+    itemsList.appendChild(row);
+  });
+  addEditAndDeleteListeners(); // إضافة المستمعات للأزرار بعد عرض العناصر
+}
+
+// تحديث دالة البحث لتشمل الفهرس الأصلي
+function searchItems() {
+  const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
+  const items = JSON.parse(localStorage.getItem('items')) || [];
+  
+  // إنشاء مصفوفة للفهارس الأصلية للعناصر المفلترة
+  const filteredItems = items.filter(item => {
+    return item.name.toLowerCase().includes(searchTerm) || 
+           item.barcodes.some(barcode => barcode.includes(searchTerm));
+  });
+  
+  const originalIndexes = items.reduce((indexes, item, index) => {
+    if (item.name.toLowerCase().includes(searchTerm) || 
+        item.barcodes.some(barcode => barcode.includes(searchTerm))) {
+      indexes.push(index);
+    }
+    return indexes;
+  }, []);
+
+  // عرض العناصر المفلترة مع فهرسها الأصلي
+  displayFilteredItems(filteredItems, originalIndexes);
+}
+    
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // الضغطة على الطباعة والحفظ عند الضغط على F2
+        document.addEventListener('keydown', function(event) {
+            // تحقق مما إذا كان مفتاح F2 مضغوطًا
+            if (event.key === 'F2') {
+                event.preventDefault(); // منع السلوك الافتراضي للمفتاح
+                // الضغط تلقائيًا على الزر الذي له id 'print-invoice-btn'
+                const printButton = document.getElementById('print-invoice-btn');
+                if (printButton) {
+                    printButton.click(); // محاكاة الضغط على الزر
+                }
+            }
+        });
+
+        // إضافة وظيفة للزر عند الضغط عليه
+        document.getElementById('print-invoice-btn').addEventListener('click', function() {
+            // ضع هنا الكود الخاص بطباعة وحفظ الفاتورة
+            console.log("تم الضغط على الزر لطباعة وحفظ الفاتورة");
+            // هنا يمكنك إضافة الكود الخاص بالمعالجة اللازمة للطباعة والحفظ
+        });
+    });
+
+    // إضافة مستمع لحدث النقر على الزر
+document.getElementById('edit-invoice-btn').addEventListener('click', function() {
+    // إظهار رسالة التأكيد
+    const userConfirmation = confirm("هل تريد إعادة تهيئة الفاتورة و حذف محتواها؟");
+
+    // إذا وافق المستخدم، قم بإعادة تحميل الصفحة
+    if (userConfirmation) {
+        location.reload();
+    }
+});
+
+</script>
 </body>
-</html>
