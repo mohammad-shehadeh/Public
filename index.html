@@ -15,9 +15,20 @@
             margin: 10px;
         }
         video {
-            display: none;
+            display: block;
             width: 300px;
             height: 200px;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        #barcode-box {
+            position: absolute;
+            border: 2px solid red;
+            width: 150px;
+            height: 100px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
         #result {
             margin-top: 20px;
@@ -34,13 +45,13 @@
     <h1>نظام البحث عن المنتجات باستخدام الباركود</h1>
 
     <!-- إدخال الباركود يدويًا -->
-    <input type="text" id="barcodeInput" placeholder="أدخل رقم الباركود" />
-    <button onclick="searchProduct()">ابحث</button>
+    <input type="text" id="barcodeInput" placeholder="أدخل رقم الباركود" readonly />
     <br>
-
+    
     <!-- استخدام الكاميرا للبحث عن المنتج -->
     <button onclick="startCamera()">استخدام الكاميرا</button>
     <video id="video" autoplay></video>
+    <div id="barcode-box"></div>
     <br>
 
     <!-- عرض النتائج -->
@@ -48,7 +59,9 @@
     <div id="error"></div>
 
     <!-- تضمين ملف الجافا سكريبت -->
-    <script>// قراءة ملف البيانات النصي
+    <script>let barcodeDetected = false;  // لتتبع إذا تم اكتشاف الباركود بالفعل
+
+        // قراءة ملف البيانات النصي
         async function fetchProductsData() {
             try {
                 const response = await fetch('test.txt');
@@ -61,21 +74,14 @@
         }
         
         // البحث عن المنتج بناءً على الباركود
-        async function searchProduct() {
-            const barcodeInput = document.getElementById('barcodeInput').value.trim();
+        async function searchProduct(barcode) {
             const result = document.getElementById('result');
             const error = document.getElementById('error');
-            
-            if (!barcodeInput) {
-                error.textContent = 'يرجى إدخال رقم الباركود.';
-                result.textContent = '';
-                return;
-            }
         
             const products = await fetchProductsData();
         
             // البحث عن المنتج المطابق للباركود
-            const product = products.find(item => item[2] === barcodeInput);
+            const product = products.find(item => item[2] === barcode);
         
             if (product) {
                 result.textContent = `اسم الصنف: ${product[0]}, السعر: ${product[1]} ₪`;
@@ -89,7 +95,9 @@
         // بدء الكاميرا لقراءة الباركود
         function startCamera() {
             const video = document.getElementById('video');
-            video.style.display = 'block';
+            const barcodeBox = document.getElementById('barcode-box');
+            barcodeBox.style.display = 'block';
+            barcodeDetected = false;
         
             navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
                 .then(stream => {
@@ -106,17 +114,41 @@
         // اكتشاف الباركود من الفيديو
         function detectBarcode(video, barcodeDetector) {
             setInterval(async () => {
+                if (barcodeDetected) return;  // تجنب تكرار الاكتشاف
+        
                 try {
                     const barcodes = await barcodeDetector.detect(video);
+                    const barcodeBox = document.getElementById('barcode-box');
+                    const videoRect = video.getBoundingClientRect();
+                    const boxRect = barcodeBox.getBoundingClientRect();
+        
                     if (barcodes.length > 0) {
-                        const barcodeValue = barcodes[0].rawValue;
-                        document.getElementById('barcodeInput').value = barcodeValue;
-                        searchProduct(); // البحث تلقائيًا عند اكتشاف الباركود
+                        // التحقق مما إذا كان الباركود داخل المربع
+                        const barcode = barcodes[0].rawValue;
+                        if (isBarcodeInBox(barcodes[0], videoRect, boxRect)) {
+                            document.getElementById('barcodeInput').value = barcode;
+                            barcodeDetected = true;  // تعيين العلامة لتجنب تكرار الاكتشاف
+                            searchProduct(barcode);  // البحث تلقائيًا عند اكتشاف الباركود
+                        }
                     }
                 } catch (error) {
                     console.error('خطأ في اكتشاف الباركود:', error);
                 }
             }, 1000);
+        }
+        
+        // التحقق مما إذا كان الباركود داخل المربع المحدد
+        function isBarcodeInBox(barcode, videoRect, boxRect) {
+            const { x, y, width, height } = barcode.boundingBox;
+            const barcodeCenterX = x + width / 2;
+            const barcodeCenterY = y + height / 2;
+        
+            return (
+                barcodeCenterX >= boxRect.left &&
+                barcodeCenterX <= boxRect.right &&
+                barcodeCenterY >= boxRect.top &&
+                barcodeCenterY <= boxRect.bottom
+            );
         }
         </script>
 </body>
