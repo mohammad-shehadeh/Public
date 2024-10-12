@@ -14,22 +14,6 @@
             font-size: 18px;
             margin: 10px;
         }
-        video {
-            display: block;
-            width: 300px;
-            height: 200px;
-            position: relative;
-            margin-bottom: 10px;
-        }
-        #barcode-box {
-            position: absolute;
-            border: 2px solid red;
-            width: 150px;
-            height: 100px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
         #result {
             margin-top: 20px;
             font-size: 20px;
@@ -63,11 +47,9 @@
         <button onclick="searchProduct()">ابحث</button>
     </div>
 
-    <!-- استخدام الكاميرا للبحث عن المنتج -->
+    <!-- استخدام كاميرا الموقع الخارجي لقراءة الباركود -->
     <div id="cameraInput" style="display:none;">
-        <button onclick="startCamera()">استخدام الكاميرا</button>
-        <video id="video" autoplay></video>
-        <div id="barcode-box"></div>
+        <button onclick="openExternalCamera()">استخدام الكاميرا</button>
     </div>
 
     <!-- مسح النص باستخدام OCR -->
@@ -81,9 +63,7 @@
     <div id="error"></div>
 
     <!-- تضمين ملف الجافا سكريبت -->
-    <script>let barcodeDetected = false;  // لتتبع إذا تم اكتشاف الباركود بالفعل
-
-        // قراءة ملف البيانات النصي
+    <script>// قراءة ملف البيانات النصي
         async function fetchProductsData() {
             try {
                 const response = await fetch('test.txt');
@@ -132,97 +112,32 @@
                 document.getElementById('manualInput').style.display = 'block';
             } else if (inputType === 'barcode') {
                 document.getElementById('cameraInput').style.display = 'block';
-                startCamera();  // بدء الكاميرا تلقائيًا
             } else if (inputType === 'ocr') {
                 document.getElementById('ocrInput').style.display = 'block';
             }
         }
         
-        // بدء الكاميرا لقراءة الباركود
-        function startCamera() {
-            const video = document.getElementById('video');
-            const barcodeBox = document.getElementById('barcode-box');
-            barcodeBox.style.display = 'block';
-            barcodeDetected = false;
-        
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-                .then(stream => {
-                    video.srcObject = stream;
-                    const barcodeDetector = new BarcodeDetector({ formats: ['code_128', 'ean_13', 'qr_code'] });
-                    detectBarcode(video, barcodeDetector);
-                })
-                .catch(error => {
-                    console.error('خطأ في الوصول إلى الكاميرا:', error);
-                    alert('لا يمكن الوصول إلى الكاميرا.');
-                });
+        // فتح موقع خارجي (ZXing) لقراءة الباركود
+        function openExternalCamera() {
+            const zxingUrl = "https://zxing.org/w/decode?u=";
+            const returnURL = encodeURIComponent(window.location.href + "?barcode=");
+            
+            // فتح الكاميرا في موقع ZXing
+            window.open(`https://zxing.appspot.com/scan?ret=${returnURL}{CODE}`);
         }
         
-        // اكتشاف الباركود من الفيديو
-        function detectBarcode(video, barcodeDetector) {
-            setInterval(async () => {
-                if (barcodeDetected) return;  // تجنب تكرار الاكتشاف
-        
-                try {
-                    const barcodes = await barcodeDetector.detect(video);
-                    const barcodeBox = document.getElementById('barcode-box');
-                    const videoRect = video.getBoundingClientRect();
-                    const boxRect = barcodeBox.getBoundingClientRect();
-        
-                    if (barcodes.length > 0) {
-                        const barcode = barcodes[0].rawValue;
-                        if (isBarcodeInBox(barcodes[0], videoRect, boxRect)) {
-                            document.getElementById('barcodeInput').value = barcode;
-                            barcodeDetected = true;  // تعيين العلامة لتجنب تكرار الاكتشاف
-                            searchProduct();  // البحث تلقائيًا عند اكتشاف الباركود
-                        }
-                    }
-                } catch (error) {
-                    console.error('خطأ في اكتشاف الباركود:', error);
-                }
-            }, 1000);
+        // التقاط الباركود من رابط ZXing عند العودة إلى الصفحة
+        function checkForBarcode() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const barcode = urlParams.get('barcode');
+            if (barcode) {
+                document.getElementById('barcodeInput').value = barcode;
+                searchProduct();  // البحث تلقائيًا عند استرجاع الباركود
+            }
         }
         
-        // التحقق مما إذا كان الباركود داخل المربع المحدد
-        function isBarcodeInBox(barcode, videoRect, boxRect) {
-            const { x, y, width, height } = barcode.boundingBox;
-            const barcodeCenterX = x + width / 2;
-            const barcodeCenterY = y + height / 2;
-        
-            return (
-                barcodeCenterX >= boxRect.left &&
-                barcodeCenterX <= boxRect.right &&
-                barcodeCenterY >= boxRect.top &&
-                barcodeCenterY <= boxRect.bottom
-            );
-        }
-        
-        // مسح النص باستخدام OCR
-        function startOCR() {
-            document.getElementById('imageInput').click();
-        }
-        
-        function processImage() {
-            const file = document.getElementById('imageInput').files[0];
-            if (!file) return;
-        
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = function () {
-                    // استخدام OCR لمسح النص من الصورة
-                    Tesseract.recognize(img, 'ara', {
-                        logger: function(m) { console.log(m); }
-                    }).then(function (result) {
-                        document.getElementById('barcodeInput').value = result.data.text.trim();
-                        searchProduct();  // البحث تلقائيًا بعد التعرف على النص
-                    }).catch(function (error) {
-                        console.error('خطأ في OCR:', error);
-                    });
-                };
-            };
-            reader.readAsDataURL(file);
-        }
+        // استدعاء دالة التحقق عند تحميل الصفحة
+        window.onload = checkForBarcode;
         </script>
 </body>
 </html>
