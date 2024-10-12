@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام البحث عن المنتجات باستخدام الباركود</title>
+    <title>نظام البحث عن المنتجات باستخدام الباركود والنص</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -39,20 +39,42 @@
             color: red;
             margin-top: 10px;
         }
+        .option-container {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <h1>نظام البحث عن المنتجات باستخدام الباركود</h1>
+    <h1>نظام البحث عن المنتجات باستخدام الباركود والنص</h1>
 
-    <!-- إدخال الباركود يدويًا -->
-    <input type="text" id="barcodeInput" placeholder="أدخل رقم الباركود" readonly />
-    <br>
+    <!-- إدخال يدوي أو اختيار المسح -->
+    <div class="option-container">
+        <label for="inputType">اختر طريقة الإدخال:</label>
+        <select id="inputType" onchange="handleInputTypeChange()">
+            <option value="manual">إدخال يدوي</option>
+            <option value="barcode">المسح باستخدام الكاميرا</option>
+            <option value="ocr">مسح النص</option>
+        </select>
+    </div>
     
+    <!-- إدخال الباركود يدويًا -->
+    <div id="manualInput">
+        <input type="text" id="barcodeInput" placeholder="أدخل رقم الباركود" />
+        <button onclick="searchProduct()">ابحث</button>
+    </div>
+
     <!-- استخدام الكاميرا للبحث عن المنتج -->
-    <button onclick="startCamera()">استخدام الكاميرا</button>
-    <video id="video" autoplay></video>
-    <div id="barcode-box"></div>
-    <br>
+    <div id="cameraInput" style="display:none;">
+        <button onclick="startCamera()">استخدام الكاميرا</button>
+        <video id="video" autoplay></video>
+        <div id="barcode-box"></div>
+    </div>
+
+    <!-- مسح النص باستخدام OCR -->
+    <div id="ocrInput" style="display:none;">
+        <button onclick="startOCR()">ابدأ المسح الضوئي للنص</button>
+        <input type="file" id="imageInput" accept="image/*" onchange="processImage()" />
+    </div>
 
     <!-- عرض النتائج -->
     <div id="result"></div>
@@ -73,15 +95,22 @@
             }
         }
         
-        // البحث عن المنتج بناءً على الباركود
-        async function searchProduct(barcode) {
+        // البحث عن المنتج بناءً على الباركود أو النص
+        async function searchProduct() {
+            const barcodeInput = document.getElementById('barcodeInput').value.trim();
             const result = document.getElementById('result');
             const error = document.getElementById('error');
+            
+            if (!barcodeInput) {
+                error.textContent = 'يرجى إدخال أو مسح الباركود.';
+                result.textContent = '';
+                return;
+            }
         
             const products = await fetchProductsData();
         
             // البحث عن المنتج المطابق للباركود
-            const product = products.find(item => item[2] === barcode);
+            const product = products.find(item => item[2] === barcodeInput);
         
             if (product) {
                 result.textContent = `اسم الصنف: ${product[0]}, السعر: ${product[1]} ₪`;
@@ -89,6 +118,23 @@
             } else {
                 result.textContent = '';
                 error.textContent = 'لم يتم العثور على صنف بهذا الباركود.';
+            }
+        }
+        
+        // التحكم في نوع الإدخال (يدوي، باركود، OCR)
+        function handleInputTypeChange() {
+            const inputType = document.getElementById('inputType').value;
+            document.getElementById('manualInput').style.display = 'none';
+            document.getElementById('cameraInput').style.display = 'none';
+            document.getElementById('ocrInput').style.display = 'none';
+        
+            if (inputType === 'manual') {
+                document.getElementById('manualInput').style.display = 'block';
+            } else if (inputType === 'barcode') {
+                document.getElementById('cameraInput').style.display = 'block';
+                startCamera();  // بدء الكاميرا تلقائيًا
+            } else if (inputType === 'ocr') {
+                document.getElementById('ocrInput').style.display = 'block';
             }
         }
         
@@ -123,12 +169,11 @@
                     const boxRect = barcodeBox.getBoundingClientRect();
         
                     if (barcodes.length > 0) {
-                        // التحقق مما إذا كان الباركود داخل المربع
                         const barcode = barcodes[0].rawValue;
                         if (isBarcodeInBox(barcodes[0], videoRect, boxRect)) {
                             document.getElementById('barcodeInput').value = barcode;
                             barcodeDetected = true;  // تعيين العلامة لتجنب تكرار الاكتشاف
-                            searchProduct(barcode);  // البحث تلقائيًا عند اكتشاف الباركود
+                            searchProduct();  // البحث تلقائيًا عند اكتشاف الباركود
                         }
                     }
                 } catch (error) {
@@ -149,6 +194,34 @@
                 barcodeCenterY >= boxRect.top &&
                 barcodeCenterY <= boxRect.bottom
             );
+        }
+        
+        // مسح النص باستخدام OCR
+        function startOCR() {
+            document.getElementById('imageInput').click();
+        }
+        
+        function processImage() {
+            const file = document.getElementById('imageInput').files[0];
+            if (!file) return;
+        
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = function () {
+                    // استخدام OCR لمسح النص من الصورة
+                    Tesseract.recognize(img, 'ara', {
+                        logger: function(m) { console.log(m); }
+                    }).then(function (result) {
+                        document.getElementById('barcodeInput').value = result.data.text.trim();
+                        searchProduct();  // البحث تلقائيًا بعد التعرف على النص
+                    }).catch(function (error) {
+                        console.error('خطأ في OCR:', error);
+                    });
+                };
+            };
+            reader.readAsDataURL(file);
         }
         </script>
 </body>
