@@ -23,6 +23,15 @@
             color: red;
             margin-top: 10px;
         }
+        #interactive {
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            display: none;
+        }
+        #interactive video {
+            width: 100%;
+        }
         .option-container {
             margin-top: 20px;
         }
@@ -40,16 +49,19 @@
             <option value="ocr">مسح النص</option>
         </select>
     </div>
-    
+
     <!-- إدخال الباركود يدويًا -->
     <div id="manualInput">
         <input type="text" id="barcodeInput" placeholder="أدخل رقم الباركود" />
         <button onclick="searchProduct()">ابحث</button>
     </div>
 
-    <!-- استخدام كاميرا الموقع الخارجي لقراءة الباركود -->
+    <!-- استخدام الكاميرا للمسح -->
     <div id="cameraInput" style="display:none;">
-        <button onclick="openExternalCamera()">استخدام الكاميرا</button>
+        <button onclick="startBarcodeScanner()">ابدأ المسح باستخدام الكاميرا</button>
+        <div id="interactive" class="viewport">
+            <video autoplay="true"></video>
+        </div>
     </div>
 
     <!-- مسح النص باستخدام OCR -->
@@ -62,7 +74,8 @@
     <div id="result"></div>
     <div id="error"></div>
 
-    <!-- تضمين ملف الجافا سكريبت -->
+    <!-- تضمين مكتبة QuaggaJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
     <script>// قراءة ملف البيانات النصي
         async function fetchProductsData() {
             try {
@@ -117,27 +130,35 @@
             }
         }
         
-        // فتح موقع خارجي (ZXing) لقراءة الباركود
-        function openExternalCamera() {
-            const zxingUrl = "https://zxing.org/w/decode?u=";
-            const returnURL = encodeURIComponent(window.location.href + "?barcode=");
-            
-            // فتح الكاميرا في موقع ZXing
-            window.open(`https://zxing.appspot.com/scan?ret=${returnURL}{CODE}`);
-        }
+        // بدء تشغيل الماسح الضوئي للباركود باستخدام QuaggaJS
+        function startBarcodeScanner() {
+            document.getElementById('interactive').style.display = 'block';
+            Quagga.init({
+                inputStream: {
+                    name: "Live",
+                    type: "LiveStream",
+                    target: document.querySelector('#interactive video'), // مكان عرض الفيديو
+                },
+                decoder: {
+                    readers: ["code_128_reader", "ean_reader", "ean_8_reader", "code_39_reader", "code_39_vin_reader", "upc_reader", "upc_e_reader", "i2of5_reader"]
+                }
+            }, function(err) {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                Quagga.start();
+            });
         
-        // التقاط الباركود من رابط ZXing عند العودة إلى الصفحة
-        function checkForBarcode() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const barcode = urlParams.get('barcode');
-            if (barcode) {
+            Quagga.onDetected(function(result) {
+                var barcode = result.codeResult.code;
                 document.getElementById('barcodeInput').value = barcode;
-                searchProduct();  // البحث تلقائيًا عند استرجاع الباركود
-            }
+                searchProduct();  // ابحث تلقائيًا عند العثور على الباركود
+                Quagga.stop();  // أوقف الكاميرا بعد العثور على الباركود
+                document.getElementById('interactive').style.display = 'none';  // إخفاء عرض الكاميرا
+            });
         }
-        
-        // استدعاء دالة التحقق عند تحميل الصفحة
-        window.onload = checkForBarcode;
         </script>
 </body>
 </html>
+
