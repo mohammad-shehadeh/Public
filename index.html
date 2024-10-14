@@ -44,6 +44,7 @@
             margin: 20px auto;
             display: block;
             border-radius: 10px;
+            display: none;
         }
     </style>
 </head>
@@ -66,7 +67,7 @@
             <h2>تفاصيل المنتج:</h2>
             <p id="product-name">الاسم: -</p>
             <p id="product-price">السعر: -</p>
-            <img id="product-image" src="" alt="Product Image" style="display:none;">
+            <img id="product-image" src="" alt="Product Image">
         </div>
     </div>
 
@@ -85,13 +86,18 @@
                     // البحث عن المنتج باستخدام الباركود
                     for (let line of lines) {
                         const [productName, productPrice, barcode, imageUrl] = line.split('/');
-                        if (barcode === barcodeInput) {
+                        if (barcode.trim() === barcodeInput.trim()) {
                             document.getElementById('product-name').textContent = `الاسم: ${productName}`;
                             document.getElementById('product-price').textContent = `السعر: ${productPrice}`;
                             
-                            // عرض الصورة من الرابط الموجود في الملف النصي
-                            document.getElementById('product-image').src = imageUrl;
-                            document.getElementById('product-image').style.display = 'block';
+                            // التحقق من صحة الرابط وحقنه في مربع الصورة
+                            const productImage = document.getElementById('product-image');
+                            if (imageUrl.trim()) {
+                                productImage.src = imageUrl.trim();
+                                productImage.style.display = 'block'; // عرض الصورة
+                            } else {
+                                productImage.style.display = 'none'; // إخفاء الصورة إذا لم يوجد رابط
+                            }
 
                             found = true;
                             break;
