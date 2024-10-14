@@ -88,8 +88,11 @@
                         if (barcode === barcodeInput) {
                             document.getElementById('product-name').textContent = `الاسم: ${productName}`;
                             document.getElementById('product-price').textContent = `السعر: ${productPrice}`;
+                            
+                            // عرض الصورة من الرابط الموجود في الملف النصي
                             document.getElementById('product-image').src = imageUrl;
                             document.getElementById('product-image').style.display = 'block';
+
                             found = true;
                             break;
                         }
@@ -100,6 +103,9 @@
                         document.getElementById('product-price').textContent = 'السعر: -';
                         document.getElementById('product-image').style.display = 'none';
                     }
+                })
+                .catch(error => {
+                    console.error('Error reading the file:', error);
                 });
         });
     </script>
