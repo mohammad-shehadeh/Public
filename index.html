@@ -85,19 +85,18 @@
 
                     // البحث عن المنتج باستخدام الباركود
                     for (let line of lines) {
-                        const [productName, productPrice, barcode, imageUrl] = line.split('/');
+                        const [productName, productPrice, barcode] = line.split('/');
                         if (barcode.trim() === barcodeInput.trim()) {
                             document.getElementById('product-name').textContent = `الاسم: ${productName}`;
                             document.getElementById('product-price').textContent = `السعر: ${productPrice}`;
                             
-                            // التحقق من صحة الرابط وحقنه في مربع الصورة
+                            // البحث عن صورة المنتج من خلال Google Images
+                            const searchQuery = encodeURIComponent(productName + ' product');
+                            const googleImageUrl = `https://www.google.com/search?tbm=isch&q=${searchQuery}`;
+
                             const productImage = document.getElementById('product-image');
-                            if (imageUrl.trim()) {
-                                productImage.src = imageUrl.trim();
-                                productImage.style.display = 'block'; // عرض الصورة
-                            } else {
-                                productImage.style.display = 'none'; // إخفاء الصورة إذا لم يوجد رابط
-                            }
+                            productImage.src = googleImageUrl;
+                            productImage.style.display = 'block'; // عرض الصورة
 
                             found = true;
                             break;
