@@ -72,6 +72,9 @@
     </div>
 
     <script>
+        const apiKey = 'AIzaSyANq87OyuJUq6bt1uFVKQC7VaklCV6eOkk';  // أدخل مفتاح API الخاص بك هنا
+        const searchEngineId = 'b284a81d633f74a1b';  // أدخل معرّف محرك البحث الخاص بك هنا
+
         document.getElementById('barcode-form').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -90,13 +93,25 @@
                             document.getElementById('product-name').textContent = `الاسم: ${productName}`;
                             document.getElementById('product-price').textContent = `السعر: ${productPrice}`;
                             
-                            // البحث عن صورة المنتج من خلال Google Images
-                            const searchQuery = encodeURIComponent(productName + ' product');
-                            const googleImageUrl = `https://www.google.com/search?tbm=isch&q=${searchQuery}`;
+                            // البحث عن صورة المنتج من خلال Google Custom Search API
+                            const searchQuery = encodeURIComponent(productName);
+                            const url = `https://www.googleapis.com/customsearch/v1?q=${searchQuery}&key=${apiKey}&cx=${searchEngineId}&searchType=image`;
 
-                            const productImage = document.getElementById('product-image');
-                            productImage.src = googleImageUrl;
-                            productImage.style.display = 'block'; // عرض الصورة
+                            fetch(url)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.items && data.items.length > 0) {
+                                        const imageUrl = data.items[0].link; // الحصول على رابط الصورة من النتيجة الأولى
+                                        const productImage = document.getElementById('product-image');
+                                        productImage.src = imageUrl;
+                                        productImage.style.display = 'block'; // عرض الصورة
+                                    } else {
+                                        document.getElementById('product-image').style.display = 'none';
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching image:', error);
+                                });
 
                             found = true;
                             break;
