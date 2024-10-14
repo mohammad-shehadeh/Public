@@ -3,100 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام البحث عن المنتجات باستخدام الباركود</title>
+    <title>بحث المنتجات باستخدام الباركود</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
             text-align: center;
-            margin: 50px;
+            color: #333;
         }
-        input, button {
-            font-size: 18px;
-            margin: 10px;
+        .header-image {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            border-radius: 10px;
         }
-        #result {
-            margin-top: 20px;
-            font-size: 20px;
-            color: green;
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        #error {
-            color: red;
-            margin-top: 10px;
+        input[type="text"], input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
-        #productImage {
-            display: none;
-            max-width: 300px;
-            margin-top: 20px;
-        }
-        .option-container {
-            margin-top: 20px;
+        #product-image {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            display: block;
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>نظام البحث عن المنتجات باستخدام الباركود</h1>
 
-    <!-- إدخال الباركود يدويًا -->
-    <div id="manualInput">
-        <input type="text" id="barcodeInput" placeholder="أدخل رقم الباركود" />
-        <button onclick="searchProduct()">ابحث</button>
-    </div>
+    <!-- صورة العنوان -->
+    <img src="https://ls6iibytsc.eu.scalesta-cdn.com/8mfEuqxAqn2kgf5APnH8fqBr_5w=/filters:format(webp):fill(fff):quality(90)/www.gstoreq8.com/images/detailed/265/800x800_680201070A-4.webp" alt="Header Image" class="header-image">
 
-    <!-- عرض النتائج -->
-    <div id="result">
-        <div id="productInfo"></div>
-        <img id="productImage" alt="صورة المنتج" />
+    <div class="container">
+        <h1>بحث المنتجات باستخدام الباركود</h1>
+
+        <!-- نموذج البحث عن المنتج -->
+        <form id="barcode-form">
+            <input type="text" id="barcode-input" placeholder="أدخل الباركود" required>
+            <input type="submit" value="بحث">
+        </form>
+
+        <!-- عرض تفاصيل المنتج -->
+        <div id="product-details">
+            <h2>تفاصيل المنتج:</h2>
+            <p id="product-name">الاسم: -</p>
+            <p id="product-price">السعر: -</p>
+            <img id="product-image" src="" alt="Product Image" style="display:none;">
+        </div>
     </div>
-    <div id="error"></div>
 
     <script>
-        // قراءة ملف البيانات النصي
-        async function fetchProductsData() {
-            try {
-                const response = await fetch('test.txt');
-                const data = await response.text();
-                return data.split('\n').map(line => line.split('/')); // تقسيم البيانات
-            } catch (error) {
-                console.error('حدث خطأ أثناء تحميل الملف:', error);
-                return [];
-            }
-        }
+        document.getElementById('barcode-form').addEventListener('submit', function(e) {
+            e.preventDefault();
 
-        // البحث عن المنتج بناءً على الباركود
-        async function searchProduct() {
-            const barcodeInput = document.getElementById('barcodeInput').value.trim();
-            const productInfo = document.getElementById('productInfo');
-            const productImage = document.getElementById('productImage');
-            const error = document.getElementById('error');
-            
-            if (!barcodeInput) {
-                error.textContent = 'يرجى إدخال الباركود.';
-                productInfo.textContent = '';
-                productImage.style.display = 'none';
-                return;
-            }
+            // قراءة ملف البيانات
+            fetch('test.txt')
+                .then(response => response.text())
+                .then(data => {
+                    const barcodeInput = document.getElementById('barcode-input').value;
+                    const lines = data.split('\n');
+                    let found = false;
 
-            const products = await fetchProductsData();
+                    // البحث عن المنتج باستخدام الباركود
+                    for (let line of lines) {
+                        const [productName, productPrice, barcode, imageUrl] = line.split('/');
+                        if (barcode === barcodeInput) {
+                            document.getElementById('product-name').textContent = `الاسم: ${productName}`;
+                            document.getElementById('product-price').textContent = `السعر: ${productPrice}`;
+                            document.getElementById('product-image').src = imageUrl;
+                            document.getElementById('product-image').style.display = 'block';
+                            found = true;
+                            break;
+                        }
+                    }
 
-            // البحث عن المنتج المطابق للباركود
-            const product = products.find(item => item[2] === barcodeInput);
-
-            if (product) {
-                // عرض معلومات المنتج
-                productInfo.textContent = `اسم الصنف: ${product[0]}, السعر: ${product[1]} ₪`;
-                
-                // عرض صورة المنتج
-                productImage.src = product[3];
-                productImage.style.display = 'block';
-
-                error.textContent = '';
-            } else {
-                productInfo.textContent = '';
-                productImage.style.display = 'none';
-                error.textContent = 'لم يتم العثور على صنف بهذا الباركود.';
-            }
-        }
+                    if (!found) {
+                        document.getElementById('product-name').textContent = 'الاسم: المنتج غير موجود';
+                        document.getElementById('product-price').textContent = 'السعر: -';
+                        document.getElementById('product-image').style.display = 'none';
+                    }
+                });
+        });
     </script>
+
 </body>
 </html>
-
