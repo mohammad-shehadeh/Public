@@ -13,80 +13,96 @@
             background-repeat: no-repeat; /* لمنع تكرار الصورة */
             background-position: center; /* لوضع الصورة في المركز */
         }  
-              header {
-            background-color: #031b35;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-        }
-        header h1 {
-            margin: 0;
-        }
-        header .datetime {
-            margin-top: 5px;
-            font-size: 14px;
-        }
-        .buttons {
-            margin: 10px;
-            text-align: center;
-        }
-        .buttons button {
-            padding: 10px 20px;
-            margin: 5px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .buttons button:hover {
-            background-color: #0056b3;
-        }
-        .category {
-            margin: 40px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: white;
-        }
-        .category img {
+        header {
+    background-color: #031b35;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+}
+header h1 {
+    margin: 0;
+}
+header .datetime {
+    margin-top: 5px;
+    font-size: 14px;
+}
+.buttons {
+    margin: 10px;
+    text-align: center;
+}
+.buttons button {
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.buttons button:hover {
+    background-color: #0056b3;
+}
+.category {
+    margin: 40px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+}
+.category img {
     width: 150px;
     height: auto;
     border-radius: 5px;
     display: block; /* منع الصورة من الانحراف */
     margin: 0 auto; /* جعل الصورة في الوسط */
 }
-        .products {
-            display: flex;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-        .product {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            margin: 10px;
-            width: 200px;
-            text-align: center;
-            background-image: url('https://img.freepik.com/free-photo/3d-abstract-background-with-modern-plexus-design_1048-17052.jpg?semt=ais_hybrid');
-          }
-        .product img {
-            width: 100px;
-            height: auto;
-            margin-bottom: 10px;
-        }
-        .form-container {
-            margin: 20px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        .form-container input, .form-container button {
-            margin: 5px 0;
-            padding: 8px;
-            width: 100%;
-        }
+.products {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+.product {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+    width: 200px;
+    text-align: center;
+    background-image: url('https://img.freepik.com/free-photo/3d-abstract-background-with-modern-plexus-design_1048-17052.jpg?semt=ais_hybrid');
+}
+.product img {
+    width: 100px;
+    height: auto;
+    margin-bottom: 10px;
+}
+.form-container {
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+.form-container input, .form-container button {
+    margin: 5px 0;
+    padding: 8px;
+    width: 100%;
+}
+
+/* استعلامات الوسائط للهاتف المحمول */
+@media (max-width: 768px) {
+    header, .buttons, .category, .products, .form-container {
+        transform: scale(0.5);
+        transform-origin: top left;
+    }
+
+    .category img {
+        width: 75px; /* تصغير الصور */
+    }
+
+    .product {
+        width: 150px; /* تصغير عرض المنتجات */
+    }
+}
         
     </style>
 </head>
