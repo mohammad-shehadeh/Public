@@ -5,14 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>برنامج تسعيرة الهواتف</title>
     <style>
-   body {
+        body {
             margin: 0;
             padding: 0;
             background-image: url('https://png.pngtree.com/thumb_back/fw800/background/20190223/ourmid/pngtree-blue-smart-light-tech-background-backgroundlight-effect-backgroundelectronic-image_81225.jpg');
             background-size: cover; /* لتغطية الشاشة بالكامل */
             background-repeat: no-repeat; /* لمنع تكرار الصورة */
             background-position: center; /* لوضع الصورة في المركز */
-        }        header {
+            font-family: Arial, sans-serif;
+        }
+
+        /* عند الشاشات الصغيرة */
+        @media screen and (max-width: 600px) {
+            body {
+                transform: scale(0.5);
+                transform-origin: top left;
+                width: 100%;
+                height: 100%;
+            }
+                }        header {
             background-color: #007bff;
             color: white;
             padding: 10px 20px;
@@ -91,21 +102,21 @@
 </head>
 <body>
     <header>
-        <h1>برنامج تسعيرة الهواتف</h1>
+        <h1>Shehadeh Center </h1>
         <div class="datetime" id="datetime"></div>
     </header>
 
     <!-- زر التحويل إلى PDF -->
     <div class="buttons">
-        <button onclick="exportToPDF()">تحويل إلى PDF</button>
+        <button onclick="exportToPDF()">طباعة  </button>
     </div>
 
     <!-- نموذج تسجيل الأصناف الجديدة -->
     <div class="form-container">
-        <h3>إضافة صنف جديد</h3>
+        <h3>إضافة صنف جديد ،يتم ادراج الصورة تلقائيا بلذكاء الصناعي</h3>
         <input type="text" id="product-name" placeholder="اسم الهاتف" required>
         <input type="text" id="product-memory" placeholder="الذاكرة (مثال: 128GB)" required>
-        <input type="text" id="product-price" placeholder="السعر (مثال: 800$)" required>
+        <input type="text" id="product-price" placeholder="السعر (مثال: 800)" required>
         <button onclick="addProduct()">إضافة المنتج</button>
     </div>
 
