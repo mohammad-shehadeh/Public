@@ -15,33 +15,11 @@
             font-family: Arial, sans-serif;
         }
 
-        /* تعديل تنسيق العناصر داخل الصفحة */
-        .content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .box {
-            width: 30%;
-            margin: 10px;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.7); /* لون خلفية شبه شفاف */
-            border-radius: 8px;
-        }
-
         /* وسائط الإعلام للأجهزة الصغيرة */
         @media (max-width: 768px) {
-            .box {
-                width: 45%; /* تغيير العرض ليكون مناسبًا للشاشات الصغيرة */
-            }
-        }
-
-        @media (max-width: 480px) {
-            .box {
-                width: 90%; /* تغيير العرض ليشغل أكبر مساحة في الشاشات الأصغر */
+            body {
+                transform: scale(0.5); /* تصغير المحتوى بنسبة 50% */
+                transform-origin: top left; /* تحديد نقطة الأصل للتحجيم من الزاوية العلوية اليسرى */
             }
         }              header {
             background-color: #031b35;
