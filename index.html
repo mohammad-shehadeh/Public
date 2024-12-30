@@ -1,134 +1,311 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بحث المنتجات باستخدام الباركود</title>
+    <title>برنامج تسعيرة الهواتف</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+   body {
             margin: 0;
-            padding: 20px;
-        }
-        h1 {
+            padding: 0;
+            background-image: url('https://png.pngtree.com/thumb_back/fw800/background/20190223/ourmid/pngtree-blue-smart-light-tech-background-backgroundlight-effect-backgroundelectronic-image_81225.jpg');
+            background-size: cover; /* لتغطية الشاشة بالكامل */
+            background-repeat: no-repeat; /* لمنع تكرار الصورة */
+            background-position: center; /* لوضع الصورة في المركز */
+        }        header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
             text-align: center;
-            color: #333;
         }
-        .header-image {
-            width: 100%;
-            max-width: 800px;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-            border-radius: 10px;
+        header h1 {
+            margin: 0;
         }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        header .datetime {
+            margin-top: 5px;
+            font-size: 14px;
         }
-        input[type="text"], input[type="submit"] {
-            width: 100%;
+        .buttons {
+            margin: 10px;
+            text-align: center;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .buttons button:hover {
+            background-color: #0056b3;
+        }
+        .category {
+            margin: 40px;
             padding: 10px;
-            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: white;
+        }
+        .category img {
+    width: 150px;
+    height: auto;
+    border-radius: 5px;
+    display: block; /* منع الصورة من الانحراف */
+    margin: 0 auto; /* جعل الصورة في الوسط */
+}
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .product {
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            width: 200px;
+            text-align: center;
+            background-image: url('https://img.freepik.com/free-photo/3d-abstract-background-with-modern-plexus-design_1048-17052.jpg?semt=ais_hybrid');
+          }
+        .product img {
+            width: 100px;
+            height: auto;
+            margin-bottom: 10px;
         }
-        #product-image {
+        .form-container {
+            margin: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .form-container input, .form-container button {
+            margin: 5px 0;
+            padding: 8px;
             width: 100%;
-            max-width: 400px;
-            margin: 20px auto;
-            display: block;
-            border-radius: 10px;
-            display: none;
         }
+        
     </style>
 </head>
 <body>
+    <header>
+        <h1>برنامج تسعيرة الهواتف</h1>
+        <div class="datetime" id="datetime"></div>
+    </header>
 
-    <!-- صورة العنوان -->
-    <img src="https://ls6iibytsc.eu.scalesta-cdn.com/8mfEuqxAqn2kgf5APnH8fqBr_5w=/filters:format(webp):fill(fff):quality(90)/www.gstoreq8.com/images/detailed/265/800x800_680201070A-4.webp" alt="Header Image" class="header-image">
-
-    <div class="container">
-        <h1>بحث المنتجات باستخدام الباركود</h1>
-
-        <!-- نموذج البحث عن المنتج -->
-        <form id="barcode-form">
-            <input type="text" id="barcode-input" placeholder="أدخل الباركود" required>
-            <input type="submit" value="بحث">
-        </form>
-
-        <!-- عرض تفاصيل المنتج -->
-        <div id="product-details">
-            <h2>تفاصيل المنتج:</h2>
-            <p id="product-name">الاسم: -</p>
-            <p id="product-price">السعر: -</p>
-            <img id="product-image" src="" alt="Product Image">
-        </div>
+    <!-- زر التحويل إلى PDF -->
+    <div class="buttons">
+        <button onclick="exportToPDF()">تحويل إلى PDF</button>
     </div>
 
+    <!-- نموذج تسجيل الأصناف الجديدة -->
+    <div class="form-container">
+        <h3>إضافة صنف جديد</h3>
+        <input type="text" id="product-name" placeholder="اسم الهاتف" required>
+        <input type="text" id="product-memory" placeholder="الذاكرة (مثال: 128GB)" required>
+        <input type="text" id="product-price" placeholder="السعر (مثال: 800$)" required>
+        <button onclick="addProduct()">إضافة المنتج</button>
+    </div>
+
+    <!-- عرض الأصناف -->
+    <div id="categories">
+        <!-- سيتم إدراج الفئات والمنتجات ديناميكيًا -->
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
-        const apiKey = 'AIzaSyANq87OyuJUq6bt1uFVKQC7VaklCV6eOkk';  // أدخل مفتاح API الخاص بك هنا
-        const searchEngineId = 'b284a81d633f74a1b';  // أدخل معرّف محرك البحث الخاص بك هنا
+        const { jsPDF } = window.jspdf;
 
-        document.getElementById('barcode-form').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // مفاتيح API
+        const apiKey = 'AIzaSyANq87OyuJUq6bt1uFVKQC7VaklCV6eOkk';
+        const searchEngineId = 'b284a81d633f74a1b';
 
-            // قراءة ملف البيانات
-            fetch('test.txt')
-                .then(response => response.text())
-                .then(data => {
-                    const barcodeInput = document.getElementById('barcode-input').value;
-                    const lines = data.split('\n');
-                    let found = false;
+        const categories = [
+    {
+        name: "",
+        keywords: ["galaxy", "samsung"],
+        image: "https://static.vecteezy.com/system/resources/previews/020/975/669/non_2x/samsung-logo-samsung-icon-transparent-free-png.png",
+        products: []
+    },
+    {
+        name: "",
+        keywords: ["redmi", "mi", "xiaomi", "poco"],
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Xiaomi_logo.svg/512px-Xiaomi_logo.svg.png",
+        products: []
+    },
+    {
+        name: "",
+        keywords: ["iphone", "apple", "ipad"],
+        image: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
+        products: []
+    },
+    {
+        name: "",
+        keywords: ["tecno", "pova", "spark"],
+        image: "https://getlogovector.com/wp-content/uploads/2021/05/tecno-mobile-logo-vector.png",
+        products: []
+    },
+    {
+        name: "",
+        keywords: ["infinix", "hot", "smart"],
+        image: "https://static.vecteezy.com/system/resources/previews/020/927/525/non_2x/infinix-brand-logo-phone-symbol-name-green-design-china-mobile-illustration-free-vector.jpg",
+        products: []
+    },
+    {
+        name: "",
+        keywords: ["honor"],
+        image: "https://logowik.com/content/uploads/images/honor7358.logowik.com.webp",
+        products: []
+    }
+];
 
-                    // البحث عن المنتج باستخدام الباركود
-                    for (let line of lines) {
-                        const [productName, productPrice, barcode] = line.split('/');
-                        if (barcode.trim() === barcodeInput.trim()) {
-                            document.getElementById('product-name').textContent = `الاسم: ${productName}`;
-                            document.getElementById('product-price').textContent = `السعر: ${productPrice}`;
-                            
-                            // البحث عن صورة المنتج من خلال Google Custom Search API
-                            const searchQuery = encodeURIComponent(productName);
-                            const url = `https://www.googleapis.com/customsearch/v1?q=${searchQuery}&key=${apiKey}&cx=${searchEngineId}&searchType=image`;
-
-                            fetch(url)
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.items && data.items.length > 0) {
-                                        const imageUrl = data.items[0].link; // الحصول على رابط الصورة من النتيجة الأولى
-                                        const productImage = document.getElementById('product-image');
-                                        productImage.src = imageUrl;
-                                        productImage.style.display = 'block'; // عرض الصورة
-                                    } else {
-                                        document.getElementById('product-image').style.display = 'none';
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Error fetching image:', error);
-                                });
-
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    if (!found) {
-                        document.getElementById('product-name').textContent = 'الاسم: المنتج غير موجود';
-                        document.getElementById('product-price').textContent = 'السعر: -';
-                        document.getElementById('product-image').style.display = 'none';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error reading the file:', error);
+        function loadFromLocalStorage() {
+            const savedData = localStorage.getItem("categories");
+            if (savedData) {
+                const parsedData = JSON.parse(savedData);
+                parsedData.forEach((category, index) => {
+                    categories[index].products = category.products;
                 });
-        });
-    </script>
+            }
+        }
 
+        function saveToLocalStorage() {
+            localStorage.setItem("categories", JSON.stringify(categories));
+        }
+
+        function updateDateTime() {
+            const datetimeDiv = document.getElementById("datetime");
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const time = now.toLocaleTimeString();
+            const date = now.toLocaleDateString('ar-EG', options);
+            datetimeDiv.textContent = `${date} - ${time}`;
+        }
+        setInterval(updateDateTime, 1000);
+
+        async function fetchProductImage(productName) {
+            const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(productName)}&searchType=image&fileType=png&key=${apiKey}&cx=${searchEngineId}`;
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                if (data.items && data.items.length > 0) {
+                    return data.items[0].link;
+                }
+                return 'https://via.placeholder.com/100';
+            } catch (error) {
+                console.error('خطأ أثناء جلب الصورة:', error);
+                return 'https://via.placeholder.com/100';
+            }
+        }
+
+        function getCategoryForProduct(productName) {
+            const lowerCaseName = productName.toLowerCase();
+            for (let category of categories) {
+                for (let keyword of category.keywords) {
+                    if (lowerCaseName.includes(keyword)) {
+                        return category;
+                    }
+                }
+            }
+            return null;
+        }
+
+        async function addProduct() {
+            const name = document.getElementById("product-name").value.trim();
+            const memory = document.getElementById("product-memory").value.trim();
+            const price = document.getElementById("product-price").value.trim();
+
+            if (!name || !memory || !price) {
+                alert("يرجى ملء جميع الحقول.");
+                return;
+            }
+
+            const image = await fetchProductImage(name);
+            const category = getCategoryForProduct(name);
+            if (category) {
+                category.products.push({ name, memory, price, image });
+            } else {
+                alert("لم يتم العثور على فئة مناسبة للمنتج!");
+                return;
+            }
+
+            saveToLocalStorage();
+            renderCategories();
+            clearForm();
+        }
+
+        function editProduct(categoryIndex, productIndex) {
+            const product = categories[categoryIndex].products[productIndex];
+            const newMemory = prompt("الذاكرة:", product.memory);
+            const newPrice = prompt("السعر:", product.price);
+
+            if (newName && newMemory && newPrice) {
+                categories[categoryIndex].products[productIndex] = { ...product, name: newName, memory: newMemory, price: newPrice };
+                saveToLocalStorage();
+                renderCategories();
+            }
+        }
+
+        function deleteProduct(categoryIndex, productIndex) {
+            categories[categoryIndex].products.splice(productIndex, 1);
+            saveToLocalStorage();
+            renderCategories();
+        }
+
+        function clearForm() {
+            document.getElementById("product-name").value = "";
+            document.getElementById("product-memory").value = "";
+            document.getElementById("product-price").value = "";
+        }
+
+        function renderCategories() {
+            const categoriesDiv = document.getElementById("categories");
+            categoriesDiv.innerHTML = "";
+
+            categories.forEach(category => {
+                const categoryDiv = document.createElement("div");
+                categoryDiv.classList.add("category");
+                categoryDiv.innerHTML = `
+                    <h2>${category.name}</h2>
+                    <img src="${category.image}" alt="${category.name}">
+                    <div class="products"></div>
+                `;
+
+                const productsDiv = categoryDiv.querySelector(".products");
+                category.products.forEach((product, index) => {
+                    const productDiv = document.createElement("div");
+                    productDiv.classList.add("product");
+                    productDiv.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p>الذاكرة: ${product.memory}</p>
+                        <p>السعر: ${product.price}</p>
+                        <button onclick="editProduct(${categories.indexOf(category)}, ${index})">تعديل</button>
+                        <button onclick="deleteProduct(${categories.indexOf(category)}, ${index})">حذف</button>
+                    `;
+                    productsDiv.appendChild(productDiv);
+                });
+
+                categoriesDiv.appendChild(categoryDiv);
+            });
+        }
+
+        async function exportToPDF() {
+            const doc = new jsPDF();
+            const content = document.getElementById("categories");
+            await doc.html(content, {
+                callback: function (doc) {
+                    doc.save("products.pdf");
+                },
+                x: 10,
+                y: 10
+            });
+        }
+
+        loadFromLocalStorage();
+        renderCategories();
+    </script>
 </body>
 </html>
