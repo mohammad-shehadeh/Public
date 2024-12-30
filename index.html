@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>برنامج تسعيرة الهواتف</title>
+    <title>Shehadeh Center</title>
     <style>
         body {
             margin: 0;
@@ -15,16 +15,36 @@
             font-family: Arial, sans-serif;
         }
 
-        /* عند الشاشات الصغيرة */
-        @media screen and (max-width: 600px) {
-            body {
-                transform: scale(0.5);
-                transform-origin: top left;
-                width: 100%;
-                height: 100%;
+        /* تعديل تنسيق العناصر داخل الصفحة */
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .box {
+            width: 30%;
+            margin: 10px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.7); /* لون خلفية شبه شفاف */
+            border-radius: 8px;
+        }
+
+        /* وسائط الإعلام للأجهزة الصغيرة */
+        @media (max-width: 768px) {
+            .box {
+                width: 45%; /* تغيير العرض ليكون مناسبًا للشاشات الصغيرة */
             }
-                }        header {
-            background-color: #007bff;
+        }
+
+        @media (max-width: 480px) {
+            .box {
+                width: 90%; /* تغيير العرض ليشغل أكبر مساحة في الشاشات الأصغر */
+            }
+        }              header {
+            background-color: #031b35;
             color: white;
             padding: 10px 20px;
             text-align: center;
@@ -102,7 +122,7 @@
 </head>
 <body>
     <header>
-        <h1>Shehadeh Center </h1>
+        <h1>Shehadeh Center</h1>
         <div class="datetime" id="datetime"></div>
     </header>
 
@@ -113,7 +133,7 @@
 
     <!-- نموذج تسجيل الأصناف الجديدة -->
     <div class="form-container">
-        <h3>إضافة صنف جديد ،يتم ادراج الصورة تلقائيا بلذكاء الصناعي</h3>
+        <h3>إضافة صنف جديد ،يتم ادراج الصورة تلقائيا بلذكاء</h3>
         <input type="text" id="product-name" placeholder="اسم الهاتف" required>
         <input type="text" id="product-memory" placeholder="الذاكرة (مثال: 128GB)" required>
         <input type="text" id="product-price" placeholder="السعر (مثال: 800)" required>
