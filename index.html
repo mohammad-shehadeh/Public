@@ -260,47 +260,46 @@ function getCategoryForProduct(productName) {
     return null;
 }
 
-async function addProduct() {
+        async function addProduct() {
     const name = document.getElementById("product-name").value.trim();
     const memory = document.getElementById("product-memory").value.trim();
-    const priceInput = document.getElementById("product-price");
-    let price = priceInput.value.trim();
+    const price = document.getElementById("product-price").value.trim();
 
-    // تحقق من الحقول المطلوبة
-    if (!name || !memory) {
+    if (!name || !memory || !price) {
         alert("يرجى ملء جميع الحقول.");
         return;
     }
 
-    // تحقق من السعر
-    if (!price) {
-        price = "غير متوفر"; // تعيين السعر كـ "غير متوفر"
-        priceInput.style.color = "red";
-        priceInput.style.fontWeight = "bold";
-        priceInput.style.fontSize = "20px"; // جعل النص عريض جدًا ولونه أحمر
-    } else {
-        // إعادة تعيين الأنماط الافتراضية إذا تم إدخال السعر
-        priceInput.style.color = "";
-        priceInput.style.fontWeight = "";
-        priceInput.style.fontSize = "";
-    }
-
-    // الحصول على صورة المنتج
     const image = await fetchProductImage(name);
     const category = getCategoryForProduct(name);
 
     if (category) {
         category.products.push({ name, memory, price, image });
 
-        // ترتيب المنتجات داخل الفئة (حسب الشروط المقدمة)
+        // الكلمات المفتاحية ذات الأولوية
         const priorityKeywords = ["pro", "max", "ultra", "plus", "s"];
+
+        // فرز المنتجات داخل الفئة
         category.products.sort((a, b) => {
+            // استخلاص الأرقام من الأسماء
             const aNumber = parseInt(a.name.match(/\d+/)) || 0;
             const bNumber = parseInt(b.name.match(/\d+/)) || 0;
+
+            // التحقق من أولوية الكلمات المفتاحية
             const aPriority = priorityKeywords.findIndex(keyword => a.name.toLowerCase().includes(keyword));
             const bPriority = priorityKeywords.findIndex(keyword => b.name.toLowerCase().includes(keyword));
-            if (aPriority !== bPriority) return aPriority - bPriority;
+
+            // إذا كان لأحدهما أولوية أعلى
+            if (aPriority !== bPriority) {
+                if (aPriority === -1) return 1; // `a` ليس له أولوية
+                if (bPriority === -1) return -1; // `b` ليس له أولوية
+                return aPriority - bPriority; // ترتيب حسب الأولوية
+            }
+
+            // إذا كانت الأولوية متساوية، يتم الفرز حسب الرقم
             if (aNumber !== bNumber) return bNumber - aNumber;
+
+            // إذا كانت الأرقام متساوية، يتم الفرز حسب الاسم
             return a.name.localeCompare(b.name, 'en', { numeric: true });
         });
     } else {
@@ -313,6 +312,7 @@ async function addProduct() {
     renderCategories();
     clearForm();
 }
+
         function editProduct(categoryIndex, productIndex) {
             const product = categories[categoryIndex].products[productIndex];
             const newMemory = prompt("الذاكرة:", product.memory);
