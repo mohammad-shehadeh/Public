@@ -137,14 +137,15 @@ p {
     <div class="buttons">
     </div>
 
-    <!-- نموذج تسجيل الأصناف الجديدة -->
-    <div class="form-container">
-        <h3>AI اضافة صنف جديد يتم ادراج الصورة تلقائيا ب</h3>
-        <input type="text" id="product-name" placeholder="اسم الهاتف" required>
-        <input type="text" id="product-memory" placeholder="الذاكرة (مثال: 128GB)" required>
-        <input type="text" id="product-price" placeholder="السعر (مثال: 800)" required>
-        <button onclick="addProduct()">إضافة المنتج</button>
-    </div>
+<!-- نموذج تسجيل الأصناف الجديدة -->
+<div class="form-container">
+    <h3>AI اضافة صنف جديد يتم ادراج الصورة تلقائيا ب</h3>
+    <input type="text" id="product-name" placeholder="اسم الهاتف" required>
+    <input type="text" id="product-memory" placeholder="الذاكرة (مثال: 128GB)" required>
+    <input type="text" id="product-price" placeholder="السعر (مثال: 800)" required>
+    <button onclick="addProduct()">إضافة المنتج</button>
+    <button onclick="toggleForm()">إخفاء النموذج</button> <!-- زر لإخفاء النموذج -->
+</div>
 
     <!-- عرض الأصناف -->
     <div id="categories">
@@ -213,14 +214,27 @@ p {
         }
 
         function updateDateTime() {
-            const datetimeDiv = document.getElementById("datetime");
-            const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const time = now.toLocaleTimeString();
-            const date = now.toLocaleDateString('ar-EG', options);
-            datetimeDiv.textContent = `${date} - ${time}`;
-        }
-        setInterval(updateDateTime, 1000);
+    const datetimeDiv = document.getElementById("datetime");
+    const now = new Date();
+    
+    // تنسيق اليوم بالعربي
+    const daysOfWeek = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+    const dayOfWeek = daysOfWeek[now.getDay()]; // الحصول على اليوم بالعربي
+
+    // تنسيق التاريخ
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+    const date = `${day}/${month}/${year}`;
+
+    // تنسيق الوقت باستخدام الأرقام الإنجليزية
+    const time = now.toLocaleTimeString('en-GB'); // تنسيق الوقت بأرقام إنجليزية
+
+    // تحديث النص داخل العنصر
+    datetimeDiv.textContent = `${dayOfWeek} - ${date} - ${time}`;
+}
+
+setInterval(updateDateTime, 1000);
 
         async function fetchProductImage(productName) {
     const searchQuery = `${productName} front and back png`;
@@ -411,6 +425,17 @@ function editProduct(categoryIndex, productIndex) {
         // تحميل البيانات عند فتح الصفحة
         loadFromLocalStorage();
         renderCategories();
-    </script>    </script>
+
+          // دالة لإخفاء النموذج عند الضغط على الزر
+    function toggleForm() {
+        var formContainer = document.querySelector('.form-container');
+        formContainer.style.display = 'none';
+    }
+
+    // دالة لإضافة المنتج
+    function addProduct() {
+        // منطق إضافة المنتج هنا
+    }
+    </script>   
 </body>
 </html>
