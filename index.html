@@ -213,7 +213,7 @@ p {
             localStorage.setItem("categories", JSON.stringify(categories));
         }
 
-        function updateDateTime() {
+function updateDateTime() {
     const datetimeDiv = document.getElementById("datetime");
     const now = new Date();
     
@@ -340,6 +340,18 @@ function getCategoryForProduct(productName) {
     saveToLocalStorage();
     renderCategories();
     clearForm();
+
+              // دالة لإخفاء النموذج عند الضغط على الزر
+              function toggleForm() {
+        var formContainer = document.querySelector('.form-container');
+        formContainer.style.display = 'none';
+    }
+
+    // دالة لإضافة المنتج
+    function addProduct() {
+        // منطق إضافة المنتج هنا
+    }
+
 }
 
         function editProduct(categoryIndex, productIndex) {
@@ -426,16 +438,6 @@ function editProduct(categoryIndex, productIndex) {
         loadFromLocalStorage();
         renderCategories();
 
-          // دالة لإخفاء النموذج عند الضغط على الزر
-    function toggleForm() {
-        var formContainer = document.querySelector('.form-container');
-        formContainer.style.display = 'none';
-    }
-
-    // دالة لإضافة المنتج
-    function addProduct() {
-        // منطق إضافة المنتج هنا
-    }
     </script>   
 </body>
 </html>
