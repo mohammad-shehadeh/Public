@@ -266,53 +266,51 @@ async function addProduct() {
     const priceInput = document.getElementById("product-price");
     const price = priceInput.value.trim();
 
+    // تحقق من الحقول المطلوبة
     if (!name || !memory) {
         alert("يرجى ملء جميع الحقول.");
         return;
     }
 
+    // تحقق من السعر
     if (!price) {
-        priceInput.value = "غير متوفر";
-        priceInput.style.color = "red";
-        priceInput.style.fontWeight = "bold";
-        priceInput.style.fontSize = "20px";
+        // عرض النص "غير متوفر" بجانب حقل السعر
+        const errorMessage = document.createElement("span");
+        errorMessage.textContent = "غير متوفر";
+        errorMessage.style.color = "red";
+        errorMessage.style.fontWeight = "bold";
+        errorMessage.style.fontSize = "16px";
+        errorMessage.id = "price-error";
+
+        // تحقق من عدم تكرار الرسالة
+        if (!document.getElementById("price-error")) {
+            priceInput.parentNode.appendChild(errorMessage);
+        }
         return;
     }
 
-    // أكمل منطق الإضافة هنا
-    console.log({ name, memory, price });
-}
+    // إزالة رسالة الخطأ إذا تم إدخال سعر
+    const existingError = document.getElementById("price-error");
+    if (existingError) {
+        existingError.remove();
+    }
 
+    // الحصول على صورة المنتج
     const image = await fetchProductImage(name);
     const category = getCategoryForProduct(name);
 
     if (category) {
         category.products.push({ name, memory, price, image });
 
-        // الكلمات المفتاحية ذات الأولوية
+        // ترتيب المنتجات داخل الفئة (حسب الشروط المقدمة)
         const priorityKeywords = ["pro", "max", "ultra", "plus", "s"];
-
-        // فرز المنتجات داخل الفئة
         category.products.sort((a, b) => {
-            // استخلاص الأرقام من الأسماء
             const aNumber = parseInt(a.name.match(/\d+/)) || 0;
             const bNumber = parseInt(b.name.match(/\d+/)) || 0;
-
-            // التحقق من أولوية الكلمات المفتاحية
             const aPriority = priorityKeywords.findIndex(keyword => a.name.toLowerCase().includes(keyword));
             const bPriority = priorityKeywords.findIndex(keyword => b.name.toLowerCase().includes(keyword));
-
-            // إذا كان لأحدهما أولوية أعلى
-            if (aPriority !== bPriority) {
-                if (aPriority === -1) return 1; // `a` ليس له أولوية
-                if (bPriority === -1) return -1; // `b` ليس له أولوية
-                return aPriority - bPriority; // ترتيب حسب الأولوية
-            }
-
-            // إذا كانت الأولوية متساوية، يتم الفرز حسب الرقم
+            if (aPriority !== bPriority) return aPriority - bPriority;
             if (aNumber !== bNumber) return bNumber - aNumber;
-
-            // إذا كانت الأرقام متساوية، يتم الفرز حسب الاسم
             return a.name.localeCompare(b.name, 'en', { numeric: true });
         });
     } else {
