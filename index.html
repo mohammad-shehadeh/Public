@@ -236,8 +236,8 @@ function updateDateTime() {
 
 setInterval(updateDateTime, 1000);
 
-        async function fetchProductImage(productName) {
-    const searchQuery = `${productName} front and back png`;
+async function fetchProductImage(productName) {
+    const searchQuery = `${productName} front and back`;
     const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(searchQuery)}&searchType=image&fileType=png&imgType=photo&key=${apiKey}&cx=${searchEngineId}`;
 
     try {
@@ -245,35 +245,37 @@ setInterval(updateDateTime, 1000);
         const data = await response.json();
 
         if (data.items && data.items.length > 0) {
-            let validImage = null;
+            let squareImage = null;
 
-            // اختر أي صورة متاحة بصيغة PNG
+            // التحقق أولاً من الصور المربعة
             for (let item of data.items) {
-                if (item.link && item.link.endsWith('.png') && item.link.includes('https') && await isImageAccessible(item.link)) {
-                    validImage = item.link;
-                    break;
+                const imageUrl = item.link;
+                const imageWidth = item.image.width;
+                const imageHeight = item.image.height;
+
+                // إذا كانت الصورة مربعة (العرض = الارتفاع)
+                if (imageWidth === imageHeight) {
+                    squareImage = imageUrl;
+                    break; // اختيار الصورة المربعة الأولى
                 }
             }
 
-            // إذا لم يتم العثور على أي صورة مطابقة، إرجاع صورة افتراضية
-            return validImage || 'https://via.placeholder.com/100';
+            // إذا تم العثور على صورة مربعة
+            if (squareImage) {
+                return squareImage;
+            }
+
+            // إذا لم يتم العثور على صورة مربعة، اختيار أول صورة متاحة
+            return data.items[0].link;
         }
 
-        // صورة افتراضية في حال عدم وجود نتائج
-        return 'https://via.placeholder.com/100';
+        // إذا لم توجد أي صور، إرجاع صورة افتراضية
+        return 'https://www.example.com/default_image.png'; // صورة افتراضية
+
     } catch (error) {
         console.error('خطأ أثناء جلب الصورة:', error);
-        return 'https://via.placeholder.com/100'; // صورة افتراضية عند الخطأ
-    }
-}
-
-// دالة للتحقق من صلاحية الصورة
-async function isImageAccessible(imageUrl) {
-    try {
-        const response = await fetch(imageUrl, { method: 'HEAD' });
-        return response.ok;
-    } catch {
-        return false;
+        // عند حدوث خطأ، إرجاع صورة افتراضية
+        return 'https://www.example.com/default_image.png'; // صورة افتراضية
     }
 }
 
@@ -288,6 +290,7 @@ function getCategoryForProduct(productName) {
     }
     return null;
 }
+
 
         async function addProduct() {
     const name = document.getElementById("product-name").value.trim();
