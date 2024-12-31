@@ -264,7 +264,7 @@ async function addProduct() {
     const name = document.getElementById("product-name").value.trim();
     const memory = document.getElementById("product-memory").value.trim();
     const priceInput = document.getElementById("product-price");
-    const price = priceInput.value.trim();
+    let price = priceInput.value.trim();
 
     // تحقق من الحقول المطلوبة
     if (!name || !memory) {
@@ -274,25 +274,15 @@ async function addProduct() {
 
     // تحقق من السعر
     if (!price) {
-        // عرض النص "غير متوفر" بجانب حقل السعر
-        const errorMessage = document.createElement("span");
-        errorMessage.textContent = "غير متوفر";
-        errorMessage.style.color = "red";
-        errorMessage.style.fontWeight = "bold";
-        errorMessage.style.fontSize = "16px";
-        errorMessage.id = "price-error";
-
-        // تحقق من عدم تكرار الرسالة
-        if (!document.getElementById("price-error")) {
-            priceInput.parentNode.appendChild(errorMessage);
-        }
-        return;
-    }
-
-    // إزالة رسالة الخطأ إذا تم إدخال سعر
-    const existingError = document.getElementById("price-error");
-    if (existingError) {
-        existingError.remove();
+        price = "غير متوفر"; // تعيين السعر كـ "غير متوفر"
+        priceInput.style.color = "red";
+        priceInput.style.fontWeight = "bold";
+        priceInput.style.fontSize = "20px"; // جعل النص عريض جدًا ولونه أحمر
+    } else {
+        // إعادة تعيين الأنماط الافتراضية إذا تم إدخال السعر
+        priceInput.style.color = "";
+        priceInput.style.fontWeight = "";
+        priceInput.style.fontSize = "";
     }
 
     // الحصول على صورة المنتج
@@ -323,7 +313,6 @@ async function addProduct() {
     renderCategories();
     clearForm();
 }
-
         function editProduct(categoryIndex, productIndex) {
             const product = categories[categoryIndex].products[productIndex];
             const newMemory = prompt("الذاكرة:", product.memory);
