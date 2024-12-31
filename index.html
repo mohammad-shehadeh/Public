@@ -260,15 +260,28 @@ function getCategoryForProduct(productName) {
     return null;
 }
 
-        async function addProduct() {
+async function addProduct() {
     const name = document.getElementById("product-name").value.trim();
     const memory = document.getElementById("product-memory").value.trim();
-    const price = document.getElementById("product-price").value.trim();
+    const priceInput = document.getElementById("product-price");
+    const price = priceInput.value.trim();
 
-    if (!name || !memory || !price) {
+    if (!name || !memory) {
         alert("يرجى ملء جميع الحقول.");
         return;
     }
+
+    if (!price) {
+        priceInput.value = "غير متوفر";
+        priceInput.style.color = "red";
+        priceInput.style.fontWeight = "bold";
+        priceInput.style.fontSize = "20px";
+        return;
+    }
+
+    // أكمل منطق الإضافة هنا
+    console.log({ name, memory, price });
+}
 
     const image = await fetchProductImage(name);
     const category = getCategoryForProduct(name);
