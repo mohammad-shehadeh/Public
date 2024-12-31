@@ -156,7 +156,7 @@ p {
         const { jsPDF } = window.jspdf;
 
         // مفاتيح API
-        const apiKey = 'AIzaSyANq87OyuJUq6bt1uFVKQC7VaklCV6eOkk';
+        const apiKey = 'AIzaSyAcr_SCnjPFKgydVUO0YVv8ukPJ5EMRAmM';
         const searchEngineId = 'b284a81d633f74a1b';
 
         const categories = [
@@ -223,28 +223,43 @@ p {
         setInterval(updateDateTime, 1000);
 
         async function fetchProductImage(productName) {
-    const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(productName)}&searchType=image&fileType=png&imgSize=medium&key=${apiKey}&cx=${searchEngineId}`;
+    const searchQuery = `${productName} front and back png`;
+    const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(searchQuery)}&searchType=image&fileType=png&imgType=photo&key=${apiKey}&cx=${searchEngineId}`;
 
     try {
         const response = await fetch(url);
         const data = await response.json();
 
-        // تحقق إذا كانت هناك صور في النتائج
         if (data.items && data.items.length > 0) {
-            // فحص الصور والتأكد من أنها بصيغة PNG وحجم مناسب
+            let validImage = null;
+
+            // اختر أي صورة متاحة بصيغة PNG
             for (let item of data.items) {
-                // التأكد من أن الرابط ينتهي بـ .png وأن الصورة مناسبة
-                if (item.link && item.link.endsWith('.png') && item.image.width >= 200 && item.image.height >= 200) {
-                    return item.link;  // العودة بالصورة الصحيحة ذات الأبعاد المناسبة
+                if (item.link && item.link.endsWith('.png') && item.link.includes('https') && await isImageAccessible(item.link)) {
+                    validImage = item.link;
+                    break;
                 }
             }
+
+            // إذا لم يتم العثور على أي صورة مطابقة، إرجاع صورة افتراضية
+            return validImage || 'https://via.placeholder.com/100';
         }
 
-        // إذا لم يتم العثور على صورة بصيغة PNG، نرجع إلى صورة افتراضية
+        // صورة افتراضية في حال عدم وجود نتائج
         return 'https://via.placeholder.com/100';
     } catch (error) {
         console.error('خطأ أثناء جلب الصورة:', error);
-        return 'https://via.placeholder.com/100';  // صورة افتراضية في حال حدوث خطأ
+        return 'https://via.placeholder.com/100'; // صورة افتراضية عند الخطأ
+    }
+}
+
+// دالة للتحقق من صلاحية الصورة
+async function isImageAccessible(imageUrl) {
+    try {
+        const response = await fetch(imageUrl, { method: 'HEAD' });
+        return response.ok;
+    } catch {
+        return false;
     }
 }
 
@@ -369,20 +384,33 @@ function getCategoryForProduct(productName) {
             });
         }
 
-        async function exportToPDF() {
-            const doc = new jsPDF();
-            const content = document.getElementById("categories");
-            await doc.html(content, {
-                callback: function (doc) {
-                    doc.save("products.pdf");
-                },
-                x: 10,
-                y: 10
-            });
+// دالة لتعديل المنتج
+function editProduct(categoryIndex, productIndex) {
+    const product = categories[categoryIndex].products[productIndex];
+    const newMemory = prompt("تعديل الذاكرة:", product.memory);
+    const newPrice = prompt("تعديل السعر:", product.price);
+
+    if (newMemory && newPrice) {
+        categories[categoryIndex].products[productIndex] = {
+            ...product,
+            memory: newMemory,
+            price: newPrice
+        };
+        saveToLocalStorage();
+        renderCategories();
+    }
+}
+
+        // دالة لحذف المنتج
+        function deleteProduct(categoryIndex, productIndex) {
+            categories[categoryIndex].products.splice(productIndex, 1);
+            saveToLocalStorage();
+            renderCategories();
         }
 
+        // تحميل البيانات عند فتح الصفحة
         loadFromLocalStorage();
         renderCategories();
-    </script>
+    </script>    </script>
 </body>
 </html>
