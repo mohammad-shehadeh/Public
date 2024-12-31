@@ -162,13 +162,13 @@ p {
         const categories = [
     {
         name: "",
-        keywords: ["galaxy", "samsung"],
+        keywords: ["galaxy", "samsung", "S", "A"],
         image: "https://static.vecteezy.com/system/resources/previews/020/975/669/non_2x/samsung-logo-samsung-icon-transparent-free-png.png",
         products: []
     },
     {
         name: "",
-        keywords: ["redmi", "mi", "xiaomi", "poco"],
+        keywords: ["redmi", "mi", "xiaomi", "poco", "Note"],
         image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Xiaomi_logo.svg/512px-Xiaomi_logo.svg.png",
         products: []
     },
@@ -192,7 +192,7 @@ p {
     },
     {
         name: "",
-        keywords: ["honor"],
+        keywords: ["honor", "X"],
         image: "https://logowik.com/content/uploads/images/honor7358.logowik.com.webp",
         products: []
     }
@@ -223,55 +223,95 @@ p {
         setInterval(updateDateTime, 1000);
 
         async function fetchProductImage(productName) {
-            const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(productName)}&searchType=image&fileType=png&key=${apiKey}&cx=${searchEngineId}`;
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                if (data.items && data.items.length > 0) {
-                    return data.items[0].link;
+    const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(productName)}&searchType=image&fileType=png&imgSize=medium&key=${apiKey}&cx=${searchEngineId}`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        // تحقق إذا كانت هناك صور في النتائج
+        if (data.items && data.items.length > 0) {
+            // فحص الصور والتأكد من أنها بصيغة PNG وحجم مناسب
+            for (let item of data.items) {
+                // التأكد من أن الرابط ينتهي بـ .png وأن الصورة مناسبة
+                if (item.link && item.link.endsWith('.png') && item.image.width >= 200 && item.image.height >= 200) {
+                    return item.link;  // العودة بالصورة الصحيحة ذات الأبعاد المناسبة
                 }
-                return 'https://via.placeholder.com/100';
-            } catch (error) {
-                console.error('خطأ أثناء جلب الصورة:', error);
-                return 'https://via.placeholder.com/100';
             }
         }
 
-        function getCategoryForProduct(productName) {
-            const lowerCaseName = productName.toLowerCase();
-            for (let category of categories) {
-                for (let keyword of category.keywords) {
-                    if (lowerCaseName.includes(keyword)) {
-                        return category;
-                    }
-                }
+        // إذا لم يتم العثور على صورة بصيغة PNG، نرجع إلى صورة افتراضية
+        return 'https://via.placeholder.com/100';
+    } catch (error) {
+        console.error('خطأ أثناء جلب الصورة:', error);
+        return 'https://via.placeholder.com/100';  // صورة افتراضية في حال حدوث خطأ
+    }
+}
+
+function getCategoryForProduct(productName) {
+    const lowerCaseName = productName.toLowerCase();
+    for (let category of categories) {
+        for (let keyword of category.keywords) {
+            if (lowerCaseName.includes(keyword)) {
+                return category;
             }
-            return null;
         }
+    }
+    return null;
+}
 
         async function addProduct() {
-            const name = document.getElementById("product-name").value.trim();
-            const memory = document.getElementById("product-memory").value.trim();
-            const price = document.getElementById("product-price").value.trim();
+    const name = document.getElementById("product-name").value.trim();
+    const memory = document.getElementById("product-memory").value.trim();
+    const price = document.getElementById("product-price").value.trim();
 
-            if (!name || !memory || !price) {
-                alert("يرجى ملء جميع الحقول.");
-                return;
+    if (!name || !memory || !price) {
+        alert("يرجى ملء جميع الحقول.");
+        return;
+    }
+
+    const image = await fetchProductImage(name);
+    const category = getCategoryForProduct(name);
+
+    if (category) {
+        category.products.push({ name, memory, price, image });
+
+        // الكلمات المفتاحية ذات الأولوية
+        const priorityKeywords = ["pro", "max", "ultra", "plus", "s"];
+
+        // فرز المنتجات داخل الفئة
+        category.products.sort((a, b) => {
+            // استخلاص الأرقام من الأسماء
+            const aNumber = parseInt(a.name.match(/\d+/)) || 0;
+            const bNumber = parseInt(b.name.match(/\d+/)) || 0;
+
+            // التحقق من أولوية الكلمات المفتاحية
+            const aPriority = priorityKeywords.findIndex(keyword => a.name.toLowerCase().includes(keyword));
+            const bPriority = priorityKeywords.findIndex(keyword => b.name.toLowerCase().includes(keyword));
+
+            // إذا كان لأحدهما أولوية أعلى
+            if (aPriority !== bPriority) {
+                if (aPriority === -1) return 1; // `a` ليس له أولوية
+                if (bPriority === -1) return -1; // `b` ليس له أولوية
+                return aPriority - bPriority; // ترتيب حسب الأولوية
             }
 
-            const image = await fetchProductImage(name);
-            const category = getCategoryForProduct(name);
-            if (category) {
-                category.products.push({ name, memory, price, image });
-            } else {
-                alert("لم يتم العثور على فئة مناسبة للمنتج!");
-                return;
-            }
+            // إذا كانت الأولوية متساوية، يتم الفرز حسب الرقم
+            if (aNumber !== bNumber) return bNumber - aNumber;
 
-            saveToLocalStorage();
-            renderCategories();
-            clearForm();
-        }
+            // إذا كانت الأرقام متساوية، يتم الفرز حسب الاسم
+            return a.name.localeCompare(b.name, 'en', { numeric: true });
+        });
+    } else {
+        alert("لم يتم العثور على فئة مناسبة للمنتج!");
+        return;
+    }
+
+    // حفظ البيانات وعرض التحديثات
+    saveToLocalStorage();
+    renderCategories();
+    clearForm();
+}
 
         function editProduct(categoryIndex, productIndex) {
             const product = categories[categoryIndex].products[productIndex];
