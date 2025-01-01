@@ -96,7 +96,7 @@
 /* استعلامات الوسائط للهاتف المحمول */
 @media (max-width: 768px) {
     .category img {
-        width: 70px; /* تصغير عرض الصورة بشكل أكبر */
+        width: 50px; /* تصغير عرض الصورة بشكل أكبر */
     }
 
     .product {
@@ -138,7 +138,7 @@ p {
     </div>
 
 <!-- نموذج تسجيل الأصناف الجديدة -->
-<div class="form-container">
+<div class="form-container" id="product-form">
     <h3>AI اضافة صنف جديد يتم ادراج الصورة تلقائيا ب</h3>
     <input type="text" id="product-name" placeholder="اسم الهاتف" required>
     <input type="text" id="product-memory" placeholder="الذاكرة (مثال: 128GB)" required>
@@ -196,7 +196,14 @@ p {
         keywords: ["honor", "X"],
         image: "https://logowik.com/content/uploads/images/honor7358.logowik.com.webp",
         products: []
+    },
+    {
+        name: "",
+        keywords: ["oale", "nokia", "kxd", "blackview", "oscal", "teclast"],
+        image: "https://media-cdn.tripadvisor.com/media/photo-m/1280/1d/86/21/5d/undefined-primary-logo.jpg",
+        products: []
     }
+
 ];
 
         function loadFromLocalStorage() {
@@ -344,19 +351,20 @@ function getCategoryForProduct(productName) {
     renderCategories();
     clearForm();
 
-              // دالة لإخفاء النموذج عند الضغط على الزر
-              function toggleForm() {
-        var formContainer = document.querySelector('.form-container');
-        formContainer.style.display = 'none';
-    }
-
-    // دالة لإضافة المنتج
-    function addProduct() {
-        // منطق إضافة المنتج هنا
-    }
-
 }
+function toggleForm() {
+        const form = document.getElementById('product-form');
+        if (form.style.display === 'none') {
+            form.style.display = 'block'; // إظهار النموذج إذا كان مخفياً
+        } else {
+            form.style.display = 'none'; // إخفاء النموذج إذا كان ظاهراً
+        }
+    }
 
+    function addProduct() {
+        // إضافة المنتج (تخصيص الوظيفة هنا)
+        alert("تمت إضافة المنتج!");
+    }
         function editProduct(categoryIndex, productIndex) {
             const product = categories[categoryIndex].products[productIndex];
             const newMemory = prompt("الذاكرة:", product.memory);
