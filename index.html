@@ -138,7 +138,7 @@ p {
     </div>
 
 <!-- نموذج تسجيل الأصناف الجديدة -->
-<div class="form-container" id="product-form">
+<div class="form-container">
     <h3>AI اضافة صنف جديد يتم ادراج الصورة تلقائيا ب</h3>
     <input type="text" id="product-name" placeholder="اسم الهاتف" required>
     <input type="text" id="product-memory" placeholder="الذاكرة (مثال: 128GB)" required>
@@ -198,7 +198,7 @@ p {
         products: []
     },
     {
-        name: "",
+    name: "",
         keywords: ["oale", "nokia", "kxd", "blackview", "oscal", "teclast"],
         image: "https://media-cdn.tripadvisor.com/media/photo-m/1280/1d/86/21/5d/undefined-primary-logo.jpg",
         products: []
@@ -351,20 +351,18 @@ function getCategoryForProduct(productName) {
     renderCategories();
     clearForm();
 
-}
-function toggleForm() {
-        const form = document.getElementById('product-form');
-        if (form.style.display === 'none') {
-            form.style.display = 'block'; // إظهار النموذج إذا كان مخفياً
-        } else {
-            form.style.display = 'none'; // إخفاء النموذج إذا كان ظاهراً
-        }
+    // دالة لإضافة المنتج
+    function addProduct() {
+        // منطق إضافة المنتج هنا
     }
 
-    function addProduct() {
-        // إضافة المنتج (تخصيص الوظيفة هنا)
-        alert("تمت إضافة المنتج!");
+}
+              // دالة لإخفاء النموذج عند الضغط على الزر
+              function toggleForm() {
+        var formContainer = document.querySelector('.form-container');
+        formContainer.style.display = 'none';
     }
+
         function editProduct(categoryIndex, productIndex) {
             const product = categories[categoryIndex].products[productIndex];
             const newMemory = prompt("الذاكرة:", product.memory);
