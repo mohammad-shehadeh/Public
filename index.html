@@ -44,6 +44,16 @@
         }
         .cart-item {
             margin-bottom: 1em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cart-item button {
+            background-color: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 0.2em 0.5em;
         }
         .share-button {
             background-color: #25D366;
@@ -51,6 +61,25 @@
             border: none;
             padding: 0.5em 1em;
             cursor: pointer;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 1em;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .popup input {
+            margin-bottom: 1em;
+            width: 100%;
+            padding: 0.5em;
+        }
+        .popup button {
+            margin-right: 0.5em;
         }
     </style>
 </head>
@@ -64,16 +93,29 @@
     <div class="cart" id="cart">
         <h2>Cart</h2>
         <div id="cart-items"></div>
-        <button class="share-button" id="share-button">Share on WhatsApp</button>
+        <button class="share-button" id="checkout-button">Checkout</button>
+    </div>
+    <div class="popup" id="popup">
+        <h2>Customer Details</h2>
+        <input type="text" id="customer-name" placeholder="Enter your name">
+        <input type="text" id="customer-phone" placeholder="Enter your phone number">
+        <button id="confirm-button">Confirm</button>
+        <button id="cancel-button">Cancel</button>
     </div>
 
     <script>
         const categoriesContainer = document.getElementById('categories');
         const cartItemsContainer = document.getElementById('cart-items');
-        const shareButton = document.getElementById('share-button');
+        const checkoutButton = document.getElementById('checkout-button');
+        const popup = document.getElementById('popup');
+        const confirmButton = document.getElementById('confirm-button');
+        const cancelButton = document.getElementById('cancel-button');
+
+        const customerNameInput = document.getElementById('customer-name');
+        const customerPhoneInput = document.getElementById('customer-phone');
 
         let products = [];
-        let cart = [];
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
         // Load products from test.txt
         fetch('test.txt')
@@ -82,9 +124,10 @@
                 const lines = data.split('\n');
                 lines.forEach(line => {
                     const [category, name, price, image] = line.split('/');
-                    products.push({ category, name, price, image });
+                    products.push({ category, name, price: parseFloat(price), image });
                 });
                 renderCategories();
+                renderCart();
             });
 
         function renderCategories() {
@@ -128,6 +171,13 @@
             } else {
                 cart.push({ ...product, quantity: 1 });
             }
+            saveCart();
+            renderCart();
+        }
+
+        function removeFromCart(productName) {
+            cart = cart.filter(item => item.name !== productName);
+            saveCart();
             renderCart();
         }
 
@@ -137,7 +187,16 @@
             cart.forEach(item => {
                 const cartItemDiv = document.createElement('div');
                 cartItemDiv.className = 'cart-item';
-                cartItemDiv.innerHTML = `<strong>${item.name}</strong><br>Price: ${item.price}<br>Quantity: ${item.quantity}`;
+
+                const itemDetails = document.createElement('div');
+                itemDetails.innerHTML = `<strong>${item.name}</strong><br>Price: ${item.price}<br>Quantity: ${item.quantity}`;
+                cartItemDiv.appendChild(itemDetails);
+
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'X';
+                removeButton.onclick = () => removeFromCart(item.name);
+                cartItemDiv.appendChild(removeButton);
+
                 total += item.price * item.quantity;
                 cartItemsContainer.appendChild(cartItemDiv);
             });
@@ -147,16 +206,42 @@
             cartItemsContainer.appendChild(totalDiv);
         }
 
-        shareButton.onclick = () => {
-            let text = 'Cart Summary:\n';
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        checkoutButton.onclick = () => {
+            popup.style.display = 'block';
+        };
+
+        confirmButton.onclick = () => {
+            const customerName = customerNameInput.value;
+            const customerPhone = customerPhoneInput.value;
+
+            if (!customerName || !customerPhone) {
+                alert('Please enter your name and phone number.');
+                return;
+            }
+
+            let text = `Customer: ${customerName}\nPhone: ${customerPhone}\nCart Summary:\n`;
             let total = 0;
             cart.forEach(item => {
                 text += `${item.name} - ${item.price} x ${item.quantity}\n`;
                 total += item.price * item.quantity;
             });
             text += `Total: ${total}`;
+
             const whatsappURL = `https://wa.me/?text=${encodeURIComponent(text)}`;
             window.open(whatsappURL, '_blank');
+
+            cart = [];
+            saveCart();
+            renderCart();
+            popup.style.display = 'none';
+        };
+
+        cancelButton.onclick = () => {
+            popup.style.display = 'none';
         };
     </script>
 </body>
