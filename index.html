@@ -330,7 +330,7 @@ text += `🛒 تفاصيل المنتجات:\n`;
 let total = 0;
 cart.forEach(item => {
     text += `\t${item.name}: ${item.quantity}x${item.price.toFixed(2)}\n`;
-    text += `─ ─ ─ ─ ─ ─ ─ ─\n`;
+    text += `─ ─ ─ ─ ─ ─ ─ ─ ─ ─\n`;
     total += item.price * item.quantity;
 });
 
