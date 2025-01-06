@@ -104,151 +104,151 @@
     </div>
 
     <script>
-const categoriesContainer = document.getElementById('categories');
-const cartItemsContainer = document.getElementById('cart-items');
-const checkoutButton = document.getElementById('checkout-button');
-const popup = document.getElementById('popup');
-const confirmButton = document.getElementById('confirm-button');
-const cancelButton = document.getElementById('cancel-button');
-
-const customerNameInput = document.getElementById('customer-name');
-const customerPhoneInput = document.getElementById('customer-phone');
-
-let products = [];
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-// Load products from test.txt
-fetch('test.txt')
-    .then(response => response.text())
-    .then(data => {
-        const lines = data.split('\n');
-        lines.forEach(line => {
-            // Splitting the line into components and assuming format: category/name/price/image_url
-            const parts = line.split('/');
-            if (parts.length >= 4) {
-                const [category, name, price, image] = parts;
-                products.push({ category, name, price: parseFloat(price), image: image.trim() });
-            }
-        });
-        renderCategories();
-        renderCart();
-    });
-
-function renderCategories() {
-    const categories = [...new Set(products.map(p => p.category))];
-    categories.forEach(category => {
-        const categoryDiv = document.createElement('div');
-        categoryDiv.className = 'category';
-        const categoryTitle = document.createElement('h2');
-        categoryTitle.textContent = category;
-        categoryDiv.appendChild(categoryTitle);
-
-        const categoryProducts = products.filter(p => p.category === category);
-        categoryProducts.forEach(product => {
-            const productDiv = document.createElement('div');
-            productDiv.className = 'product';
-
-            // Creating and adding image element
-            const productImage = document.createElement('img');
-            productImage.src = product.image;
-            productImage.alt = product.name;  // Adding alt text for better accessibility
-            productDiv.appendChild(productImage);
-
-            const productDetails = document.createElement('div');
-            productDetails.innerHTML = `<strong>${product.name}</strong><br>Price: ${product.price}`;
-            productDiv.appendChild(productDetails);
-
-            const addToCartButton = document.createElement('button');
-            addToCartButton.textContent = 'Add to Cart';
-            addToCartButton.onclick = () => addToCart(product);
-            productDiv.appendChild(addToCartButton);
-
-            categoryDiv.appendChild(productDiv);
-        });
-
-        categoriesContainer.appendChild(categoryDiv);
-    });
-}
-
-        function addToCart(product) {
-            const existingProduct = cart.find(item => item.name === product.name);
-            if (existingProduct) {
-                existingProduct.quantity++;
-            } else {
-                cart.push({ ...product, quantity: 1 });
-            }
-            saveCart();
-            renderCart();
-        }
-
-        function removeFromCart(productName) {
-            cart = cart.filter(item => item.name !== productName);
-            saveCart();
-            renderCart();
-        }
-
-        function renderCart() {
-            cartItemsContainer.innerHTML = '';
-            let total = 0;
-            cart.forEach(item => {
-                const cartItemDiv = document.createElement('div');
-                cartItemDiv.className = 'cart-item';
-
-                const itemDetails = document.createElement('div');
-                itemDetails.innerHTML = `<strong>${item.name}</strong><br>Price: ${item.price}<br>Quantity: ${item.quantity}`;
-                cartItemDiv.appendChild(itemDetails);
-
-                const removeButton = document.createElement('button');
-                removeButton.textContent = 'X';
-                removeButton.onclick = () => removeFromCart(item.name);
-                cartItemDiv.appendChild(removeButton);
-
-                total += item.price * item.quantity;
-                cartItemsContainer.appendChild(cartItemDiv);
-            });
-
-            const totalDiv = document.createElement('div');
-            totalDiv.innerHTML = `<strong>Total: ${total}</strong>`;
-            cartItemsContainer.appendChild(totalDiv);
-        }
-
-        function saveCart() {
-            localStorage.setItem('cart', JSON.stringify(cart));
-        }
-
-        checkoutButton.onclick = () => {
-            popup.style.display = 'block';
-        };
-
-        confirmButton.onclick = () => {
-            const customerName = customerNameInput.value;
-            const customerPhone = customerPhoneInput.value;
-
-            if (!customerName || !customerPhone) {
-                alert('Please enter your name and phone number.');
-                return;
-            }
-
-            let text = `Customer: ${customerName}\nPhone: ${customerPhone}\nCart Summary:\n`;
-            let total = 0;
-            cart.forEach(item => {
-                text += `${item.name} - ${item.price} x ${item.quantity}\n`;
-                total += item.price * item.quantity;
-            });
-            text += `Total: ${total}`;
-
-            const whatsappURL = `https://wa.me/?text=${encodeURIComponent(text)}`;
-            window.open(whatsappURL, '_blank');
-
-            cart = [];
-            saveCart();
-            renderCart();
-            popup.style.display = 'none';
-        };
-
-        cancelButton.onclick = () => {
-            popup.style.display = 'none';
-        };
-    </script>
-</body>
+      const categoriesContainer = document.getElementById('categories');
+      const cartItemsContainer = document.getElementById('cart-items');
+      const checkoutButton = document.getElementById('checkout-button');
+      const popup = document.getElementById('popup');
+      const confirmButton = document.getElementById('confirm-button');
+      const cancelButton = document.getElementById('cancel-button');
+      
+      const customerNameInput = document.getElementById('customer-name');
+      const customerPhoneInput = document.getElementById('customer-phone');
+      
+      let products = [];
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      
+      // Load products from test.txt
+      fetch('test.txt')
+          .then(response => response.text())
+          .then(data => {
+              const lines = data.split('\n');
+              lines.forEach(line => {
+                  // Splitting the line into components using the | as separator
+                  const parts = line.split('|');
+                  if (parts.length >= 4) {
+                      const [category, name, price, image] = parts;
+                      products.push({ category, name, price: parseFloat(price), image: image.trim() });
+                  }
+              });
+              renderCategories();
+              renderCart();
+          });
+      
+      function renderCategories() {
+          const categories = [...new Set(products.map(p => p.category))];
+          categories.forEach(category => {
+              const categoryDiv = document.createElement('div');
+              categoryDiv.className = 'category';
+              const categoryTitle = document.createElement('h2');
+              categoryTitle.textContent = category;
+              categoryDiv.appendChild(categoryTitle);
+      
+              const categoryProducts = products.filter(p => p.category === category);
+              categoryProducts.forEach(product => {
+                  const productDiv = document.createElement('div');
+                  productDiv.className = 'product';
+      
+                  // Creating and adding image element
+                  const productImage = document.createElement('img');
+                  productImage.src = product.image;
+                  productImage.alt = product.name;  // Adding alt text for better accessibility
+                  productDiv.appendChild(productImage);
+      
+                  const productDetails = document.createElement('div');
+                  productDetails.innerHTML = `<strong>${product.name}</strong><br>Price: ${product.price}`;
+                  productDiv.appendChild(productDetails);
+      
+                  const addToCartButton = document.createElement('button');
+                  addToCartButton.textContent = 'Add to Cart';
+                  addToCartButton.onclick = () => addToCart(product);
+                  productDiv.appendChild(addToCartButton);
+      
+                  categoryDiv.appendChild(productDiv);
+              });
+      
+              categoriesContainer.appendChild(categoryDiv);
+          });
+      }
+      
+      function addToCart(product) {
+          const existingProduct = cart.find(item => item.name === product.name);
+          if (existingProduct) {
+              existingProduct.quantity++;
+          } else {
+              cart.push({ ...product, quantity: 1 });
+          }
+          saveCart();
+          renderCart();
+      }
+      
+      function removeFromCart(productName) {
+          cart = cart.filter(item => item.name !== productName);
+          saveCart();
+          renderCart();
+      }
+      
+      function renderCart() {
+          cartItemsContainer.innerHTML = '';
+          let total = 0;
+          cart.forEach(item => {
+              const cartItemDiv = document.createElement('div');
+              cartItemDiv.className = 'cart-item';
+      
+              const itemDetails = document.createElement('div');
+              itemDetails.innerHTML = `<strong>${item.name}</strong><br>Price: ${item.price}<br>Quantity: ${item.quantity}`;
+              cartItemDiv.appendChild(itemDetails);
+      
+              const removeButton = document.createElement('button');
+              removeButton.textContent = 'X';
+              removeButton.onclick = () => removeFromCart(item.name);
+              cartItemDiv.appendChild(removeButton);
+      
+              total += item.price * item.quantity;
+              cartItemsContainer.appendChild(cartItemDiv);
+          });
+      
+          const totalDiv = document.createElement('div');
+          totalDiv.innerHTML = `<strong>Total: ${total}</strong>`;
+          cartItemsContainer.appendChild(totalDiv);
+      }
+      
+      function saveCart() {
+          localStorage.setItem('cart', JSON.stringify(cart));
+      }
+      
+      checkoutButton.onclick = () => {
+          popup.style.display = 'block';
+      };
+      
+      confirmButton.onclick = () => {
+          const customerName = customerNameInput.value;
+          const customerPhone = customerPhoneInput.value;
+      
+          if (!customerName || !customerPhone) {
+              alert('Please enter your name and phone number.');
+              return;
+          }
+      
+          let text = `Customer: ${customerName}\nPhone: ${customerPhone}\nCart Summary:\n`;
+          let total = 0;
+          cart.forEach(item => {
+              text += `${item.name} - ${item.price} x ${item.quantity}\n`;
+              total += item.price * item.quantity;
+          });
+          text += `Total: ${total}`;
+      
+          const whatsappURL = `https://wa.me/?text=${encodeURIComponent(text)}`;
+          window.open(whatsappURL, '_blank');
+      
+          cart = [];
+          saveCart();
+          renderCart();
+          popup.style.display = 'none';
+      };
+      
+      cancelButton.onclick = () => {
+          popup.style.display = 'none';
+      };
+      </script>
+      </body>
 </html>
