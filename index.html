@@ -298,8 +298,7 @@
               alert('الرجاء ادخال الأسم و رقم الهاتف.');
               return;
           }
-      
-// الحصول على التاريخ والوقت الحالي بتنسيق "يوم/شهر/سنة ساعة:دقيقةم اليوم"
+      // الحصول على التاريخ والوقت الحالي بتنسيق "يوم/شهر/سنة ساعة:دقيقةم اليوم"
 function formatDateTime() {
     const now = new Date();
     const day = now.getDate().toString().padStart(2, '0');
@@ -314,14 +313,36 @@ function formatDateTime() {
     return `${day}/${month}/${year} ${hours}:${minutes}${ampm} ${dayOfWeek}`;
 }
 
+// رقم الفاتورة (يمكنك توليد رقم عشوائي إذا أردت)
+const invoiceNumber = Math.floor(Math.random() * 1000000); // رقم عشوائي من 1 إلى 999999
+
 // إضافة الوقت والتاريخ الحالي إلى الفاتورة
-let text = `الأسم: ${customerName}\nرقم الهاتف: ${customerPhone}\nالتاريخ والوقت: ${formatDateTime()}\nملخص السلة:\n`;
+let text = `⭐️ Shehadeh Centre ⭐️\n`;
+text += `━━━━━━━━━━━━━━━\n`;
+text += `📅 التاريخ: ${formatDateTime()}\n`;
+text += `📄 رقم الفاتورة: ${invoiceNumber}\n`;
+text += `━━━━━━━━━━━━━━━\n\n`;
+text += `👤 اسم العميل: ${customerName}\n`;
+text += `☎️ رقم الهاتف: ${customerPhone}\n`;
+text += `━━━━━━━━━━━━━━━\n\n`;
+text += `🛒 تفاصيل المنتجات:\n`;
+
 let total = 0;
 cart.forEach(item => {
-    text += `${item.name} - ${item.price} x ${item.quantity}\n`;
-    total += item.price * item.quantity;
+    const itemTotal = item.price * item.quantity;
+    text += `\t• 📦 ${item.name}: الكمية ${item.quantity} × ${item.price.toFixed(2)} = ${itemTotal.toFixed(2)}\n`;
+    text += `─────────────────────\n`;
+    total += itemTotal;
 });
-text += `الإجمالي: ${total}`;
+
+// إجمالي الفاتورة مع الضريبة (كمثال 15% ضريبة)
+const tax = total * 0.15;
+const grandTotal = total + tax;
+
+text += `💵 الإجمالي الفرعي: ${total.toFixed(2)}\n`;
+text += `💰 الإجمالي الكلي: ${grandTotal.toFixed(2)}\n`;
+text += `━━━━━━━━━━━━━━━\n`;
+text += `شكرًا لاختياركم خدماتنا! 🙏`;
 
 // رابط الواتساب مع الرقم المحدد
 const whatsappURL = `https://wa.me/972566888825?text=${encodeURIComponent(text)}`;
