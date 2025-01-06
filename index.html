@@ -104,65 +104,71 @@
     </div>
 
     <script>
-        const categoriesContainer = document.getElementById('categories');
-        const cartItemsContainer = document.getElementById('cart-items');
-        const checkoutButton = document.getElementById('checkout-button');
-        const popup = document.getElementById('popup');
-        const confirmButton = document.getElementById('confirm-button');
-        const cancelButton = document.getElementById('cancel-button');
+const categoriesContainer = document.getElementById('categories');
+const cartItemsContainer = document.getElementById('cart-items');
+const checkoutButton = document.getElementById('checkout-button');
+const popup = document.getElementById('popup');
+const confirmButton = document.getElementById('confirm-button');
+const cancelButton = document.getElementById('cancel-button');
 
-        const customerNameInput = document.getElementById('customer-name');
-        const customerPhoneInput = document.getElementById('customer-phone');
+const customerNameInput = document.getElementById('customer-name');
+const customerPhoneInput = document.getElementById('customer-phone');
 
-        let products = [];
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+let products = [];
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-        // Load products from test.txt
-        fetch('test.txt')
-            .then(response => response.text())
-            .then(data => {
-                const lines = data.split('\n');
-                lines.forEach(line => {
-                    const [category, name, price, image] = line.split('/');
-                    products.push({ category, name, price: parseFloat(price), image });
-                });
-                renderCategories();
-                renderCart();
-            });
+// Load products from test.txt
+fetch('test.txt')
+    .then(response => response.text())
+    .then(data => {
+        const lines = data.split('\n');
+        lines.forEach(line => {
+            // Splitting the line into components and assuming format: category/name/price/image_url
+            const parts = line.split('/');
+            if (parts.length >= 4) {
+                const [category, name, price, image] = parts;
+                products.push({ category, name, price: parseFloat(price), image: image.trim() });
+            }
+        });
+        renderCategories();
+        renderCart();
+    });
 
-        function renderCategories() {
-            const categories = [...new Set(products.map(p => p.category))];
-            categories.forEach(category => {
-                const categoryDiv = document.createElement('div');
-                categoryDiv.className = 'category';
-                const categoryTitle = document.createElement('h2');
-                categoryTitle.textContent = category;
-                categoryDiv.appendChild(categoryTitle);
+function renderCategories() {
+    const categories = [...new Set(products.map(p => p.category))];
+    categories.forEach(category => {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'category';
+        const categoryTitle = document.createElement('h2');
+        categoryTitle.textContent = category;
+        categoryDiv.appendChild(categoryTitle);
 
-                const categoryProducts = products.filter(p => p.category === category);
-                categoryProducts.forEach(product => {
-                    const productDiv = document.createElement('div');
-                    productDiv.className = 'product';
+        const categoryProducts = products.filter(p => p.category === category);
+        categoryProducts.forEach(product => {
+            const productDiv = document.createElement('div');
+            productDiv.className = 'product';
 
-                    const productImage = document.createElement('img');
-                    productImage.src = product.image;
-                    productDiv.appendChild(productImage);
+            // Creating and adding image element
+            const productImage = document.createElement('img');
+            productImage.src = product.image;
+            productImage.alt = product.name;  // Adding alt text for better accessibility
+            productDiv.appendChild(productImage);
 
-                    const productDetails = document.createElement('div');
-                    productDetails.innerHTML = `<strong>${product.name}</strong><br>Price: ${product.price}`;
-                    productDiv.appendChild(productDetails);
+            const productDetails = document.createElement('div');
+            productDetails.innerHTML = `<strong>${product.name}</strong><br>Price: ${product.price}`;
+            productDiv.appendChild(productDetails);
 
-                    const addToCartButton = document.createElement('button');
-                    addToCartButton.textContent = 'Add to Cart';
-                    addToCartButton.onclick = () => addToCart(product);
-                    productDiv.appendChild(addToCartButton);
+            const addToCartButton = document.createElement('button');
+            addToCartButton.textContent = 'Add to Cart';
+            addToCartButton.onclick = () => addToCart(product);
+            productDiv.appendChild(addToCartButton);
 
-                    categoryDiv.appendChild(productDiv);
-                });
+            categoryDiv.appendChild(productDiv);
+        });
 
-                categoriesContainer.appendChild(categoryDiv);
-            });
-        }
+        categoriesContainer.appendChild(categoryDiv);
+    });
+}
 
         function addToCart(product) {
             const existingProduct = cart.find(item => item.name === product.name);
