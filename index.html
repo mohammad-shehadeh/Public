@@ -231,25 +231,45 @@
           const customerPhone = customerPhoneInput.value;
       
           if (!customerName || !customerPhone) {
-              alert('Please enter your name and phone number.');
+              alert('الرجاء ادخال الأسم و رقم الهاتف.');
               return;
           }
       
-          let text = `Customer: ${customerName}\nPhone: ${customerPhone}\nCart Summary:\n`;
-          let total = 0;
-          cart.forEach(item => {
-              text += `${item.name} - ${item.price} x ${item.quantity}\n`;
-              total += item.price * item.quantity;
-          });
-          text += `Total: ${total}`;
-      
-          const whatsappURL = `https://wa.me/?text=${encodeURIComponent(text)}`;
-          window.open(whatsappURL, '_blank');
-      
-          cart = [];
-          saveCart();
-          renderCart();
-          popup.style.display = 'none';
+// الحصول على التاريخ والوقت الحالي بتنسيق "يوم/شهر/سنة ساعة:دقيقةم اليوم"
+function formatDateTime() {
+    const now = new Date();
+    const day = now.getDate().toString().padStart(2, '0');
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const year = now.getFullYear();
+    let hours = now.getHours();
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'م' : 'ص';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // الساعة 0 تصبح 12
+    const dayOfWeek = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"][now.getDay()];
+    return `${day}/${month}/${year} ${hours}:${minutes}${ampm} ${dayOfWeek}`;
+}
+
+// إضافة الوقت والتاريخ الحالي إلى الفاتورة
+let text = `الأسم: ${customerName}\nرقم الهاتف: ${customerPhone}\nالتاريخ والوقت: ${formatDateTime()}\nملخص السلة:\n`;
+let total = 0;
+cart.forEach(item => {
+    text += `${item.name} - ${item.price} x ${item.quantity}\n`;
+    total += item.price * item.quantity;
+});
+text += `الإجمالي: ${total}`;
+
+const whatsappURL = `https://wa.me/?text=${encodeURIComponent(text)}`;
+window.open(whatsappURL, '_blank');
+
+// لتحديث السلة وحفظها
+cart = [];
+saveCart();
+renderCart();
+
+// إغلاق النافذة المنبثقة
+popup.style.display = 'none';
+
       };
       
       cancelButton.onclick = () => {
