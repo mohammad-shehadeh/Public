@@ -429,6 +429,7 @@ fetch('test.txt')
             // Add To Cart Button
             const addToCartButton = document.createElement('button');
             addToCartButton.textContent = 'Add to Cart';
+            addToCartButton.classList.add('add-to-cart-btn'); // Adding a class for better styling
             addToCartButton.onclick = () => {
                 addToCart(product, quantityInput.value);
                 quantityDiv.style.display = 'block'; // Show quantity controls after adding to cart
@@ -578,7 +579,6 @@ confirmButton.onclick = () => {
         alert('الرجاء ادخال الأسم و رقم الهاتف.');
         return;
     }
-
  
 // الحصول على التاريخ والوقت الحالي بتنسيق "يوم/شهر/سنة ساعة:دقيقةم اليوم"
 function formatDateTime() {
