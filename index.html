@@ -332,7 +332,7 @@
         <button class="button button-cart" id="toggle-cart">عرض السلة</button>
         <button class="button button-home" id="go-home">الرجوع للصفحة الرئيسية</button>
     </div>
-    
+
     <script>
 const categoriesContainer = document.getElementById('categories');
 const cartItemsContainer = document.getElementById('cart-items');
@@ -638,13 +638,6 @@ popup.style.display = 'none';
       cancelButton.onclick = () => {
           popup.style.display = 'none';
       };
-      toggleCartButton.addEventListener('click', () => {
-    cartContainer.style.display = cartContainer.style.display === 'block' ? 'none' : 'block';
-});
-goHomeButton.addEventListener('click', () => {
-    categoriesContainer.scrollIntoView({ behavior: 'smooth' });
-});
-
       </script>
       </body>
 </html>
