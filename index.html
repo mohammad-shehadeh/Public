@@ -638,6 +638,27 @@ popup.style.display = 'none';
       cancelButton.onclick = () => {
           popup.style.display = 'none';
       };
+      const toggleCartButton = document.getElementById('toggle-cart');
+    const goHomeButton = document.getElementById('go-home');
+    const cartDiv = document.getElementById('cart');
+    const categoriesDiv = document.getElementById('categories');
+
+    // عرض السلة عند الضغط على زر "عرض السلة"
+    toggleCartButton.addEventListener('click', function() {
+      if (cartDiv.style.display === 'none' || cartDiv.style.display === '') {
+        cartDiv.style.display = 'block';
+        categoriesDiv.style.display = 'none'; // إخفاء المنتجات عند عرض السلة
+      } else {
+        cartDiv.style.display = 'none';
+        categoriesDiv.style.display = 'block'; // إظهار المنتجات عندما تكون السلة مخفية
+      }
+    });
+
+    // الرجوع للصفحة الرئيسية عند الضغط على زر "الرجوع للصفحة الرئيسية"
+    goHomeButton.addEventListener('click', function() {
+      cartDiv.style.display = 'none';
+      categoriesDiv.style.display = 'block'; // إظهار المنتجات عند الرجوع للصفحة الرئيسية
+    });
       </script>
       </body>
 </html>
