@@ -138,7 +138,7 @@
   
       .popup input {
           margin-bottom: 1em;
-          width: 300%;
+          width: 100%;
           padding: 0.5em;
       }
   
@@ -307,8 +307,13 @@ function updateQuantity(input, change) {
     const product = cart.find(item => item.name === productName);
     if (product) {
         product.quantity = newQuantity;
-        saveCart();
-        renderCart();
+        if (newQuantity === 0) {
+            removeFromCart(productName); // Remove from cart if quantity is zero
+            input.closest('.quantity-controls').style.display = 'none'; // Hide quantity controls
+        } else {
+            saveCart();
+            renderCart();
+        }
     }
 }
 
@@ -363,8 +368,13 @@ function renderCart() {
             const product = cart.find(item => item.name === productName);
             if (product) {
                 product.quantity = newQuantity;
-                saveCart();
-                renderCart();
+                if (newQuantity === 0) {
+                    removeFromCart(productName); // Remove from cart if quantity is zero
+                    event.target.closest('.cart-item').remove(); // Remove item from cart display
+                } else {
+                    saveCart();
+                    renderCart();
+                }
             }
         });
     });
