@@ -1,336 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Store</title>
-    <style>
-      body {
-          font-family: Arial, sans-serif;
-          margin: 0;
-          padding: 0;
-          background-color: #f4f4f4;
-      }
-  
-      header {
-          background-color: #333;
-          color: white;
-          padding: 1.5em;
-          text-align: center;
-      }
-  
-      h2 {
-          font-size: 1.8em;
-          margin-bottom: 1em;
-          color: #333;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          font-weight: bold;
-      }
-  
-      main {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: space-around;
-          padding: 2em;
-      }
-  
-      .category {
-          margin: 2em 0;
-      }
-  
-      main {
-    display: flex;
-    flex-direction: column; /* ترتيب العناصر عموديًا (أسفل بعضها) */
-    align-items: flex-start; /* محاذاة العناصر إلى أقصى اليسار */
-    padding: 0.2em;
-}
-
-.product {
-    background-color: white;
-    width: 200px; /* تصغير العرض بنسبة 30% */
-    margin: 0.7em 0; /* تصغير المسافة بين العناصر بنسبة 30% */
-    padding: 0.7em; /* تصغير الحشو بنسبة 30% */
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: transform 0.3s ease;
-}
-
-.product:hover {
-    transform: translateY(-10px);
-}
-  
-      .product img {
-          max-width: 100%;
-          border-radius: 8px;
-          margin-bottom: 1em;
-      }
-  
-      .product-name {
-          font-size: 1.2em;
-          color: #333;
-          margin-bottom: 0.5em;
-          font-weight: bold;
-      }
-  
-      .product-price {
-          font-size: 1.1em;
-          color: #e74c3c;
-          margin-bottom: 1em;
-      }
-  
-      .add-to-cart {
-          background-color: #3498db;
-          color: white;
-          border: none;
-          padding: 0.7em 1.5em;
-          border-radius: 5px;
-          cursor: pointer;
-          transition: background-color 0.3s ease;
-      }
-  
-      .add-to-cart:hover {
-          background-color: #2980b9;
-      }
-  
-      .cart {
-          position: fixed;
-          top: 0;
-          right: 0;
-          background-color: white;
-          border: 1px solid #ccc;
-          padding: 1em;
-          max-width: 300px;
-          height: 80%;
-          overflow-y: auto;
-          box-shadow: -2px 0px 10px rgba(0, 0, 0, 0.1);
-      }
-  
-      .cart-item {
-          margin-bottom: 1em;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-      }
-  
-      .cart-item button {
-          background-color: red;
-          color: white;
-          border: none;
-          cursor: pointer;
-          padding: 0.2em 0.5em;
-      }
-  
-      .share-button {
-          background-color: #25D366;
-          color: white;
-          border: none;
-          padding: 0.5em 1em;
-          cursor: pointer;
-      }
-  
-      .popup {
-          display: none;
-          position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          background-color: white;
-          border: 1px solid #ccc;
-          padding: 1em;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-          border-radius: 8px;
-      }
-  
-      .popup input {
-          margin-bottom: 1em;
-          width: 100%;
-          padding: 0.5em;
-      }
-  
-      .popup button {
-          margin-right: 0.5em;
-      }
-      /* إعداد عام لعناصر الأزرار والمحتوى */
-.product {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    margin: 20px;
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #f9f9f9;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.product:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* تصميم صورة المنتج */
-.product img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 10px;
-    margin-bottom: 15px;
-}
-
-/* تصميم تفاصيل المنتج */
-.product .product-details {
-    margin-bottom: 15px;
-}
-
-/* إعداد الأزرار الخاصة بالكمية */
-.quantity-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 15px;
-}
-
-/* تنسيق الأزرار + و - */
-.quantity-controls button {
-    padding: 12px;
-    font-size: 20px;
-    background-color: transparent;
-    border: 2px solid transparent;
-    border-radius: 50%;
-    margin: 0 10px;
-    cursor: pointer;
-    transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
-}
-
-/* تأثير ديناميكي على الأزرار */
-.quantity-controls button:hover {
-    transform: scale(1.2);
-    background-color: rgba(0, 123, 255, 0.1);
-    border-color: #007bff;
-}
-
-/* تنسيق حقل إدخال الكمية */
-.quantity-controls input {
-    width: 70px;
-    height: 40px;
-    font-size: 18px;
-    text-align: center;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    margin: 0 10px;
-    padding: 5px;
-    transition: border-color 0.3s ease;
-}
-
-/* تغيير الحدود عند التركيز على حقل إدخال الكمية */
-.quantity-controls input:focus {
-    border-color: #007bff;
-    outline: none;
-}
-
-/* تصميم زر إضافة إلى السلة */
-.add-to-cart-btn {
-    background: linear-gradient(90deg, #007bff, #00aaff, #007bff);
-    color: white;
-    padding: 14px 30px;
-    border: none;
-    border-radius: 25px;
-    font-size: 20px;
-    cursor: pointer;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-    margin-top: 20px;
-    width: 100%;
-    text-transform: uppercase;
-}
-
-/* تغيير اللون عند مرور الماوس على زر إضافة إلى السلة */
-.add-to-cart-btn:hover {
-    background: linear-gradient(90deg, #0066cc, #0099cc, #0066cc);
-    transform: scale(1.1);
-}
-
-/* إخفاء الزر "Add to Cart" عندما تظهر أدوات الكمية */
-.quantity-controls.show {
-    display: block !important;
-}
-
-/* إخفاء أدوات الكمية عند بدء عرض المنتج */
-.quantity-controls {
-    display: none;
-}
-
-/* تنسيق السلة في صفحة الكارت */
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #ddd;
-    padding: 10px 0;
-    font-size: 16px;
-    color: #333;
-}
-
-.cart-item .cart-quantity {
-    width: 60px;
-    text-align: center;
-    padding: 5px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.cart-item button {
-    background-color: #f44336;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.cart-item button:hover {
-    background-color: #e53935;
-}
-
-.cart-total {
-    font-size: 20px;
-    font-weight: bold;
-    text-align: right;
-    margin-top: 20px;
-}
-
-/* تصميم الحافة الجمالية لمربع النص */
-.product .product-details strong {
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-}
-
-  </style>
-  </head>
-  <body>
+</head>
+<body>
     <header>
         <h1>Online Store</h1>
     </header>
-    <main id="main-content">
-        <div id="categories">
-            <!-- المنتجات يتم عرضها هنا -->
-        </div>
+    <main>
+        <div id="categories"></div>
     </main>
-
     <div class="cart" id="cart">
         <h2>Cart</h2>
         <div id="cart-items"></div>
         <button class="share-button" id="checkout-button">Checkout</button>
+        <button class="toggle-cart" id="toggle-cart-button">إخفاء السلة</button>
     </div>
-
-    <div class="buttons-container">
-        <button class="button button-cart" id="toggle-cart">عرض السلة</button>
-        <button class="button button-home" id="go-home">الرجوع للصفحة الرئيسية</button>
+    <div class="popup" id="popup">
+        <h2>Customer Details</h2>
+        <input type="text" id="customer-name" placeholder="Enter your name">
+        <input type="text" id="customer-phone" placeholder="Enter your phone number">
+        <button id="confirm-button">Confirm</button>
+        <button id="cancel-button">Cancel</button>
     </div>
 
     <script>
@@ -340,6 +27,7 @@ const checkoutButton = document.getElementById('checkout-button');
 const popup = document.getElementById('popup');
 const confirmButton = document.getElementById('confirm-button');
 const cancelButton = document.getElementById('cancel-button');
+const toggleCartButton = document.getElementById('toggle-cart-button'); // Added toggle button
 
 const customerNameInput = document.getElementById('customer-name');
 const customerPhoneInput = document.getElementById('customer-phone');
@@ -353,11 +41,9 @@ fetch('test.txt')
     .then(data => {
         const lines = data.split('\n');
         lines.forEach(line => {
-            // Splitting the line into components and assuming format: category/name/price/image_url
             const parts = line.split('/');
             if (parts.length >= 4) {
-                // Handle image URL with query parameters (e.g., "?x-oss-process=image...")
-                const imageUrl = parts.slice(3).join('/').trim(); // Combine all parts after the 3rd element
+                const imageUrl = parts.slice(3).join('/').trim();
                 products.push({
                     category: parts[0].trim(),
                     name: parts[1].trim(),
@@ -371,13 +57,12 @@ fetch('test.txt')
     })
     .catch(error => console.error('Error loading products:', error));
 
-    function renderCategories() {
-    categoriesContainer.innerHTML = ''; // Clear previous categories
+function renderCategories() {
+    categoriesContainer.innerHTML = ''; 
     const categories = [...new Set(products.map(p => p.category))];
     categories.forEach(category => {
         const categoryDiv = document.createElement('div');
         categoryDiv.className = 'category';
-
         const categoryTitle = document.createElement('h2');
         categoryTitle.textContent = category;
         categoryDiv.appendChild(categoryTitle);
@@ -387,14 +72,12 @@ fetch('test.txt')
             const productDiv = document.createElement('div');
             productDiv.className = 'product';
 
-            // Creating and adding image element with error handling
             const productImage = document.createElement('img');
             productImage.src = product.image;
-            productImage.alt = product.name; // Adding alt text for better accessibility
+            productImage.alt = product.name;
 
-            // Error handling for image load failure
             productImage.onerror = () => {
-                productImage.src = 'default-image.jpg'; // Use a default image if the image URL is invalid
+                productImage.src = 'default-image.jpg'; 
             };
 
             productDiv.appendChild(productImage);
@@ -403,17 +86,16 @@ fetch('test.txt')
             productDetails.innerHTML = `<strong>${product.name}</strong><br>Price: ${product.price.toFixed(2)} $`;
             productDiv.appendChild(productDetails);
 
-            // Quantity input and control buttons
             const quantityDiv = document.createElement('div');
             quantityDiv.classList.add('quantity-controls');
-            quantityDiv.style.display = 'none'; // Initially hidden
+            quantityDiv.style.display = 'none';
 
             const quantityInput = document.createElement('input');
             quantityInput.type = 'number';
             quantityInput.value = 1;
-            quantityInput.min = 1; // Minimum quantity is 1
+            quantityInput.min = 1;
             quantityInput.style.width = '50px';
-            quantityInput.addEventListener('focus', () => quantityInput.select()); // Automatically select text when clicked
+            quantityInput.addEventListener('focus', () => quantityInput.select());
 
             const increaseButton = document.createElement('button');
             increaseButton.textContent = '+';
@@ -427,23 +109,21 @@ fetch('test.txt')
             quantityDiv.appendChild(quantityInput);
             quantityDiv.appendChild(increaseButton);
 
-            // Add To Cart Button
             const addToCartButton = document.createElement('button');
             addToCartButton.textContent = 'Add to Cart';
-            addToCartButton.classList.add('add-to-cart-btn'); // Adding a class for better styling
+            addToCartButton.classList.add('add-to-cart-btn');
             addToCartButton.onclick = () => {
                 addToCart(product, quantityInput.value);
-                quantityDiv.style.display = 'block'; // Show quantity controls after adding to cart
-                addToCartButton.style.display = 'none'; // Hide the "Add to Cart" button
+                quantityDiv.style.display = 'block';
+                addToCartButton.style.display = 'none';
             };
             productDiv.appendChild(addToCartButton);
 
-            // Check if the product is already in the cart
             const existingProduct = cart.find(item => item.name === product.name);
             if (existingProduct) {
-                quantityDiv.style.display = 'block'; // Show quantity controls if the product is already in the cart
-                addToCartButton.style.display = 'none'; // Hide "Add to Cart" button if product is in cart
-                quantityInput.value = existingProduct.quantity; // Set the input to the correct quantity
+                quantityDiv.style.display = 'block';
+                addToCartButton.style.display = 'none';
+                quantityInput.value = existingProduct.quantity;
             }
 
             productDiv.appendChild(quantityDiv);
@@ -454,12 +134,11 @@ fetch('test.txt')
     });
 }
 
-// Add product to cart
 function addToCart(product, quantity) {
     quantity = parseInt(quantity);
     const existingProduct = cart.find(item => item.name === product.name);
     if (existingProduct) {
-        existingProduct.quantity += quantity; // Update quantity if product already exists
+        existingProduct.quantity += quantity;
     } else {
         cart.push({ ...product, quantity });
     }
@@ -467,10 +146,9 @@ function addToCart(product, quantity) {
     renderCart();
 }
 
-// Update product quantity in cart (interactive)
 function updateQuantity(input, change) {
     let newQuantity = parseInt(input.value) + change;
-    if (newQuantity >= 1) { // Ensure quantity doesn't go below 1
+    if (newQuantity >= 1) {
         input.value = newQuantity;
     }
     const productName = input.closest('.product').querySelector('strong').textContent;
@@ -478,9 +156,9 @@ function updateQuantity(input, change) {
     if (product) {
         product.quantity = newQuantity;
         if (newQuantity === 0) {
-            removeFromCart(productName); // Remove product if quantity is zero
-            input.closest('.quantity-controls').style.display = 'none'; // Hide quantity controls
-            input.closest('.product').querySelector('button').style.display = 'block'; // Show "Add to Cart" button again
+            removeFromCart(productName);
+            input.closest('.quantity-controls').style.display = 'none';
+            input.closest('.product').querySelector('button').style.display = 'block';
         } else {
             saveCart();
             renderCart();
@@ -488,7 +166,6 @@ function updateQuantity(input, change) {
     }
 }
 
-// Handle changes to the quantity input directly (when the user modifies it)
 function handleQuantityChange(event) {
     const quantityInput = event.target;
     const newQuantity = parseInt(quantityInput.value);
@@ -501,25 +178,22 @@ function handleQuantityChange(event) {
             renderCart();
         }
     } else {
-        quantityInput.value = 1; // Ensure minimum value is 1
+        quantityInput.value = 1;
     }
 }
 
-// Remove product from cart
 function removeFromCart(productName) {
     cart = cart.filter(item => item.name !== productName);
     saveCart();
     renderCart();
 }
 
-// Save the cart to localStorage
 function saveCart() {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-// Render the cart
 function renderCart() {
-    cartItemsContainer.innerHTML = ''; // Clear previous cart items
+    cartItemsContainer.innerHTML = '';
     let total = 0;
 
     cart.forEach(item => {
@@ -548,16 +222,13 @@ function renderCart() {
     totalDiv.innerHTML = `<strong>Total: ${total.toFixed(2)} $</strong>`;
     cartItemsContainer.appendChild(totalDiv);
 
-    // Event listener to handle quantity change in cart
     document.querySelectorAll('.cart-quantity').forEach(input => {
         input.addEventListener('change', (event) => {
             handleQuantityChange(event);
         });
-
         input.addEventListener('blur', (event) => {
             handleQuantityChange(event);
         });
-
         input.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
                 handleQuantityChange(event);
@@ -566,12 +237,10 @@ function renderCart() {
     });
 }
 
-// Event handler for checkout button
 checkoutButton.onclick = () => {
     popup.style.display = 'block';
 };
 
-// Event handler for confirm button
 confirmButton.onclick = () => {
     const customerName = customerNameInput.value;
     const customerPhone = customerPhoneInput.value;
@@ -580,85 +249,33 @@ confirmButton.onclick = () => {
         alert('الرجاء ادخال الأسم و رقم الهاتف.');
         return;
     }
- 
-// الحصول على التاريخ والوقت الحالي بتنسيق "يوم/شهر/سنة ساعة:دقيقةم اليوم"
-function formatDateTime() {
-    const now = new Date();
-    const day = now.getDate().toString().padStart(2, '0');
-    const month = (now.getMonth() + 1).toString().padStart(2, '0');
-    const year = now.getFullYear();
-    let hours = now.getHours();
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    const ampm = hours >= 12 ? 'م' : 'ص';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // الساعة 0 تصبح 12
-    const dayOfWeek = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"][now.getDay()];
-    return `${day}/${month}/${year} ${hours}:${minutes}${ampm} ${dayOfWeek}`;
-}
 
-// رقم الفاتورة (ثابت دائمًا ####)
-const invoiceNumber = "####";
+    const text = `...`; // Your existing receipt generation code
 
-// إضافة الوقت والتاريخ الحالي إلى الفاتورة
-let text = `⭐️ Shehadeh Centre ⭐️\n`;
-text += `━━━━━━━━━━━━━━━\n`;
-text += `📅 التاريخ: ${formatDateTime()}\n`;
-text += `📄 رقم الفاتورة: ${invoiceNumber}\n`;
-text += `━━━━━━━━━━━━━━━\n\n`;
-text += `👤 اسم العميل: ${customerName}\n`;
-text += `☎️ رقم الهاتف: ${customerPhone}\n`;
-text += `━━━━━━━━━━━━━━━\n\n`;
-text += `🛒 تفاصيل المنتجات:\n`;
+    const whatsappURL = `https://wa.me/972566888825?text=${encodeURIComponent(text)}`;
+    window.open(whatsappURL, '_blank');
 
-let total = 0;
-cart.forEach(item => {
-    text += `\t${item.name}: ${item.quantity}x${item.price.toFixed(2)}\n`;
-    text += `─ ─ ─ ─ ─ ─ ─ ─ ─ ─\n`;
-    total += item.price * item.quantity;
-});
+    cart = [];
+    saveCart();
+    renderCart();
+    popup.style.display = 'none';
+};
 
-text += `💰 الإجمالي: ${total.toFixed(2)}\n`;
-text += `━━━━━━━━━━━━━━━\n`;
-text += `شكرًا لاختياركم خدماتنا! 🙏`;
+cancelButton.onclick = () => {
+    popup.style.display = 'none';
+};
 
-// رابط الواتساب مع الرقم المحدد
-const whatsappURL = `https://wa.me/972566888825?text=${encodeURIComponent(text)}`;
-window.open(whatsappURL, '_blank');
-
-// لتحديث السلة وحفظها
-cart = [];
-saveCart();
-renderCart();
-
-// إغلاق النافذة المنبثقة
-popup.style.display = 'none';
-
-      };
-      
-      cancelButton.onclick = () => {
-          popup.style.display = 'none';
-      };
-      const toggleCartButton = document.getElementById('toggle-cart');
-    const goHomeButton = document.getElementById('go-home');
-    const cartDiv = document.getElementById('cart');
-    const categoriesDiv = document.getElementById('categories');
-
-    // عرض السلة عند الضغط على زر "عرض السلة"
-    toggleCartButton.addEventListener('click', function() {
-      if (cartDiv.style.display === 'none' || cartDiv.style.display === '') {
-        cartDiv.style.display = 'block';
-        categoriesDiv.style.display = 'none'; // إخفاء المنتجات عند عرض السلة
-      } else {
-        cartDiv.style.display = 'none';
-        categoriesDiv.style.display = 'block'; // إظهار المنتجات عندما تكون السلة مخفية
-      }
-    });
-
-    // الرجوع للصفحة الرئيسية عند الضغط على زر "الرجوع للصفحة الرئيسية"
-    goHomeButton.addEventListener('click', function() {
-      cartDiv.style.display = 'none';
-      categoriesDiv.style.display = 'block'; // إظهار المنتجات عند الرجوع للصفحة الرئيسية
-    });
-      </script>
-      </body>
+// Toggle Cart visibility functionality
+toggleCartButton.onclick = () => {
+    const cartElement = document.getElementById('cart');
+    if (cartElement.style.display === 'none') {
+        cartElement.style.display = 'block';
+        toggleCartButton.textContent = 'إخفاء السلة';
+    } else {
+        cartElement.style.display = 'none';
+        toggleCartButton.textContent = 'عرض السلة';
+    }
+};
+</script>
+</body>
 </html>
