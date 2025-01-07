@@ -145,11 +145,6 @@
       .popup button {
           margin-right: 0.5em;
       }
-      .add-to-cart-btn {
-    display: block;
-    margin: 0 auto; /* To center the button */
-}
-
   </style>
   </head>
 <body>
@@ -253,6 +248,7 @@ fetch('test.txt')
             quantityInput.min = 1; // Minimum quantity is 1
             quantityInput.style.width = '50px';
             quantityInput.addEventListener('focus', () => quantityInput.select()); // Automatically select text when clicked
+            quantityInput.addEventListener('click', () => showPopup(quantityInput));
 
             const increaseButton = document.createElement('button');
             increaseButton.textContent = '+';
@@ -293,6 +289,49 @@ fetch('test.txt')
     });
 }
 
+// Show popup for updating the quantity
+function showPopup(inputField) {
+    const popup = document.createElement('div');
+    popup.classList.add('quantity-popup');
+    popup.innerHTML = `
+        <input type="number" value="${inputField.value}" min="1" class="popup-quantity-input">
+        <button class="popup-confirm-btn">Confirm</button>
+        <button class="popup-cancel-btn">Cancel</button>
+    `;
+
+    document.body.appendChild(popup); // Append the popup to the body
+
+    const confirmButton = popup.querySelector('.popup-confirm-btn');
+    const cancelButton = popup.querySelector('.popup-cancel-btn');
+    const quantityInput = popup.querySelector('.popup-quantity-input');
+
+    confirmButton.onclick = () => {
+        inputField.value = quantityInput.value; // Update the quantity input field with the new value
+        popup.remove(); // Close the popup
+        updateProductQuantity(inputField);
+    };
+
+    cancelButton.onclick = () => {
+        popup.remove(); // Close the popup without updating
+    };
+}
+
+// Update product quantity in cart (interactive)
+function updateProductQuantity(input) {
+    const newQuantity = parseInt(input.value);
+    if (newQuantity >= 1) {
+        const productName = input.closest('.product').querySelector('strong').textContent;
+        const product = cart.find(item => item.name === productName);
+        if (product) {
+            product.quantity = newQuantity;
+            saveCart();
+            renderCart();
+        }
+    } else {
+        input.value = 1; // Ensure minimum value is 1
+    }
+}
+
 // Add product to cart
 function addToCart(product, quantity) {
     quantity = parseInt(quantity);
@@ -304,44 +343,6 @@ function addToCart(product, quantity) {
     }
     saveCart();
     renderCart();
-}
-
-// Update product quantity in cart (interactive)
-function updateQuantity(input, change) {
-    let newQuantity = parseInt(input.value) + change;
-    if (newQuantity >= 1) { // Ensure quantity doesn't go below 1
-        input.value = newQuantity;
-    }
-    const productName = input.closest('.product').querySelector('strong').textContent;
-    const product = cart.find(item => item.name === productName);
-    if (product) {
-        product.quantity = newQuantity;
-        if (newQuantity === 0) {
-            removeFromCart(productName); // Remove product if quantity is zero
-            input.closest('.quantity-controls').style.display = 'none'; // Hide quantity controls
-            input.closest('.product').querySelector('button').style.display = 'block'; // Show "Add to Cart" button again
-        } else {
-            saveCart();
-            renderCart();
-        }
-    }
-}
-
-// Handle changes to the quantity input directly (when the user modifies it)
-function handleQuantityChange(event) {
-    const quantityInput = event.target;
-    const newQuantity = parseInt(quantityInput.value);
-    if (newQuantity >= 1) {
-        const productName = quantityInput.closest('.product').querySelector('strong').textContent;
-        const product = cart.find(item => item.name === productName);
-        if (product) {
-            product.quantity = newQuantity;
-            saveCart();
-            renderCart();
-        }
-    } else {
-        quantityInput.value = 1; // Ensure minimum value is 1
-    }
 }
 
 // Remove product from cart
@@ -419,8 +420,7 @@ confirmButton.onclick = () => {
         alert('الرجاء ادخال الأسم و رقم الهاتف.');
         return;
     }
-
-
+    
 // الحصول على التاريخ والوقت الحالي بتنسيق "يوم/شهر/سنة ساعة:دقيقةم اليوم"
 function formatDateTime() {
     const now = new Date();
