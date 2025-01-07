@@ -205,7 +205,7 @@ fetch('test.txt')
     })
     .catch(error => console.error('Error loading products:', error));
 
-function renderCategories() {
+    function renderCategories() {
     categoriesContainer.innerHTML = ''; // Clear previous categories
     const categories = [...new Set(products.map(p => p.category))];
     categories.forEach(category => {
@@ -237,9 +237,31 @@ function renderCategories() {
             productDetails.innerHTML = `<strong>${product.name}</strong><br>Price: ${product.price.toFixed(2)} $`;
             productDiv.appendChild(productDetails);
 
+            // Adding quantity input and buttons to change the quantity
+            const quantityDiv = document.createElement('div');
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'number';
+            quantityInput.value = 1;
+            quantityInput.min = 1; // Minimum quantity is 1
+            quantityInput.style.width = '50px';
+
+            // Buttons to increase and decrease quantity
+            const increaseButton = document.createElement('button');
+            increaseButton.textContent = '+';
+            increaseButton.onclick = () => updateQuantity(quantityInput, 1);
+
+            const decreaseButton = document.createElement('button');
+            decreaseButton.textContent = '-';
+            decreaseButton.onclick = () => updateQuantity(quantityInput, -1);
+
+            quantityDiv.appendChild(decreaseButton);
+            quantityDiv.appendChild(quantityInput);
+            quantityDiv.appendChild(increaseButton);
+            productDiv.appendChild(quantityDiv);
+
             const addToCartButton = document.createElement('button');
             addToCartButton.textContent = 'Add to Cart';
-            addToCartButton.onclick = () => addToCart(product);
+            addToCartButton.onclick = () => addToCart(product, quantityInput.value);
             productDiv.appendChild(addToCartButton);
 
             categoryDiv.appendChild(productDiv);
@@ -249,27 +271,40 @@ function renderCategories() {
     });
 }
 
-function addToCart(product) {
+// Function to add product to the cart
+function addToCart(product, quantity) {
+    quantity = parseInt(quantity);
     const existingProduct = cart.find(item => item.name === product.name);
     if (existingProduct) {
-        existingProduct.quantity++;
+        existingProduct.quantity += quantity; // Update the quantity if product exists
     } else {
-        cart.push({ ...product, quantity: 1 });
+        cart.push({ ...product, quantity });
     }
     saveCart();
     renderCart();
 }
 
+// Function to update product quantity in cart
+function updateQuantity(input, change) {
+    let newQuantity = parseInt(input.value) + change;
+    if (newQuantity >= 1) { // Ensure quantity doesn't go below 1
+        input.value = newQuantity;
+    }
+}
+
+// Function to remove product from cart
 function removeFromCart(productName) {
     cart = cart.filter(item => item.name !== productName);
     saveCart();
     renderCart();
 }
 
+// Save the cart to localStorage
 function saveCart() {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 
+// Render the cart
 function renderCart() {
     cartItemsContainer.innerHTML = ''; // Clear previous cart items
     let total = 0;
@@ -282,7 +317,7 @@ function renderCart() {
         itemDetails.innerHTML = `
             <strong>${item.name}</strong><br>
             Price: ${item.price.toFixed(2)} $<br>
-            Quantity: ${item.quantity}
+            Quantity: <input type="number" value="${item.quantity}" min="1" class="cart-quantity" data-product="${item.name}">
         `;
         cartItemDiv.appendChild(itemDetails);
 
@@ -299,24 +334,37 @@ function renderCart() {
     totalDiv.className = 'cart-total';
     totalDiv.innerHTML = `<strong>Total: ${total.toFixed(2)} $</strong>`;
     cartItemsContainer.appendChild(totalDiv);
+
+    // Event listener to handle quantity change in cart
+    document.querySelectorAll('.cart-quantity').forEach(input => {
+        input.addEventListener('change', (event) => {
+            const productName = event.target.dataset.product;
+            const newQuantity = parseInt(event.target.value);
+            const product = cart.find(item => item.name === productName);
+            if (product) {
+                product.quantity = newQuantity;
+                saveCart();
+                renderCart();
+            }
+        });
+    });
 }
-      
-      function saveCart() {
-          localStorage.setItem('cart', JSON.stringify(cart));
-      }
-      
-      checkoutButton.onclick = () => {
-          popup.style.display = 'block';
-      };
-      
-      confirmButton.onclick = () => {
-          const customerName = customerNameInput.value;
-          const customerPhone = customerPhoneInput.value;
-      
-          if (!customerName || !customerPhone) {
-              alert('الرجاء ادخال الأسم و رقم الهاتف.');
-              return;
-          }
+
+// Event handler for checkout button
+checkoutButton.onclick = () => {
+    popup.style.display = 'block';
+};
+
+// Event handler for confirm button
+confirmButton.onclick = () => {
+    const customerName = customerNameInput.value;
+    const customerPhone = customerPhoneInput.value;
+
+    if (!customerName || !customerPhone) {
+        alert('الرجاء ادخال الأسم و رقم الهاتف.');
+        return;
+    }
+
 // الحصول على التاريخ والوقت الحالي بتنسيق "يوم/شهر/سنة ساعة:دقيقةم اليوم"
 function formatDateTime() {
     const now = new Date();
