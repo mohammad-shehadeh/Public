@@ -313,6 +313,7 @@ function updateQuantity(input, change) {
         if (newQuantity === 0) {
             removeFromCart(productName); // Remove product if quantity is zero
             input.closest('.quantity-controls').style.display = 'none'; // Hide quantity controls
+            input.closest('.product').querySelector('button').style.display = 'block'; // Show "Add to Cart" button again
         } else {
             saveCart();
             renderCart();
@@ -412,7 +413,8 @@ confirmButton.onclick = () => {
         alert('الرجاء ادخال الأسم و رقم الهاتف.');
         return;
     }
-    
+
+
 // الحصول على التاريخ والوقت الحالي بتنسيق "يوم/شهر/سنة ساعة:دقيقةم اليوم"
 function formatDateTime() {
     const now = new Date();
