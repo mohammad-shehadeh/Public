@@ -145,6 +145,156 @@
       .popup button {
           margin-right: 0.5em;
       }
+      /* إعداد عام لعناصر الأزرار والمحتوى */
+.product {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 20px;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* تصميم صورة المنتج */
+.product img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+/* تصميم تفاصيل المنتج */
+.product .product-details {
+    margin-bottom: 15px;
+}
+
+/* إعداد الأزرار الخاصة بالكمية */
+.quantity-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+}
+
+/* تنسيق الأزرار + و - */
+.quantity-controls button {
+    padding: 10px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.quantity-controls button:hover {
+    background-color: #45a049;
+}
+
+/* تنسيق حقل إدخال الكمية */
+.quantity-controls input {
+    width: 50px;
+    height: 40px;
+    font-size: 18px;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin: 0 10px;
+    padding: 5px;
+    transition: border-color 0.3s ease;
+}
+
+/* تغيير الحدود عند التركيز على حقل إدخال الكمية */
+.quantity-controls input:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+/* تصميم زر إضافة إلى السلة */
+.add-to-cart-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 15px;
+    width: 100%;
+}
+
+/* تغيير اللون عند مرور الماوس على زر إضافة إلى السلة */
+.add-to-cart-btn:hover {
+    background-color: #45a049;
+}
+
+/* إخفاء الزر "Add to Cart" عندما تظهر أدوات الكمية */
+.quantity-controls.show {
+    display: block !important;
+}
+
+/* إخفاء أدوات الكمية عند بدء عرض المنتج */
+.quantity-controls {
+    display: none;
+}
+
+/* تنسيق السلة في صفحة الكارت */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.cart-item .cart-quantity {
+    width: 60px;
+    text-align: center;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.cart-item button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cart-item button:hover {
+    background-color: #e53935;
+}
+
+.cart-total {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: right;
+    margin-top: 20px;
+}
+
+/* تصميم الحافة الجمالية لمربع النص */
+.product .product-details strong {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
   </style>
   </head>
 <body>
@@ -248,7 +398,6 @@ fetch('test.txt')
             quantityInput.min = 1; // Minimum quantity is 1
             quantityInput.style.width = '50px';
             quantityInput.addEventListener('focus', () => quantityInput.select()); // Automatically select text when clicked
-            quantityInput.addEventListener('click', () => showPopup(quantityInput));
 
             const increaseButton = document.createElement('button');
             increaseButton.textContent = '+';
@@ -289,49 +438,6 @@ fetch('test.txt')
     });
 }
 
-// Show popup for updating the quantity
-function showPopup(inputField) {
-    const popup = document.createElement('div');
-    popup.classList.add('quantity-popup');
-    popup.innerHTML = `
-        <input type="number" value="${inputField.value}" min="1" class="popup-quantity-input">
-        <button class="popup-confirm-btn">Confirm</button>
-        <button class="popup-cancel-btn">Cancel</button>
-    `;
-
-    document.body.appendChild(popup); // Append the popup to the body
-
-    const confirmButton = popup.querySelector('.popup-confirm-btn');
-    const cancelButton = popup.querySelector('.popup-cancel-btn');
-    const quantityInput = popup.querySelector('.popup-quantity-input');
-
-    confirmButton.onclick = () => {
-        inputField.value = quantityInput.value; // Update the quantity input field with the new value
-        popup.remove(); // Close the popup
-        updateProductQuantity(inputField);
-    };
-
-    cancelButton.onclick = () => {
-        popup.remove(); // Close the popup without updating
-    };
-}
-
-// Update product quantity in cart (interactive)
-function updateProductQuantity(input) {
-    const newQuantity = parseInt(input.value);
-    if (newQuantity >= 1) {
-        const productName = input.closest('.product').querySelector('strong').textContent;
-        const product = cart.find(item => item.name === productName);
-        if (product) {
-            product.quantity = newQuantity;
-            saveCart();
-            renderCart();
-        }
-    } else {
-        input.value = 1; // Ensure minimum value is 1
-    }
-}
-
 // Add product to cart
 function addToCart(product, quantity) {
     quantity = parseInt(quantity);
@@ -343,6 +449,44 @@ function addToCart(product, quantity) {
     }
     saveCart();
     renderCart();
+}
+
+// Update product quantity in cart (interactive)
+function updateQuantity(input, change) {
+    let newQuantity = parseInt(input.value) + change;
+    if (newQuantity >= 1) { // Ensure quantity doesn't go below 1
+        input.value = newQuantity;
+    }
+    const productName = input.closest('.product').querySelector('strong').textContent;
+    const product = cart.find(item => item.name === productName);
+    if (product) {
+        product.quantity = newQuantity;
+        if (newQuantity === 0) {
+            removeFromCart(productName); // Remove product if quantity is zero
+            input.closest('.quantity-controls').style.display = 'none'; // Hide quantity controls
+            input.closest('.product').querySelector('button').style.display = 'block'; // Show "Add to Cart" button again
+        } else {
+            saveCart();
+            renderCart();
+        }
+    }
+}
+
+// Handle changes to the quantity input directly (when the user modifies it)
+function handleQuantityChange(event) {
+    const quantityInput = event.target;
+    const newQuantity = parseInt(quantityInput.value);
+    if (newQuantity >= 1) {
+        const productName = quantityInput.closest('.product').querySelector('strong').textContent;
+        const product = cart.find(item => item.name === productName);
+        if (product) {
+            product.quantity = newQuantity;
+            saveCart();
+            renderCart();
+        }
+    } else {
+        quantityInput.value = 1; // Ensure minimum value is 1
+    }
 }
 
 // Remove product from cart
@@ -420,7 +564,8 @@ confirmButton.onclick = () => {
         alert('الرجاء ادخال الأسم و رقم الهاتف.');
         return;
     }
-    
+
+ 
 // الحصول على التاريخ والوقت الحالي بتنسيق "يوم/شهر/سنة ساعة:دقيقةم اليوم"
 function formatDateTime() {
     const now = new Date();
