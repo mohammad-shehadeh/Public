@@ -138,7 +138,7 @@
   
       .popup input {
           margin-bottom: 1em;
-          width: 100%;
+          width: 300%;
           padding: 0.5em;
       }
   
@@ -237,8 +237,11 @@ fetch('test.txt')
             productDetails.innerHTML = `<strong>${product.name}</strong><br>Price: ${product.price.toFixed(2)} $`;
             productDiv.appendChild(productDetails);
 
-            // Adding quantity input and buttons to change the quantity
+            // Adding quantity input and buttons to change the quantity (hidden by default)
             const quantityDiv = document.createElement('div');
+            quantityDiv.classList.add('quantity-controls');
+            quantityDiv.style.display = 'none'; // Initially hidden
+
             const quantityInput = document.createElement('input');
             quantityInput.type = 'number';
             quantityInput.value = 1;
@@ -261,8 +264,18 @@ fetch('test.txt')
 
             const addToCartButton = document.createElement('button');
             addToCartButton.textContent = 'Add to Cart';
-            addToCartButton.onclick = () => addToCart(product, quantityInput.value);
+            addToCartButton.onclick = () => {
+                addToCart(product, quantityInput.value);
+                quantityDiv.style.display = 'block'; // Show quantity input and buttons after adding to cart
+            };
             productDiv.appendChild(addToCartButton);
+
+            // Check if the product is already in the cart
+            const existingProduct = cart.find(item => item.name === product.name);
+            if (existingProduct) {
+                quantityDiv.style.display = 'block'; // Show quantity controls if the product is already in the cart
+                quantityInput.value = existingProduct.quantity; // Set the input to the correct quantity
+            }
 
             categoryDiv.appendChild(productDiv);
         });
@@ -284,11 +297,18 @@ function addToCart(product, quantity) {
     renderCart();
 }
 
-// Function to update product quantity in cart
+// Function to update product quantity in cart (interactive)
 function updateQuantity(input, change) {
     let newQuantity = parseInt(input.value) + change;
     if (newQuantity >= 1) { // Ensure quantity doesn't go below 1
         input.value = newQuantity;
+    }
+    const productName = input.closest('.product').querySelector('strong').textContent;
+    const product = cart.find(item => item.name === productName);
+    if (product) {
+        product.quantity = newQuantity;
+        saveCart();
+        renderCart();
     }
 }
 
@@ -364,7 +384,7 @@ confirmButton.onclick = () => {
         alert('الرجاء ادخال الأسم و رقم الهاتف.');
         return;
     }
-
+    
 // الحصول على التاريخ والوقت الحالي بتنسيق "يوم/شهر/سنة ساعة:دقيقةم اليوم"
 function formatDateTime() {
     const now = new Date();
