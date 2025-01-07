@@ -248,72 +248,78 @@
             })
             .catch(error => console.error('Error loading products:', error));
 
-        function renderCategories() {
-            categoriesContainer.innerHTML = '';
-            const categories = [...new Set(products.map(p => p.category))];
-            categories.forEach(category => {
-                const categoryDiv = document.createElement('div');
-                categoryDiv.className = 'category';
+            function renderCategories() {
+    categoriesContainer.innerHTML = '';
+    if (products.length === 0) {
+        const noProductsMessage = document.createElement('p');
+        noProductsMessage.textContent = 'لا توجد منتجات لعرضها';
+        categoriesContainer.appendChild(noProductsMessage);
+    } else {
+        const categories = [...new Set(products.map(p => p.category))];
+        categories.forEach(category => {
+            const categoryDiv = document.createElement('div');
+            categoryDiv.className = 'category';
 
-                const categoryTitle = document.createElement('h2');
-                categoryTitle.textContent = category;
-                categoryDiv.appendChild(categoryTitle);
+            const categoryTitle = document.createElement('h2');
+            categoryTitle.textContent = category;
+            categoryDiv.appendChild(categoryTitle);
 
-                const categoryProducts = products.filter(p => p.category === category);
-                categoryProducts.forEach(product => {
-                    const productDiv = document.createElement('div');
-                    productDiv.className = 'product';
+            const categoryProducts = products.filter(p => p.category === category);
+            categoryProducts.forEach(product => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product';
 
-                    const productImage = document.createElement('img');
-                    productImage.src = product.image;
-                    productImage.alt = product.name;
+                const productImage = document.createElement('img');
+                productImage.src = product.image;
+                productImage.alt = product.name;
 
-                    productImage.onerror = () => {
-                        productImage.src = 'default-image.jpg'; // Use default image
-                    };
+                productImage.onerror = () => {
+                    productImage.src = 'default-image.jpg'; // Use default image
+                };
 
-                    productDiv.appendChild(productImage);
+                productDiv.appendChild(productImage);
 
-                    const productDetails = document.createElement('div');
-                    productDetails.innerHTML = `<strong>${product.name}</strong><br>السعر: ${product.price.toFixed(2)} $`;
-                    productDiv.appendChild(productDetails);
+                const productDetails = document.createElement('div');
+                productDetails.innerHTML = `<strong>${product.name}</strong><br>السعر: ${product.price.toFixed(2)} $`;
+                productDiv.appendChild(productDetails);
 
-                    const quantityDiv = document.createElement('div');
-                    quantityDiv.classList.add('quantity-controls');
-                    quantityDiv.style.display = 'none';
+                const quantityDiv = document.createElement('div');
+                quantityDiv.classList.add('quantity-controls');
+                quantityDiv.style.display = 'none';
 
-                    const quantityInput = document.createElement('input');
-                    quantityInput.type = 'number';
-                    quantityInput.value = 1;
-                    quantityInput.min = 1;
-                    quantityInput.style.width = '50px';
-                    quantityInput.addEventListener('focus', () => quantityInput.select());
+                const quantityInput = document.createElement('input');
+                quantityInput.type = 'number';
+                quantityInput.value = 1;
+                quantityInput.min = 1;
+                quantityInput.style.width = '50px';
+                quantityInput.addEventListener('focus', () => quantityInput.select());
 
-                    const increaseButton = document.createElement('button');
-                    increaseButton.textContent = '+';
-                    increaseButton.onclick = () => updateQuantity(quantityInput, 1);
+                const increaseButton = document.createElement('button');
+                increaseButton.textContent = '+';
+                increaseButton.onclick = () => updateQuantity(quantityInput, 1);
 
-                    const decreaseButton = document.createElement('button');
-                    decreaseButton.textContent = '-';
-                    decreaseButton.onclick = () => updateQuantity(quantityInput, -1);
+                const decreaseButton = document.createElement('button');
+                decreaseButton.textContent = '-';
+                decreaseButton.onclick = () => updateQuantity(quantityInput, -1);
 
-                    quantityDiv.appendChild(decreaseButton);
-                    quantityDiv.appendChild(quantityInput);
-                    quantityDiv.appendChild(increaseButton);
+                quantityDiv.appendChild(decreaseButton);
+                quantityDiv.appendChild(quantityInput);
+                quantityDiv.appendChild(increaseButton);
 
-                    const addToCartButton = document.createElement('button');
-                    addToCartButton.textContent = 'إضافة إلى السلة';
-                    addToCartButton.onclick = () => {
-                        addToCart(product, quantityInput.value);
-                        quantityDiv.style.display = 'block'; // Show quantity controls after adding to cart
-                    };
+                const addToCartButton = document.createElement('button');
+                addToCartButton.textContent = 'إضافة إلى السلة';
+                addToCartButton.onclick = () => {
+                    addToCart(product, quantityInput.value);
+                    quantityDiv.style.display = 'block'; // Show quantity controls after adding to cart
+                };
 
-                    productDiv.appendChild(addToCartButton);
-                    productDiv.appendChild(quantityDiv);
-                    categoriesContainer.appendChild(categoryDiv);
-                });
+                productDiv.appendChild(addToCartButton);
+                productDiv.appendChild(quantityDiv);
+                categoriesContainer.appendChild(categoryDiv);
             });
-        }
+        });
+    }
+}
 
         function addToCart(product, quantity) {
             const existingProduct = cart.find(item => item.name === product.name);
