@@ -237,7 +237,7 @@ fetch('test.txt')
             productDetails.innerHTML = `<strong>${product.name}</strong><br>Price: ${product.price.toFixed(2)} $`;
             productDiv.appendChild(productDetails);
 
-            // Adding quantity input and buttons to change the quantity (hidden by default)
+            // Quantity input and control buttons
             const quantityDiv = document.createElement('div');
             quantityDiv.classList.add('quantity-controls');
             quantityDiv.style.display = 'none'; // Initially hidden
@@ -247,8 +247,8 @@ fetch('test.txt')
             quantityInput.value = 1;
             quantityInput.min = 1; // Minimum quantity is 1
             quantityInput.style.width = '50px';
+            quantityInput.addEventListener('focus', () => quantityInput.select()); // Automatically select text when clicked
 
-            // Buttons to increase and decrease quantity
             const increaseButton = document.createElement('button');
             increaseButton.textContent = '+';
             increaseButton.onclick = () => updateQuantity(quantityInput, 1);
@@ -260,13 +260,14 @@ fetch('test.txt')
             quantityDiv.appendChild(decreaseButton);
             quantityDiv.appendChild(quantityInput);
             quantityDiv.appendChild(increaseButton);
-            productDiv.appendChild(quantityDiv);
 
+            // Add To Cart Button
             const addToCartButton = document.createElement('button');
             addToCartButton.textContent = 'Add to Cart';
             addToCartButton.onclick = () => {
                 addToCart(product, quantityInput.value);
-                quantityDiv.style.display = 'block'; // Show quantity input and buttons after adding to cart
+                quantityDiv.style.display = 'block'; // Show quantity controls after adding to cart
+                addToCartButton.style.display = 'none'; // Hide the "Add to Cart" button
             };
             productDiv.appendChild(addToCartButton);
 
@@ -274,9 +275,11 @@ fetch('test.txt')
             const existingProduct = cart.find(item => item.name === product.name);
             if (existingProduct) {
                 quantityDiv.style.display = 'block'; // Show quantity controls if the product is already in the cart
+                addToCartButton.style.display = 'none'; // Hide "Add to Cart" button if product is in cart
                 quantityInput.value = existingProduct.quantity; // Set the input to the correct quantity
             }
 
+            productDiv.appendChild(quantityDiv);
             categoryDiv.appendChild(productDiv);
         });
 
@@ -284,12 +287,12 @@ fetch('test.txt')
     });
 }
 
-// Function to add product to the cart
+// Add product to cart
 function addToCart(product, quantity) {
     quantity = parseInt(quantity);
     const existingProduct = cart.find(item => item.name === product.name);
     if (existingProduct) {
-        existingProduct.quantity += quantity; // Update the quantity if product exists
+        existingProduct.quantity += quantity; // Update quantity if product already exists
     } else {
         cart.push({ ...product, quantity });
     }
@@ -297,7 +300,7 @@ function addToCart(product, quantity) {
     renderCart();
 }
 
-// Function to update product quantity in cart (interactive)
+// Update product quantity in cart (interactive)
 function updateQuantity(input, change) {
     let newQuantity = parseInt(input.value) + change;
     if (newQuantity >= 1) { // Ensure quantity doesn't go below 1
@@ -308,7 +311,7 @@ function updateQuantity(input, change) {
     if (product) {
         product.quantity = newQuantity;
         if (newQuantity === 0) {
-            removeFromCart(productName); // Remove from cart if quantity is zero
+            removeFromCart(productName); // Remove product if quantity is zero
             input.closest('.quantity-controls').style.display = 'none'; // Hide quantity controls
         } else {
             saveCart();
@@ -317,7 +320,7 @@ function updateQuantity(input, change) {
     }
 }
 
-// Function to remove product from cart
+// Remove product from cart
 function removeFromCart(productName) {
     cart = cart.filter(item => item.name !== productName);
     saveCart();
@@ -369,7 +372,7 @@ function renderCart() {
             if (product) {
                 product.quantity = newQuantity;
                 if (newQuantity === 0) {
-                    removeFromCart(productName); // Remove from cart if quantity is zero
+                    removeFromCart(productName); // Remove product if quantity is zero
                     event.target.closest('.cart-item').remove(); // Remove item from cart display
                 } else {
                     saveCart();
