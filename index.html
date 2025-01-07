@@ -190,12 +190,13 @@ fetch('test.txt')
             // Splitting the line into components and assuming format: category/name/price/image_url
             const parts = line.split('/');
             if (parts.length >= 4) {
-                const [category, name, price, image] = parts;
+                // Handle image URL with query parameters (e.g., "?x-oss-process=image...")
+                const imageUrl = parts.slice(3).join('/').trim(); // Combine all parts after the 3rd element
                 products.push({
-                    category: category.trim(),
-                    name: name.trim(),
-                    price: parseFloat(price.trim()),
-                    image: image.trim()
+                    category: parts[0].trim(),
+                    name: parts[1].trim(),
+                    price: parseFloat(parts[2].trim()),
+                    image: imageUrl
                 });
             }
         });
