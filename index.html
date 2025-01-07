@@ -145,6 +145,11 @@
       .popup button {
           margin-right: 0.5em;
       }
+      .add-to-cart-btn {
+    display: block;
+    margin: 0 auto; /* To center the button */
+}
+
   </style>
   </head>
 <body>
@@ -264,6 +269,7 @@ fetch('test.txt')
             // Add To Cart Button
             const addToCartButton = document.createElement('button');
             addToCartButton.textContent = 'Add to Cart';
+            addToCartButton.classList.add('add-to-cart-btn'); // Adding a class for better styling
             addToCartButton.onclick = () => {
                 addToCart(product, quantityInput.value);
                 quantityDiv.style.display = 'block'; // Show quantity controls after adding to cart
