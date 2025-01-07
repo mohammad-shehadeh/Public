@@ -651,6 +651,22 @@ popup.style.display = 'none';
 cancelButton.onclick = () => {
     popup.style.display = 'none';
 };
+// إضافة هذه الدالة للتحكم في إظهار/إخفاء السلة
+document.getElementById('toggle-cart-button').onclick = function() {
+    const cartElement = document.getElementById('cart');
+    // التبديل بين إظهار وإخفاء السلة
+    if (cartElement.style.display === 'none') {
+        cartElement.style.display = 'block';
+        this.textContent = 'إخفاء السلة'; // تغيير النص إلى "إخفاء السلة"
+    } else {
+        cartElement.style.display = 'none';
+        this.textContent = 'إظهار السلة'; // تغيير النص إلى "إظهار السلة"
+    }
+};
+
+// ضمان أن السلة مخفية عند التحميل الأول للصفحة
+document.getElementById('cart').style.display = 'none';
+
 </script>
 </body>
 </html>
