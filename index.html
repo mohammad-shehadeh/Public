@@ -168,119 +168,137 @@
     </div>
 
     <script>
-      const categoriesContainer = document.getElementById('categories');
-      const cartItemsContainer = document.getElementById('cart-items');
-      const checkoutButton = document.getElementById('checkout-button');
-      const popup = document.getElementById('popup');
-      const confirmButton = document.getElementById('confirm-button');
-      const cancelButton = document.getElementById('cancel-button');
-      
-      const customerNameInput = document.getElementById('customer-name');
-      const customerPhoneInput = document.getElementById('customer-phone');
-      
-      let products = [];
-      let cart = JSON.parse(localStorage.getItem('cart')) || [];
-      
-      // Load products from test.txt
-      fetch('test.txt')
-          .then(response => response.text())
-          .then(data => {
-              const lines = data.split('\n');
-              lines.forEach(line => {
-                  // Splitting the line into components and assuming format: category/name/price/image_url
-                  const parts = line.split('/');
-                  if (parts.length >= 4) {
-                      const [category, name, price, image] = parts;
-                      products.push({ category, name, price: parseFloat(price), image: image.trim() });
-                  }
-              });
-              renderCategories();
-              renderCart();
-          });
-      
-      function renderCategories() {
-          const categories = [...new Set(products.map(p => p.category))];
-          categories.forEach(category => {
-              const categoryDiv = document.createElement('div');
-              categoryDiv.className = 'category';
-              const categoryTitle = document.createElement('h2');
-              categoryTitle.textContent = category;
-              categoryDiv.appendChild(categoryTitle);
-      
-              const categoryProducts = products.filter(p => p.category === category);
-              categoryProducts.forEach(product => {
-                  const productDiv = document.createElement('div');
-                  productDiv.className = 'product';
-      
-                  // Creating and adding image element with error handling
-                  const productImage = document.createElement('img');
-                  productImage.src = product.image;
-                  productImage.alt = product.name;  // Adding alt text for better accessibility
-      
-                  // Error handling for image load failure
-                  productImage.onerror = () => {
-                      productImage.src = 'path/to/default-image.jpg';  // Use a default image if the image URL is invalid
-                  };
-      
-                  productDiv.appendChild(productImage);
-      
-                  const productDetails = document.createElement('div');
-                  productDetails.innerHTML = `<strong>${product.name}</strong><br>Price: ${product.price}`;
-                  productDiv.appendChild(productDetails);
-      
-                  const addToCartButton = document.createElement('button');
-                  addToCartButton.textContent = 'Add to Cart';
-                  addToCartButton.onclick = () => addToCart(product);
-                  productDiv.appendChild(addToCartButton);
-      
-                  categoryDiv.appendChild(productDiv);
-              });
-      
-              categoriesContainer.appendChild(categoryDiv);
-          });
-      }
-      
-      function addToCart(product) {
-          const existingProduct = cart.find(item => item.name === product.name);
-          if (existingProduct) {
-              existingProduct.quantity++;
-          } else {
-              cart.push({ ...product, quantity: 1 });
-          }
-          saveCart();
-          renderCart();
-      }
-      
-      function removeFromCart(productName) {
-          cart = cart.filter(item => item.name !== productName);
-          saveCart();
-          renderCart();
-      }
-      
-      function renderCart() {
-          cartItemsContainer.innerHTML = '';
-          let total = 0;
-          cart.forEach(item => {
-              const cartItemDiv = document.createElement('div');
-              cartItemDiv.className = 'cart-item';
-      
-              const itemDetails = document.createElement('div');
-              itemDetails.innerHTML = `<strong>${item.name}</strong><br>Price: ${item.price}<br>Quantity: ${item.quantity}`;
-              cartItemDiv.appendChild(itemDetails);
-      
-              const removeButton = document.createElement('button');
-              removeButton.textContent = 'X';
-              removeButton.onclick = () => removeFromCart(item.name);
-              cartItemDiv.appendChild(removeButton);
-      
-              total += item.price * item.quantity;
-              cartItemsContainer.appendChild(cartItemDiv);
-          });
-      
-          const totalDiv = document.createElement('div');
-          totalDiv.innerHTML = `<strong>Total: ${total}</strong>`;
-          cartItemsContainer.appendChild(totalDiv);
-      }
+const categoriesContainer = document.getElementById('categories');
+const cartItemsContainer = document.getElementById('cart-items');
+const checkoutButton = document.getElementById('checkout-button');
+const popup = document.getElementById('popup');
+const confirmButton = document.getElementById('confirm-button');
+const cancelButton = document.getElementById('cancel-button');
+
+const customerNameInput = document.getElementById('customer-name');
+const customerPhoneInput = document.getElementById('customer-phone');
+
+let products = [];
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+// Load products from test.txt
+fetch('test.txt')
+    .then(response => response.text())
+    .then(data => {
+        const lines = data.split('\n');
+        lines.forEach(line => {
+            // Splitting the line into components and assuming format: category/name/price/image_url
+            const parts = line.split('/');
+            if (parts.length >= 4) {
+                const [category, name, price, image] = parts;
+                products.push({
+                    category: category.trim(),
+                    name: name.trim(),
+                    price: parseFloat(price.trim()),
+                    image: image.trim()
+                });
+            }
+        });
+        renderCategories();
+        renderCart();
+    })
+    .catch(error => console.error('Error loading products:', error));
+
+function renderCategories() {
+    categoriesContainer.innerHTML = ''; // Clear previous categories
+    const categories = [...new Set(products.map(p => p.category))];
+    categories.forEach(category => {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'category';
+
+        const categoryTitle = document.createElement('h2');
+        categoryTitle.textContent = category;
+        categoryDiv.appendChild(categoryTitle);
+
+        const categoryProducts = products.filter(p => p.category === category);
+        categoryProducts.forEach(product => {
+            const productDiv = document.createElement('div');
+            productDiv.className = 'product';
+
+            // Creating and adding image element with error handling
+            const productImage = document.createElement('img');
+            productImage.src = product.image;
+            productImage.alt = product.name; // Adding alt text for better accessibility
+
+            // Error handling for image load failure
+            productImage.onerror = () => {
+                productImage.src = 'default-image.jpg'; // Use a default image if the image URL is invalid
+            };
+
+            productDiv.appendChild(productImage);
+
+            const productDetails = document.createElement('div');
+            productDetails.innerHTML = `<strong>${product.name}</strong><br>Price: ${product.price.toFixed(2)} $`;
+            productDiv.appendChild(productDetails);
+
+            const addToCartButton = document.createElement('button');
+            addToCartButton.textContent = 'Add to Cart';
+            addToCartButton.onclick = () => addToCart(product);
+            productDiv.appendChild(addToCartButton);
+
+            categoryDiv.appendChild(productDiv);
+        });
+
+        categoriesContainer.appendChild(categoryDiv);
+    });
+}
+
+function addToCart(product) {
+    const existingProduct = cart.find(item => item.name === product.name);
+    if (existingProduct) {
+        existingProduct.quantity++;
+    } else {
+        cart.push({ ...product, quantity: 1 });
+    }
+    saveCart();
+    renderCart();
+}
+
+function removeFromCart(productName) {
+    cart = cart.filter(item => item.name !== productName);
+    saveCart();
+    renderCart();
+}
+
+function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+function renderCart() {
+    cartItemsContainer.innerHTML = ''; // Clear previous cart items
+    let total = 0;
+
+    cart.forEach(item => {
+        const cartItemDiv = document.createElement('div');
+        cartItemDiv.className = 'cart-item';
+
+        const itemDetails = document.createElement('div');
+        itemDetails.innerHTML = `
+            <strong>${item.name}</strong><br>
+            Price: ${item.price.toFixed(2)} $<br>
+            Quantity: ${item.quantity}
+        `;
+        cartItemDiv.appendChild(itemDetails);
+
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'X';
+        removeButton.onclick = () => removeFromCart(item.name);
+        cartItemDiv.appendChild(removeButton);
+
+        total += item.price * item.quantity;
+        cartItemsContainer.appendChild(cartItemDiv);
+    });
+
+    const totalDiv = document.createElement('div');
+    totalDiv.className = 'cart-total';
+    totalDiv.innerHTML = `<strong>Total: ${total.toFixed(2)} $</strong>`;
+    cartItemsContainer.appendChild(totalDiv);
+}
       
       function saveCart() {
           localStorage.setItem('cart', JSON.stringify(cart));
