@@ -82,7 +82,7 @@
           background-color: #3498db;
           color: white;
           border: none;
-          padding: 0.7em 1.5em;
+          padding: 0.7em 0.7em;
           border-radius: 5px;
           cursor: pointer;
           transition: background-color 0.3s ease;
@@ -332,8 +332,7 @@
 <body>
     <header>
         <h1>Online Store</h1>
-        <button class="toggle-cart" id="toggle-cart-button">إخفاء السلة</button>
-
+        <button class="toggle-cart" id="show-cart-button">إظهار الفاتورة</button>
     </header>
     <main>
         <div id="categories"></div>
@@ -342,6 +341,7 @@
         <h2>Cart</h2>
         <div id="cart-items"></div>
         <button class="share-button" id="checkout-button">Checkout</button>
+        <button class="toggle-cart" id="hide-cart-button">إخفاء الفاتورة</button>
     </div>
     <div class="popup" id="popup">
         <h2>Customer Details</h2>
@@ -656,22 +656,27 @@ popup.style.display = 'none';
 cancelButton.onclick = () => {
     popup.style.display = 'none';
 };
-// إضافة هذه الدالة للتحكم في إظهار/إخفاء السلة
-document.getElementById('toggle-cart-button').onclick = function() {
-    const cartElement = document.getElementById('cart');
-    // التبديل بين إظهار وإخفاء السلة
-    if (cartElement.style.display === 'none') {
-        cartElement.style.display = 'block';
-        this.textContent = 'إخفاء السلة'; // تغيير النص إلى "إخفاء السلة"
-    } else {
-        cartElement.style.display = 'none';
-        this.textContent = 'إظهار السلة'; // تغيير النص إلى "إظهار السلة"
-    }
+// الحصول على الأزرار الخاصة بإظهار وإخفاء السلة
+const showCartButton = document.getElementById('show-cart-button');
+const hideCartButton = document.getElementById('hide-cart-button');
+const cartElement = document.getElementById('cart');
+
+// إخفاء السلة عند تحميل الصفحة
+cartElement.style.display = 'none';
+
+// عند النقر على زر إظهار السلة
+showCartButton.onclick = function() {
+    cartElement.style.display = 'block';  // إظهار السلة
+    showCartButton.style.display = 'none';  // إخفاء زر الإظهار
+    hideCartButton.style.display = 'inline-block';  // إظهار زر الإخفاء
 };
 
-// ضمان أن السلة مخفية عند التحميل الأول للصفحة
-document.getElementById('cart').style.display = 'none';
-
+// عند النقر على زر إخفاء السلة
+hideCartButton.onclick = function() {
+    cartElement.style.display = 'none';  // إخفاء السلة
+    showCartButton.style.display = 'inline-block';  // إظهار زر الإظهار
+    hideCartButton.style.display = 'none';  // إخفاء زر الإخفاء
+};
 </script>
 </body>
 </html>
