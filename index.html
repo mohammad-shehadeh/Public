@@ -36,16 +36,24 @@
             gap: 1em; /* إضافة مسافة بين العناصر */
         }
 
-        .product {
-            background-color: white;
-            width: 300px;
-            margin: 0.7em;
-            padding: 0.7em;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
+  .product {
+    background-color: white;
+    width: 300px;
+    margin: 0.7em;
+    padding: 0.7em;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+/* تصميم مخصص للأجهزة المحمولة */
+@media (max-width: 768px) { /* العرض الأقصى 768px */
+    .product {
+        width: 100%; /* العرض يكون 100% من حجم الشاشة */
+        box-sizing: border-box; /* لضمان عدم تجاوز الحواف */
+    }
+}
 
         .product:hover {
             transform: translateY(-10px);
