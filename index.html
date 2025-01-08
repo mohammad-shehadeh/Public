@@ -486,7 +486,7 @@ function renderCategories() {
             productDiv.appendChild(productImage);
 
             const productDetails = document.createElement('div');
-            productDetails.innerHTML = `<strong>${product.name}</strong><br>Price: ${product.price.toFixed(2)} $`;
+            productDetails.innerHTML = `<strong>${product.name}</strong><br>Price: ₪{product.price.toFixed(2)} ₪`;
             productDiv.appendChild(productDetails);
 
             // Quantity input and control buttons
@@ -614,9 +614,9 @@ function renderCart() {
 
         const itemDetails = document.createElement('div');
         itemDetails.innerHTML = `
-            <strong>${item.name}</strong><br>
-            Price: ${item.price.toFixed(2)} $<br>
-            Quantity: <input type="number" value="${item.quantity}" min="1" class="cart-quantity" data-product="${item.name}">
+            <strong>₪{item.name}</strong><br>
+            Price: ₪{item.price.toFixed(2)} ₪<br>
+            Quantity: <input type="number" value="₪{item.quantity}" min="1" class="cart-quantity" data-product="₪{item.name}">
         `;
         cartItemDiv.appendChild(itemDetails);
 
@@ -631,7 +631,7 @@ function renderCart() {
 
     const totalDiv = document.createElement('div');
     totalDiv.className = 'cart-total';
-    totalDiv.innerHTML = `<strong>Total: ${total.toFixed(2)} $</strong>`;
+    totalDiv.innerHTML = `<strong>Total: ₪{total.toFixed(2)} ₪</strong>`;
     cartItemsContainer.appendChild(totalDiv);
 
     // Event listener to handle quantity change in cart
@@ -688,17 +688,17 @@ const invoiceNumber = "####";
 // إضافة الوقت والتاريخ الحالي إلى الفاتورة
 let text = `⭐️ Shehadeh Centre ⭐️\n`;
 text += `━━━━━━━━━━━━━━━\n`;
-text += `📅 التاريخ: ${formatDateTime()}\n`;
-text += `📄 رقم الفاتورة: ${invoiceNumber}\n`;
+text += `📅 التاريخ: ₪{formatDateTime()}\n`;
+text += `📄 رقم الفاتورة: ₪{invoiceNumber}\n`;
 text += `━━━━━━━━━━━━━━━\n\n`;
-text += `👤 اسم العميل: ${customerName}\n`;
-text += `☎️ رقم الهاتف: ${customerPhone}\n`;
+text += `👤 اسم العميل: ₪{customerName}\n`;
+text += `☎️ رقم الهاتف: ₪{customerPhone}\n`;
 text += `━━━━━━━━━━━━━━━\n\n`;
 text += `🛒 تفاصيل المنتجات:\n`;
 
 let total = 0;
 cart.forEach(item => {
-    text += `\t${item.name}: ${item.quantity}x${item.price.toFixed(2)}\n`;
+    text += `\t₪{item.name}: ₪{item.quantity}x₪{item.price.toFixed(2)}\n`;
     text += `─ ─ ─ ─ ─ ─ ─ ─ ─ ─\n`;
     total += item.price * item.quantity;
 });
@@ -708,7 +708,7 @@ text += `━━━━━━━━━━━━━━━\n`;
 text += `شكرًا لاختياركم خدماتنا! 🙏`;
 
 // رابط الواتساب مع الرقم المحدد
-const whatsappURL = `https://wa.me/972566888825?text=${encodeURIComponent(text)}`;
+const whatsappURL = `https://wa.me/972566888825?text=₪{encodeURIComponent(text)}`;
 window.open(whatsappURL, '_blank');
 
 // لتحديث السلة وحفظها
