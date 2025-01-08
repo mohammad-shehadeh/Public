@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Store</title>
+    <title>Shehadeh Center</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -135,13 +135,48 @@
           padding: 0.2em 0.5em;
       }
   
-      .share-button {
-          background-color: #25D366;
-          color: white;
-          border: none;
-          padding: 0.5em 1em;
-          cursor: pointer;
-      }
+/* تصميم زر المشاركة بنفس حجم زر إخفاء السلة */
+.share-button {
+    padding: 10px 20px;  /* نفس المسافة الداخلية مثل زر إخفاء السلة */
+    font-size: 16px;  /* نفس حجم الخط */
+    font-weight: bold;  /* نفس الخط السميك */
+    border: none;  /* إزالة الحدود */
+    border-radius: 8px;  /* نفس الحواف الدائرية */
+    color: white;  /* لون النص أبيض */
+    cursor: pointer;  /* تغيير المؤشر عند المرور على الزر */
+    transition: transform 0.2s;  /* تأثير الانتقال (رفع الزر عند النقر) */
+    width: 200px;  /* نفس العرض مثل زر إخفاء السلة */
+    margin-bottom: 10px;  /* نفس المسافة بين الأزرار */
+    animation: colorChange 5s infinite;  /* تطبيق نفس تأثير تغيير الألوان */
+}
+
+/* تأثير تغيير الألوان بشكل مستمر */
+@keyframes colorChange {
+    0% {
+        background-color: #1e7e34;  /* اللون الأول (أخضر داكن) */
+    }
+    25% {
+        background-color: #ff5722;  /* اللون الثاني (برتقالي) */
+    }
+    50% {
+        background-color: #2196F3;  /* اللون الثالث (أزرق) */
+    }
+    75% {
+        background-color: #f44336;  /* اللون الرابع (أحمر) */
+    }
+    100% {
+        background-color: #1e7e34;  /* العودة إلى اللون الأول (أخضر داكن) */
+    }
+}
+
+/* يمكن إضافة تأثيرات عند التفاعل مع زر المشاركة إذا لزم الأمر */
+.share-button:hover {
+    transform: translateY(-3px);  /* رفع الزر عند التحويم */
+}
+
+.share-button:active {
+    transform: translateY(0);  /* العودة إلى الوضع الطبيعي عند النقر */
+}
   
       .popup {
           display: none;
@@ -326,7 +361,39 @@
 #toggle-cart-button {
   float: left;
 }
+/* تصميم الأزرار */
+.toggle-cart {
+    padding: 10px 20px;  /* المسافة الداخلية داخل الزر */
+    font-size: 16px;  /* حجم الخط */
+    font-weight: bold;  /* جعل الخط سميكًا */
+    border: none;  /* إزالة الحدود */
+    border-radius: 8px;  /* حواف دائرية للزر */
+    color: white;  /* لون النص */
+    cursor: pointer;  /* تغيير المؤشر عند المرور على الزر */
+    transition: transform 0.2s;  /* تأثير الانتقال */
+    width: 200px;  /* عرض الزر */
+    margin-bottom: 10px;  /* مسافة بين الأزرار */
+    animation: colorChange 5s infinite;  /* تطبيق تأثير التغيير اللوني */
+}
 
+/* تأثير تغيير الألوان بشكل مستمر */
+@keyframes colorChange {
+    0% {
+        background-color: #ff0000e7;  /* اللون الأول (أخضر) */
+    }
+    25% {
+        background-color: #ff9800;  /* اللون الثاني (برتقالي) */
+    }
+    50% {
+        background-color: #ff0000;  /* اللون الثالث (أزرق) */
+    }
+    75% {
+        background-color: #ffa600;  /* اللون الرابع (أحمر) */
+    }
+    100% {
+        background-color: #ff0000;  /* العودة إلى اللون الأول (أخضر) */
+    }
+}
   </style>
 </head>
 <body>
@@ -340,7 +407,8 @@
     <div class="cart" id="cart">
         <h2>Cart</h2>
         <div id="cart-items"></div>
-        <button class="share-button" id="checkout-button">Checkout</button>
+        <button class="share-button" id="checkout-button">ارسال طلبية</button>
+        <br>
         <button class="toggle-cart" id="hide-cart-button">إخفاء الفاتورة</button>
     </div>
     <div class="popup" id="popup">
