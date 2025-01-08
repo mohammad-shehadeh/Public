@@ -264,7 +264,7 @@
 /* تأثير ديناميكي على الأزرار */
 .quantity-controls button:hover {
     transform: scale(1.2);
-    background-color: rgba(0, 123, 255, 0.1);
+    background-color: rgba(0, 123, 123, 0.1);
     border-color: #007bff;
 }
 
@@ -403,12 +403,17 @@
     }
 }
 .price {
-    font-size: 1.5em;  /* زيادة حجم النص ليكون أكبر */
+    font-size: 1.6em;  /* زيادة حجم النص لجعل السعر أكثر وضوحًا */
     font-weight: bold;  /* جعل الخط عريضًا */
-    color: #2C3E50;  /* لون النص (يمكن تغييره حسب الحاجة) */
+    color: #16a085;  /* اختيار لون جميل للنص (أخضر مزرق) */
     text-align: center;  /* توسيط النص */
-    display: inline-block;  /* الحفاظ على التنسيق في سطر واحد */
-    margin-top: 10px;  /* مسافة صغيرة من الأعلى */
+    display: inline-block;  /* الحفاظ على النص في سطر واحد */
+    margin-top: 10px;  /* إضافة مسافة صغيرة من الأعلى */
+    margin-bottom: 10px;  /* إضافة مسافة صغيرة من الأسفل */
+    padding: 5px;  /* إضافة مسافة داخلية لتفادي التصاق النص بالحواف */
+    background-color: #ecf0f1;  /* إضافة خلفية فاتحة للنص */
+    border-radius: 5px;  /* إضافة حواف دائرية للخلفية */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* إضافة ظل خفيف للنص */
 }
 
   </style>
