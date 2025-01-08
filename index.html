@@ -50,10 +50,10 @@
 /* تصميم مخصص للأجهزة المحمولة */
 @media (max-width: 768px) { /* العرض الأقصى 768px */
     .product {
-        width: 100%; /* العرض الكامل */
-        max-width: calc(100% - 10px); /* الحد الأقصى للعرض مع ترك 1 بكس */
+        width: calc(100% - 10px); /* العرض الكامل مع ترك 5 بكسل على كل جانب */
         box-sizing: border-box; /* لضمان أن الحجم يشمل padding و margin */
-        margin-right: 1px; /* تأكيد الهوامش على اليمين */
+        margin-left: 5px;  /* الهوامش 5 بكسل على اليسار */
+        margin-right: 5px; /* الهوامش 5 بكسل على اليمين */
     }
 }
         .product:hover {
