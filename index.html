@@ -36,7 +36,7 @@
             gap: 1em; /* إضافة مسافة بين العناصر */
         }
 
-  .product {
+.product {
     background-color: white;
     width: 300px;
     margin: 0.7em;
@@ -50,11 +50,11 @@
 /* تصميم مخصص للأجهزة المحمولة */
 @media (max-width: 768px) { /* العرض الأقصى 768px */
     .product {
-        width: 100%; /* العرض يكون 100% من حجم الشاشة */
+        width: calc(100% - 1px); /* العرض الكامل مع ترك 1 بكس فقط */
         box-sizing: border-box; /* لضمان عدم تجاوز الحواف */
+        margin-right: 1px; /* تأكيد ترك 1 بكس كهوامش على اليمين */
     }
 }
-
         .product:hover {
             transform: translateY(-10px);
         }
