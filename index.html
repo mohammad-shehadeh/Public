@@ -20,13 +20,21 @@
         }
 
         h2 {
-            font-size: 1.8em;
-            margin-bottom: 1em;
-            color: #333;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: bold;
-        }
+    font-size: 2em;  /* زيادة حجم الخط لجعل النص أكثر وضوحًا */
+    margin-bottom: 1.5em;  /* زيادة المسافة أسفل النص */
+    color: #1f201f;  /* اختيار لون مميز للنص (أخضر) */
+    text-transform: uppercase;  /* تحويل النص إلى حروف كبيرة */
+    letter-spacing: 2px;  /* زيادة المسافة بين الحروف */
+    font-weight: bold;  /* جعل النص سميكًا */
+    text-align: center;  /* توسيط النص */
+    background-color: #f0f0f0;  /* خلفية خفيفة للنص */
+    padding: 0.5em 0;  /* إضافة مسافة داخلية من الأعلى والأسفل */
+    border-radius: 5px;  /* إضافة حواف دائرية للخلفية */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* إضافة ظل خفيف حول النص */
+    max-width: 90%;  /* تحديد أقصى عرض للنص */
+    margin-left: auto;  /* توسيط النص أفقيًا */
+    margin-right: auto;  /* توسيط النص أفقيًا */
+}
 
         .products-container {
             display: flex;
@@ -486,7 +494,7 @@ function renderCategories() {
             productDiv.appendChild(productImage);
 
             const productDetails = document.createElement('div');
-            productDetails.innerHTML = `<strong>${product.name}</strong><br>Price: ${product.price.toFixed(2)} $`;
+            productDetails.innerHTML = `<strong>₪{product.name}</strong><br>Price: ₪{product.price.toFixed(2)} ₪`;
             productDiv.appendChild(productDetails);
 
             // Quantity input and control buttons
@@ -614,9 +622,9 @@ function renderCart() {
 
         const itemDetails = document.createElement('div');
         itemDetails.innerHTML = `
-            <strong>${item.name}</strong><br>
-            Price: ${item.price.toFixed(2)} $<br>
-            Quantity: <input type="number" value="${item.quantity}" min="1" class="cart-quantity" data-product="${item.name}">
+            <strong>₪{item.name}</strong><br>
+            Price: ₪{item.price.toFixed(2)} ₪<br>
+            Quantity: <input type="number" value="₪{item.quantity}" min="1" class="cart-quantity" data-product="₪{item.name}">
         `;
         cartItemDiv.appendChild(itemDetails);
 
@@ -631,7 +639,7 @@ function renderCart() {
 
     const totalDiv = document.createElement('div');
     totalDiv.className = 'cart-total';
-    totalDiv.innerHTML = `<strong>Total: ${total.toFixed(2)} $</strong>`;
+    totalDiv.innerHTML = `<strong>Total: ₪{total.toFixed(2)} ₪</strong>`;
     cartItemsContainer.appendChild(totalDiv);
 
     // Event listener to handle quantity change in cart
@@ -679,7 +687,7 @@ function formatDateTime() {
     hours = hours % 12;
     hours = hours ? hours : 12; // الساعة 0 تصبح 12
     const dayOfWeek = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"][now.getDay()];
-    return `${day}/${month}/${year} ${hours}:${minutes}${ampm} ${dayOfWeek}`;
+    return `₪{day}/₪{month}/₪{year} ₪{hours}:₪{minutes}₪{ampm} ₪{dayOfWeek}`;
 }
 
 // رقم الفاتورة (ثابت دائمًا ####)
@@ -688,27 +696,27 @@ const invoiceNumber = "####";
 // إضافة الوقت والتاريخ الحالي إلى الفاتورة
 let text = `⭐️ Shehadeh Centre ⭐️\n`;
 text += `━━━━━━━━━━━━━━━\n`;
-text += `📅 التاريخ: ${formatDateTime()}\n`;
-text += `📄 رقم الفاتورة: ${invoiceNumber}\n`;
+text += `📅 التاريخ: ₪{formatDateTime()}\n`;
+text += `📄 رقم الفاتورة: ₪{invoiceNumber}\n`;
 text += `━━━━━━━━━━━━━━━\n\n`;
-text += `👤 اسم العميل: ${customerName}\n`;
-text += `☎️ رقم الهاتف: ${customerPhone}\n`;
+text += `👤 اسم العميل: ₪{customerName}\n`;
+text += `☎️ رقم الهاتف: ₪{customerPhone}\n`;
 text += `━━━━━━━━━━━━━━━\n\n`;
 text += `🛒 تفاصيل المنتجات:\n`;
 
 let total = 0;
 cart.forEach(item => {
-    text += `\t${item.name}: ${item.quantity}x${item.price.toFixed(2)}\n`;
+    text += `\t₪{item.name}: ₪{item.quantity}x₪{item.price.toFixed(2)}\n`;
     text += `─ ─ ─ ─ ─ ─ ─ ─ ─ ─\n`;
     total += item.price * item.quantity;
 });
 
-text += `💰 الإجمالي: ${total.toFixed(2)}\n`;
+text += `💰 الإجمالي: ₪{total.toFixed(2)}\n`;
 text += `━━━━━━━━━━━━━━━\n`;
 text += `شكرًا لاختياركم خدماتنا! 🙏`;
 
 // رابط الواتساب مع الرقم المحدد
-const whatsappURL = `https://wa.me/972566888825?text=${encodeURIComponent(text)}`;
+const whatsappURL = `https://wa.me/972566888825?text=₪{encodeURIComponent(text)}`;
 window.open(whatsappURL, '_blank');
 
 // لتحديث السلة وحفظها
