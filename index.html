@@ -753,6 +753,22 @@ hideCartButton.onclick = function() {
     showCartButton.style.display = 'inline-block';  // إظهار زر الإظهار
     hideCartButton.style.display = 'none';  // إخفاء زر الإخفاء
 };
+        // منع التكبير عبر اللمس على الهاتف
+        document.addEventListener('touchstart', function (event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        // منع التكبير بالنقر مرتين
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            let now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) { // 300ms هو الفاصل الزمني للنقر المزدوج
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, { passive: false });
 </script>
 </body>
 </html>
