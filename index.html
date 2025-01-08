@@ -27,29 +27,29 @@
           letter-spacing: 1px;
           font-weight: bold;
       }
-  
-      main {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: space-around;
-          padding: 2em;
-      }
-  
-      .category {
-          margin: 2em 0;
-      }
-
+  main {
+    display: flex;
+    flex-wrap: wrap; /* السماح بالتفاف العناصر */
+    justify-content: space-around; /* توزيع العناصر بشكل متساوٍ حولها */
+    align-items: flex-start; /* محاذاة العناصر إلى الأعلى */
+    padding: 0.2em;
+}
 
 .product {
     background-color: white;
-    width: 100px; /* تصغير العرض بنسبة 30% */
-    margin: 0.1em 0; /* تصغير المسافة بين العناصر بنسبة 30% */
-    padding: 0.1em; /* تصغير الحشو بنسبة 30% */
+    width: 175px; /* عرض العنصر */
+    margin: 0.7em; /* المسافة بين العناصر */
+    padding: 0.7em; /* الحشو داخل العنصر */
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: transform 0.3s ease;
 }
+
+.product:hover {
+    transform: translateY(-10px);
+}
+
 
 .product:hover {
     transform: translateY(-10px);
