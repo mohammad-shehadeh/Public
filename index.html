@@ -253,39 +253,53 @@
 .quantity-controls button {
     padding: 12px;
     font-size: 20px;
-    background-color: transparent;
-    border: 2px solid transparent;
-    border-radius: 100%;
+    background-color: #f8f9fa;
+    border: 2px solid #ddd;
+    border-radius: 5px;
     margin: 0 10px;
     cursor: pointer;
-    transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* تأثير ديناميكي على الأزرار */
+/* تأثير ديناميكي على الأزرار عند التمرير */
 .quantity-controls button:hover {
-    transform: scale(1.2);
-    background-color: rgba(0, 123, 255, 0.1);
+    background-color: #e9ecef;
     border-color: #007bff;
+}
+
+/* تأثير عند الضغط على الأزرار */
+.quantity-controls button:active {
+    transform: scale(1.1);
+    background-color: #007bff;
+    color: #fff;
+    border-color: #0056b3;
 }
 
 /* تنسيق حقل إدخال الكمية */
 .quantity-controls input {
     width: 70px;
-    height: 40px;
+    height: 50px;
     font-size: 18px;
     text-align: center;
     border-radius: 5px;
     border: 1px solid #ddd;
     margin: 0 10px;
     padding: 5px;
-    transition: border-color 0.3s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* تغيير الحدود عند التركيز على حقل إدخال الكمية */
 .quantity-controls input:focus {
     border-color: #007bff;
     outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
+
 
 /* تصميم زر إضافة إلى السلة */
 .add-to-cart-btn {
