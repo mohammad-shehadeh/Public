@@ -778,6 +778,48 @@ hideCartButton.onclick = function() {
             }
             lastTouchEnd = now;
         }, { passive: false });
+        document.addEventListener("DOMContentLoaded", function () {
+    const quantityInput = document.querySelector(".quantity-controls input");
+    const incrementButton = document.querySelector(".quantity-controls .increment");
+    const decrementButton = document.querySelector(".quantity-controls .decrement");
+
+    let intervalId = null;
+
+    // زيادة العدد
+    const increaseQuantity = () => {
+        quantityInput.value = parseInt(quantityInput.value) + 1;
+    };
+
+    // تقليل العدد
+    const decreaseQuantity = () => {
+        if (parseInt(quantityInput.value) > 0) {
+            quantityInput.value = parseInt(quantityInput.value) - 1;
+        }
+    };
+
+    // عند الضغط المطول على زر "+"
+    incrementButton.addEventListener("mousedown", () => {
+        increaseQuantity(); // زيادة العدد فور الضغط
+        intervalId = setInterval(increaseQuantity, 100); // زيادة العدد باستمرار
+    });
+
+    // عند الضغط المطول على زر "-"
+    decrementButton.addEventListener("mousedown", () => {
+        decreaseQuantity(); // تقليل العدد فور الضغط
+        intervalId = setInterval(decreaseQuantity, 100); // تقليل العدد باستمرار
+    });
+
+    // إيقاف العملية عند إفلات الزر
+    document.addEventListener("mouseup", () => {
+        clearInterval(intervalId);
+    });
+
+    // أيضًا عند خروج مؤشر الماوس
+    document.addEventListener("mouseleave", () => {
+        clearInterval(intervalId);
+    });
+});
+
 </script>
 </body>
 </html>
