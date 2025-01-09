@@ -526,52 +526,47 @@ const updateQuantity = (input, delta) => {
 let intervalId = null;
 let holdTimeout = null;
 
-const startRapidUpdate = (delta) => {
-    intervalId = setInterval(() => updateQuantity(quantityInput, delta), 100); // Rapid increase or decrease
-};
-
 const handlePress = (delta) => {
     updateQuantity(quantityInput, delta); // Single update for normal press
-    holdTimeout = setTimeout(() => startRapidUpdate(delta), 1000); // Start rapid update after 1 second
+    holdTimeout = setTimeout(() => {
+        intervalId = setInterval(() => updateQuantity(quantityInput, delta), 100); // Start rapid updates
+    }, 1000); // Wait 1 second before starting rapid updates
 };
 
 const handleRelease = () => {
-    clearTimeout(holdTimeout); // Cancel rapid start
-    clearInterval(intervalId); // Stop rapid update
+    clearTimeout(holdTimeout); // Cancel rapid update start
+    clearInterval(intervalId); // Stop rapid updates
 };
 
 // Increase button
 const increaseButton = document.createElement('button');
 increaseButton.textContent = '+';
-increaseButton.addEventListener('mousedown', () => handlePress(1));
-increaseButton.addEventListener('mouseup', handleRelease);
-increaseButton.addEventListener('mouseleave', handleRelease);
+increaseButton.onmousedown = () => handlePress(1);
+increaseButton.onmouseup = increaseButton.onmouseleave = handleRelease;
 
 // Support for touch devices
-increaseButton.addEventListener('touchstart', (e) => {
+increaseButton.ontouchstart = (e) => {
     e.preventDefault(); // Prevent accidental double-tap zoom
     handlePress(1);
-});
-increaseButton.addEventListener('touchend', handleRelease);
+};
+increaseButton.ontouchend = handleRelease;
 
 // Decrease button
 const decreaseButton = document.createElement('button');
 decreaseButton.textContent = '-';
-decreaseButton.addEventListener('mousedown', () => handlePress(-1));
-decreaseButton.addEventListener('mouseup', handleRelease);
-decreaseButton.addEventListener('mouseleave', handleRelease);
+decreaseButton.onmousedown = () => handlePress(-1);
+decreaseButton.onmouseup = decreaseButton.onmouseleave = handleRelease;
 
 // Support for touch devices
-decreaseButton.addEventListener('touchstart', (e) => {
+decreaseButton.ontouchstart = (e) => {
     e.preventDefault(); // Prevent accidental double-tap zoom
     handlePress(-1);
-});
-decreaseButton.addEventListener('touchend', handleRelease);
+};
+decreaseButton.ontouchend = handleRelease;
 
 quantityDiv.appendChild(decreaseButton);
 quantityDiv.appendChild(quantityInput);
 quantityDiv.appendChild(increaseButton);
-
 
 // Add product to cart
 function addToCart(product, quantity) {
