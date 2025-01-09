@@ -506,6 +506,7 @@ function renderCategories() {
             productDetails.innerHTML = `<strong>${product.name}</strong><br>Price: ${product.price.toFixed(2)} ₪`;
             productDiv.appendChild(productDetails);
 
+            // Quantity input and control buttons
 // Quantity input and control buttons
 const quantityDiv = document.createElement('div');
 quantityDiv.classList.add('quantity-controls');
@@ -525,27 +526,42 @@ const updateQuantity = (input, delta) => {
 
 let intervalId = null;
 
+const startUpdating = (delta) => {
+    updateQuantity(quantityInput, delta); // Update once immediately
+    intervalId = setInterval(() => updateQuantity(quantityInput, delta), 100); // Adjust speed as needed
+};
+
+const stopUpdating = () => {
+    clearInterval(intervalId);
+};
+
 // Increase button
 const increaseButton = document.createElement('button');
 increaseButton.textContent = '+';
-increaseButton.onmousedown = () => {
-    updateQuantity(quantityInput, 1);
-    intervalId = setInterval(() => updateQuantity(quantityInput, 1), 200); // Adjust speed as needed
-};
-increaseButton.onmouseup = increaseButton.onmouseleave = () => {
-    clearInterval(intervalId);
-};
+increaseButton.addEventListener('mousedown', () => startUpdating(1));
+increaseButton.addEventListener('mouseup', stopUpdating);
+increaseButton.addEventListener('mouseleave', stopUpdating);
+
+// Support for touch devices
+increaseButton.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // Prevent accidental double-tap zoom
+    startUpdating(1);
+});
+increaseButton.addEventListener('touchend', stopUpdating);
 
 // Decrease button
 const decreaseButton = document.createElement('button');
 decreaseButton.textContent = '-';
-decreaseButton.onmousedown = () => {
-    updateQuantity(quantityInput, -1);
-    intervalId = setInterval(() => updateQuantity(quantityInput, -1), 200); // Adjust speed as needed
-};
-decreaseButton.onmouseup = decreaseButton.onmouseleave = () => {
-    clearInterval(intervalId);
-};
+decreaseButton.addEventListener('mousedown', () => startUpdating(-1));
+decreaseButton.addEventListener('mouseup', stopUpdating);
+decreaseButton.addEventListener('mouseleave', stopUpdating);
+
+// Support for touch devices
+decreaseButton.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // Prevent accidental double-tap zoom
+    startUpdating(-1);
+});
+decreaseButton.addEventListener('touchend', stopUpdating);
 
 quantityDiv.appendChild(decreaseButton);
 quantityDiv.appendChild(quantityInput);
@@ -794,7 +810,7 @@ hideCartButton.onclick = function() {
         let lastTouchEnd = 0;
         document.addEventListener('touchend', function (event) {
             let now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 50) { // 100ms هو الفاصل الزمني للنقر المزدوج
+            if (now - lastTouchEnd <= 100) { // 300ms هو الفاصل الزمني للنقر المزدوج
                 event.preventDefault();
             }
             lastTouchEnd = now;
