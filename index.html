@@ -528,7 +528,7 @@ let intervalId = null;
 
 const startUpdating = (delta) => {
     updateQuantity(quantityInput, delta); // Update once immediately
-    intervalId = setInterval(() => updateQuantity(quantityInput, delta), 100); // Adjust speed as needed
+    intervalId = setInterval(() => updateQuantity(quantityInput, delta), 300); // Adjust speed as needed
 };
 
 const stopUpdating = () => {
