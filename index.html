@@ -518,7 +518,7 @@ quantityInput.min = 1; // Minimum quantity is 1
 quantityInput.style.width = '50px';
 quantityInput.addEventListener('focus', () => quantityInput.select()); // Automatically select text when clicked
 
-const updateQuantity = (input, delta) => {
+const updateQuantityInput = (input, delta) => {
     const newValue = parseInt(input.value, 10) + delta;
     input.value = Math.max(newValue, parseInt(input.min, 10) || 1);
 };
@@ -527,9 +527,9 @@ let intervalId = null;
 let holdTimeout = null;
 
 const handlePress = (delta) => {
-    updateQuantity(quantityInput, delta); // Single update for normal press
+    updateQuantityInput(quantityInput, delta); // Single update for normal press
     holdTimeout = setTimeout(() => {
-        intervalId = setInterval(() => updateQuantity(quantityInput, delta), 100); // Start rapid updates
+        intervalId = setInterval(() => updateQuantityInput(quantityInput, delta), 100); // Start rapid updates
     }, 1000); // Wait 1 second before starting rapid updates
 };
 
@@ -582,7 +582,7 @@ function addToCart(product, quantity) {
 }
 
 // Update product quantity in cart (interactive)
-function updateQuantity(input, change) {
+function updateCartQuantity(input, change) {
     let newQuantity = parseInt(input.value) + change;
     if (newQuantity >= 1) { // Ensure quantity doesn't go below 1
         input.value = newQuantity;
@@ -601,7 +601,6 @@ function updateQuantity(input, change) {
         }
     }
 }
-
 // Handle changes to the quantity input directly (when the user modifies it)
 function handleQuantityChange(event) {
     const quantityInput = event.target;
