@@ -506,29 +506,50 @@ function renderCategories() {
             productDetails.innerHTML = `<strong>${product.name}</strong><br>Price: ${product.price.toFixed(2)} ₪`;
             productDiv.appendChild(productDetails);
 
-            // Quantity input and control buttons
-            const quantityDiv = document.createElement('div');
-            quantityDiv.classList.add('quantity-controls');
-            quantityDiv.style.display = 'none'; // Initially hidden
+// Quantity input and control buttons
+const quantityDiv = document.createElement('div');
+quantityDiv.classList.add('quantity-controls');
+quantityDiv.style.display = 'none'; // Initially hidden
 
-            const quantityInput = document.createElement('input');
-            quantityInput.type = 'number';
-            quantityInput.value = 1;
-            quantityInput.min = 1; // Minimum quantity is 1
-            quantityInput.style.width = '50px';
-            quantityInput.addEventListener('focus', () => quantityInput.select()); // Automatically select text when clicked
+const quantityInput = document.createElement('input');
+quantityInput.type = 'number';
+quantityInput.value = 1;
+quantityInput.min = 1; // Minimum quantity is 1
+quantityInput.style.width = '50px';
+quantityInput.addEventListener('focus', () => quantityInput.select()); // Automatically select text when clicked
 
-            const increaseButton = document.createElement('button');
-            increaseButton.textContent = '+';
-            increaseButton.onclick = () => updateQuantity(quantityInput, 1);
+const updateQuantity = (input, delta) => {
+    const newValue = parseInt(input.value, 10) + delta;
+    input.value = Math.max(newValue, parseInt(input.min, 10) || 1);
+};
 
-            const decreaseButton = document.createElement('button');
-            decreaseButton.textContent = '-';
-            decreaseButton.onclick = () => updateQuantity(quantityInput, -1);
+let intervalId = null;
 
-            quantityDiv.appendChild(decreaseButton);
-            quantityDiv.appendChild(quantityInput);
-            quantityDiv.appendChild(increaseButton);
+// Increase button
+const increaseButton = document.createElement('button');
+increaseButton.textContent = '+';
+increaseButton.onmousedown = () => {
+    updateQuantity(quantityInput, 1);
+    intervalId = setInterval(() => updateQuantity(quantityInput, 1), 200); // Adjust speed as needed
+};
+increaseButton.onmouseup = increaseButton.onmouseleave = () => {
+    clearInterval(intervalId);
+};
+
+// Decrease button
+const decreaseButton = document.createElement('button');
+decreaseButton.textContent = '-';
+decreaseButton.onmousedown = () => {
+    updateQuantity(quantityInput, -1);
+    intervalId = setInterval(() => updateQuantity(quantityInput, -1), 200); // Adjust speed as needed
+};
+decreaseButton.onmouseup = decreaseButton.onmouseleave = () => {
+    clearInterval(intervalId);
+};
+
+quantityDiv.appendChild(decreaseButton);
+quantityDiv.appendChild(quantityInput);
+quantityDiv.appendChild(increaseButton);
 
             // Add To Cart Button
             const addToCartButton = document.createElement('button');
@@ -762,114 +783,63 @@ hideCartButton.onclick = function() {
     showCartButton.style.display = 'inline-block';  // إظهار زر الإظهار
     hideCartButton.style.display = 'none';  // إخفاء زر الإخفاء
 };
-// منع التكبير عبر اللمس على الهاتف
-document.addEventListener(
-    "touchstart",
-    function (event) {
-        if (event.touches.length > 1) {
-            event.preventDefault();
-        }
-    },
-    { passive: false }
-);
+        // منع التكبير عبر اللمس على الهاتف
+        document.addEventListener('touchstart', function (event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
 
-// منع التكبير بالنقر مرتين
-let lastTouchEnd = 0;
-document.addEventListener(
-    "touchend",
-    function (event) {
-        let now = new Date().getTime();
-        if (now - lastTouchEnd <= 300) {
-            // 300ms هو الفاصل الزمني للنقر المزدوج
-            event.preventDefault();
-        }
-        lastTouchEnd = now;
-    },
-    { passive: false }
-);
-
-document.addEventListener("DOMContentLoaded", function () {
+        // منع التكبير بالنقر مرتين
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            let now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 50) { // 100ms هو الفاصل الزمني للنقر المزدوج
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, { passive: false });
+        document.addEventListener("DOMContentLoaded", function () {
     const quantityInput = document.querySelector(".quantity-controls input");
     const incrementButton = document.querySelector(".quantity-controls .increment");
     const decrementButton = document.querySelector(".quantity-controls .decrement");
 
-    let intervalId = null; // معرف setInterval
-    let isMouseDown = false; // لتتبع حالة الضغط المستمر
+    let intervalId = null;
 
     // زيادة العدد
     const increaseQuantity = () => {
-        quantityInput.value = parseInt(quantityInput.value || 0) + 1;
+        quantityInput.value = parseInt(quantityInput.value) + 1;
     };
 
     // تقليل العدد
     const decreaseQuantity = () => {
-        if (parseInt(quantityInput.value || 0) > 0) {
+        if (parseInt(quantityInput.value) > 0) {
             quantityInput.value = parseInt(quantityInput.value) - 1;
         }
     };
 
-    // عند الضغط المستمر على زر "+"
+    // عند الضغط المطول على زر "+"
     incrementButton.addEventListener("mousedown", () => {
-        isMouseDown = true;
         increaseQuantity(); // زيادة العدد فور الضغط
-        intervalId = setInterval(() => {
-            if (isMouseDown) increaseQuantity();
-        }, 100); // زيادة العدد باستمرار
+        intervalId = setInterval(increaseQuantity, 100); // زيادة العدد باستمرار
     });
 
-    // عند الضغط المستمر على زر "-"
+    // عند الضغط المطول على زر "-"
     decrementButton.addEventListener("mousedown", () => {
-        isMouseDown = true;
         decreaseQuantity(); // تقليل العدد فور الضغط
-        intervalId = setInterval(() => {
-            if (isMouseDown) decreaseQuantity();
-        }, 100); // تقليل العدد باستمرار
+        intervalId = setInterval(decreaseQuantity, 100); // تقليل العدد باستمرار
     });
 
-    // إيقاف العملية عند إفلات الزر (للحاسوب)
+    // إيقاف العملية عند إفلات الزر
     document.addEventListener("mouseup", () => {
-        isMouseDown = false;
         clearInterval(intervalId);
     });
 
-    // إيقاف العملية عند خروج المؤشر
+    // أيضًا عند خروج مؤشر الماوس
     document.addEventListener("mouseleave", () => {
-        isMouseDown = false;
-        clearInterval(intervalId);
-    });
-
-    // دعم الضغط المستمر على الأجهزة التي تعمل باللمس
-    incrementButton.addEventListener("touchstart", (event) => {
-        event.preventDefault(); // منع السلوك الافتراضي
-        isMouseDown = true;
-        increaseQuantity();
-        intervalId = setInterval(() => {
-            if (isMouseDown) increaseQuantity();
-        }, 100);
-    });
-
-    decrementButton.addEventListener("touchstart", (event) => {
-        event.preventDefault(); // منع السلوك الافتراضي
-        isMouseDown = true;
-        decreaseQuantity();
-        intervalId = setInterval(() => {
-            if (isMouseDown) decreaseQuantity();
-        }, 100);
-    });
-
-    // إيقاف العملية عند رفع الإصبع عن الشاشة
-    document.addEventListener("touchend", () => {
-        isMouseDown = false;
-        clearInterval(intervalId);
-    });
-
-    // إيقاف العملية عند خروج الإصبع من الشاشة
-    document.addEventListener("touchcancel", () => {
-        isMouseDown = false;
         clearInterval(intervalId);
     });
 });
-
 
 </script>
 </body>
