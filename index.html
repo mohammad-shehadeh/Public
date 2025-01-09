@@ -773,7 +773,7 @@ hideCartButton.onclick = function() {
         let lastTouchEnd = 0;
         document.addEventListener('touchend', function (event) {
             let now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) { // 300ms هو الفاصل الزمني للنقر المزدوج
+            if (now - lastTouchEnd <= 100) { // 300ms هو الفاصل الزمني للنقر المزدوج
                 event.preventDefault();
             }
             lastTouchEnd = now;
