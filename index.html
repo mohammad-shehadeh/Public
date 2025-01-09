@@ -777,6 +777,64 @@ hideCartButton.onclick = function() {
             }
             lastTouchEnd = now;
         }, { passive: false });
+
+        document.addEventListener("DOMContentLoaded", function () {
+    const quantityInput = document.querySelector(".quantity-controls input");
+    const incrementButton = document.querySelector(".quantity-controls .increment");
+    const decrementButton = document.querySelector(".quantity-controls .decrement");
+
+    let intervalId = null; // معرف setInterval
+    let isPressed = false; // لتتبع الضغط المطول
+
+    // زيادة العدد
+    const increaseQuantity = () => {
+        quantityInput.value = parseInt(quantityInput.value || 0) + 1;
+    };
+
+    // تقليل العدد
+    const decreaseQuantity = () => {
+        if (parseInt(quantityInput.value || 0) > 0) {
+            quantityInput.value = parseInt(quantityInput.value) - 1;
+        }
+    };
+
+    // بدء العملية (للضغط أو اللمس)
+    const startAction = (action) => {
+        action(); // تنفيذ العملية فور الضغط أو اللمس
+        isPressed = true;
+        intervalId = setInterval(() => {
+            if (isPressed) action();
+        }, 100); // تكرار العملية كل 100 مللي ثانية
+    };
+
+    // إيقاف العملية
+    const stopAction = () => {
+        isPressed = false;
+        clearInterval(intervalId);
+    };
+
+    // عند الضغط المطول على زر "+"
+    incrementButton.addEventListener("mousedown", () => startAction(increaseQuantity));
+    incrementButton.addEventListener("touchstart", (event) => {
+        event.preventDefault(); // منع السلوك الافتراضي (مثل التكبير)
+        startAction(increaseQuantity);
+    });
+
+    // عند الضغط المطول على زر "-"
+    decrementButton.addEventListener("mousedown", () => startAction(decreaseQuantity));
+    decrementButton.addEventListener("touchstart", (event) => {
+        event.preventDefault(); // منع السلوك الافتراضي
+        startAction(decreaseQuantity);
+    });
+
+    // إيقاف العملية عند إفلات الزر أو رفع الإصبع
+    document.addEventListener("mouseup", stopAction);
+    document.addEventListener("touchend", stopAction);
+
+    // إيقاف العملية عند خروج المؤشر أو إلغاء اللمس
+    document.addEventListener("mouseleave", stopAction);
+    document.addEventListener("touchcancel", stopAction);
+});
 </script>
 </body>
 </html>
