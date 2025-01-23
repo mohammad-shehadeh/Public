@@ -1,9 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shehadeh Center</title>
+    <title>أسعار الاجهزة أونلاين</title>
+    <meta name="description" content="أسعار الأجهزة">
+    <meta property="og:title" content="Shehadeh Center">
+    <meta property="og:description" content="اسعار الاجهزة اونلاين">
+    <meta property="og:image" content="https://img.freepik.com/premium-vector/vector-price-text-logo-design_867743-461.jpg">
+    <meta property="og:type" content="website">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,11 +19,31 @@
         }
 
         header {
-            background-color: #333;
-            color: white;
-            padding: 1.5em;
-            text-align: center;
-        }
+    background-color: #333;
+    color: white;
+    padding: 1.5em;
+    text-align: center;
+    font-size: 1em; /* تم تصغير الحجم إلى النصف */
+    position: relative;
+}
+
+header h1 {
+    animation: glow 1.5s ease-in-out infinite alternate;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff0000, 0 0 20px #ff0000, 0 0 25px #ff0000;
+}
+
+@keyframes glow {
+    0% {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff0000, 0 0 20px #ff0000, 0 0 25px #ff0000;
+    }
+    50% {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0000, 0 0 40px #ff0000, 0 0 50px #ff0000;
+    }
+    100% {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff0000, 0 0 20px #ff0000, 0 0 25px #ff0000;
+    }
+}
+
 
         h2 {
     font-size: 2em;  /* زيادة حجم الخط لجعل النص أكثر وضوحًا */
@@ -110,7 +136,7 @@
     border: 1px solid #ccc;
     padding: 1em;
     width: 80%;  /* عرض السلة بنسبة 90% من عرض الصفحة */
-    height: 100%;
+    height: 90%;
     overflow-y: auto;
     box-shadow: -2px 0px 10px rgba(0, 0, 0, 0.1);
     transition: top 0.3s ease-in-out;  /* إضافة انتقال لتحريك السلة */
@@ -186,18 +212,109 @@
     transform: translateY(0);  /* العودة إلى الوضع الطبيعي عند النقر */
 }
 
-      .popup {
-          display: none;
-          position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          background-color: white;
-          border: 1px solid #ccc;
-          padding: 1em;
-          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-          border-radius: 8px;
-      }
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: none; /* إزالة الحدود */
+    padding: 1.5em;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* تحسين الظل */
+    border-radius: 16px; /* زيادة الانحناء */
+    width: 400px; /* العرض الافتراضي */
+    max-width: 90%; /* للتأكد من عدم تخطي العرض على الهواتف */
+    font-family: 'Arial', sans-serif; /* خط أنيق */
+    animation: fadeIn 0.3s ease-in-out; /* تأثير الظهور */
+}
+
+.popup h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5em;
+    color: #333;
+    letter-spacing: normal; /* إلغاء أي تباعد إضافي بين الحروف */
+}
+
+
+.popup p {
+    font-size: 1rem; /* حجم النص العادي */
+    color: #555; /* لون هادئ للنص */
+    line-height: 1.5; /* تحسين التباعد بين السطور */
+}
+
+.popup .buttons {
+    margin-top: 1em;
+    display: flex;
+    justify-content: space-around; /* توزيع الأزرار بالتساوي */
+}
+
+.popup button {
+    background-color: #007bff; /* الأزرق */
+    color: #fff; /* النص الأبيض */
+    border: none; /* إزالة الحدود */
+    border-radius: 8px; /* انحناء الأزرار */
+    padding: 0.75em 1.5em; /* حجم أكبر قليلاً */
+    font-size: 1rem; /* حجم النص */
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* ظل للأزرار */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* تحسين الحركة */
+}
+
+.popup button:hover {
+    background-color: #0056b3; /* لون أغمق عند التمرير */
+    transform: scale(1.05); /* تكبير طفيف عند التمرير */
+}
+
+.popup button:active {
+    transform: scale(0.98); /* تصغير طفيف عند النقر */
+}
+
+@media (max-width: 768px) {
+    .popup {
+        width: 90%; /* عرض 90% للهواتف */
+        padding: 1em; /* تقليل الحواف */
+    }
+
+    .popup button {
+        font-size: 0.9rem; /* تصغير النص للأزرار قليلاً على الشاشات الصغيرة */
+        padding: 0.5em 1em; /* تقليل الحواف للأزرار */
+    }
+}
+
+
+/* إضافة زر إغلاق */
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #f44336; /* لون أحمر خفيف */
+    border: none;
+    color: #fff;
+    font-size: 1em;
+    padding: 0.5em;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease;
+}
+
+.popup-close:hover {
+    background: #d32f2f; /* لون أغمق عند التحويم */
+}
+
+/* تأثير الظهور */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -55%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
 
       .popup input {
           margin-bottom: 1em;
@@ -410,29 +527,275 @@
         background-color: #ff0000;  /* العودة إلى اللون الأول (أخضر) */
     }
 }
+input[type="number"] {
+    pointer-events: none; /* يمنع التفاعل مع العنصر */
+    background-color: #f0f0f0; /* لون خلفية اختياري لإظهار أنه غير نشط */
+    color: #000000; /* لون النص اختياري لإظهار أنه غير قابل للتعديل */
+}
+div {
+    font-size: 24px; /* تكبير حجم الخط */
+    font-weight: bold; /* جعل النص عريضًا */
+}
+
+/* تصميم زر الصعود والنزول */
+.scroll-btn {
+    position: fixed;
+    top: 50%; /* وضع الأزرار في منتصف الصفحة عموديًا */
+    left: 10px; /* وضع الأزرار في أقصى يسار الصفحة */
+    transform: translateY(-50%); /* لضمان توسيط الأزرار */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    z-index: 1000;
+}
+
+.scroll-btn button {
+    background-color: #007BFF; /* اللون الأزرق */
+    color: white;
+    border: none;
+    border-radius: 25px; /* تعديل الحدود لجعلها مستطيلة مع أطراف مستديرة */
+    width: 25px; /* العرض أقل */
+    height: 70px; /* الطول أكبر */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    font-size: 30px; /* تكبير حجم الأسهم */
+}
+
+.scroll-btn button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.scroll-btn button:active {
+    transform: scale(1);
+}
+
+/* استعلام الوسائط للهواتف المحمولة */
+@media screen and (max-width: 768px) {
+    .scroll-btn {
+        left: 5px; /* تقليل المسافة من الحافة اليسرى */
+        gap: 10px; /* تقليل المسافة بين الأزرار */
+    }
+
+    .scroll-btn button {
+        width: 5px; /* تقليل عرض الأزرار */
+        height: 60px; /* تقليل طول الأزرار */
+        font-size: 10px; /* تقليل حجم الأسهم */
+    }
+}
+/* تصميم عام لأزرار filter-buttons */
+#filter-buttons {
+    display: flex;
+    flex-wrap: wrap; /* لجعل الأزرار تلتف إذا كانت كثيرة */
+    gap: 10px; /* مسافة صغيرة بين الأزرار */
+    margin-bottom: 15px;
+    justify-content: center; /* لمحاذاة الأزرار في المنتصف */
+}
+
+/* تصميم كل زر */
+#filter-buttons .filter-btn {
+    padding: 6px 12px; /* حجم صغير ومضغوط */
+    font-size: 14px; /* حجم نص مناسب */
+    border: 1px solid #ddd; /* إطار خفيف */
+    border-radius: 20px; /* زوايا مستديرة */
+    background-color: #f9f9f9; /* خلفية فاتحة */
+    color: #333; /* لون النص */
+    cursor: pointer;
+    transition: all 0.3s ease; /* تأثير عند التمرير فوق الزر */
+}
+
+#filter-buttons .filter-btn:hover {
+    background-color: #007bff; /* لون خلفية عند التمرير */
+    color: white; /* لون النص عند التمرير */
+}
+
+#filter-buttons .filter-btn.active {
+    background-color: #007bff; /* لون مميز للزر النشط */
+    color: white; /* نص أبيض للزر النشط */
+    border-color: #0056b3; /* إطار أغمق للزر النشط */
+}
+
+/* تصميم مربع البحث */
+#search-box {
+    width: 100%; /* ليكون بعرض الحاوية */
+    max-width: 350px; /* أقصى عرض */
+    margin: 10px auto; /* محاذاة وسط الصفحة */
+    padding: 8px 12px; /* حشوة داخلية */
+    font-size: 16px; /* حجم النص */
+    border: 1px solid #ddd; /* إطار خفيف */
+    border-radius: 20px; /* زوايا مستديرة */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* ظل خفيف */
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+#search-box:focus {
+    border-color: #007bff; /* لون الإطار عند التركيز */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* ظل عند التركيز */
+}
+
+/* جعل الأزرار ومربع البحث ضمن حاوية واحدة */
+.search-filter-container {
+    display: flex;
+    flex-direction: column; /* ترتيب عمودي */
+    align-items: center; /* محاذاة الوسط */
+    gap: 10px; /* مسافة بين العناصر */
+}
+
+/* الحاوية الرئيسية */
+#login-section {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* العنوان */
+#login-section h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* حقول الإدخال */
+input[type="text"], input[type="tel"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+input[type="text"]:focus, input[type="tel"]:focus {
+    border-color: #5c99e6;
+    outline: none;
+}
+
+/* تضمين كافة الأكواد ضمن محدد فريد */
+#otp-section.custom-otp-style {
+    font-family: "Arial", sans-serif;
+    background: linear-gradient(135deg, #f7f7f7, #e3e3e3);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 400px;
+    margin: 50px auto;
+    border: 2px solid #ddd;
+}
+
+#otp-section.custom-otp-style h5 {
+    font-size: 14px;
+    color: #ff0000;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#otp-section.custom-otp-style h2 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 15px;
+    text-align: center;
+    letter-spacing: normal; /* إزالة أي تباعد بين الحروف */
+}
+
+
+#otp-section.custom-otp-style input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+#otp-section.custom-otp-style button {
+    display: block;
+    width: 100%;
+    background: linear-gradient(135deg, #0066cc, #003399);
+    color: #fff;
+    padding: 10px 0;
+    margin-top: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+#otp-section.custom-otp-style button:hover {
+    background: linear-gradient(135deg, #005bb5, #002f66);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+#otp-section.custom-otp-style button:active {
+    background: linear-gradient(135deg, #004080, #001f40);
+    transform: translateY(0);
+}
+
   </style>
 </head>
 <body>
-    <header>
-        <h1>Shehadeh Center</h1>
-        <button class="toggle-cart" id="show-cart-button">إظهار الفاتورة</button>
-    </header>
-    <main>
-        <div id="categories"></div>
-    </main>
-    <div class="cart" id="cart">
-        <h2>Cart</h2>
-        <div id="cart-items"></div>
-        <button class="share-button" id="checkout-button">ارسال طلبية</button>
-        <br>
-        <button class="toggle-cart" id="hide-cart-button">إخفاء الفاتورة</button>
+    <!-- قسم إدخال رمز التحقق -->
+    <div id="otp-section" class="custom-otp-style">
+        <h5>سجل دخولك لمرة واحدة للتحقق من أنك ضمن أصحاب المحلات وسوف يتم فتح الموقع بشكل دائمًا حيث يتطلب إدخال رمز تحقق لمرة واحدة فقط ولن يتم طلب الرمز أو التسجيل مرة أخرى.</h5>
+        <button onclick="sendWhatsAppMessage()">الحصول على رمز التحقق</button>
+        <h2>إدخال رمز التحقق</h2>
+        <input type="text" id="otp-code" placeholder="ادخل رمز التحقق" />
+        <button onclick="verifyOTP()">تسجيل الدخول</button>
     </div>
-    <div class="popup" id="popup">
-        <h2>Customer Details</h2>
-        <input type="text" id="customer-name" placeholder="Enter your name">
-        <input type="text" id="customer-phone" placeholder="Enter your phone number">
-        <button id="confirm-button">Confirm</button>
-        <button id="cancel-button">Cancel</button>
+    
+</body>
+
+
+    <!-- محتوى الموقع -->
+    <div id="content-section" style="display: none;">
+        <header>
+            <h1>Shehadeh Center</h1>
+            <div id="filter-buttons">
+                <!-- الأزرار سيتم إنشاؤها ديناميكيًا بواسطة JavaScript -->
+            </div>
+            <input type="text" id="search-box" placeholder="🔍 أبحث عن منتج" />
+            <div id="filter-buttons"></div>
+            <button class="toggle-cart" id="show-cart-button">إظهار الفاتورة</button>
+        </header>
+        
+        <main>
+            <div id="categories"></div>
+        </main>
+        <div class="cart" id="cart">
+            <div id="cart-items"></div>
+            <button class="share-button" id="checkout-button">ارسال طلبية</button>
+            <br>
+            <button class="toggle-cart" id="hide-cart-button">إخفاء الفاتورة</button>
+        </div>
+        <div class="popup" id="popup">
+            <h2>نموذج إتمام الطلب</h2>
+            <input type="text" id="customer-name" placeholder="ادخل اسمك">
+            <input type="text" id="customer-phone" placeholder="ادخل رقم هاتفك">
+            <button id="confirm-button">إرسال</button>
+            <button id="cancel-button">ألغاء</button>
+        </div>
+
+        <div class="scroll-btn">
+            <button id="scrollUp" title="الصعود للأعلى">↑</button>
+            <button id="scrollDown" title="النزول للأسفل">↓</button>
+        </div>
     </div>
 
     <script>
@@ -455,11 +818,9 @@ fetch('test.txt')
     .then(data => {
         const lines = data.split('\n');
         lines.forEach(line => {
-            // Splitting the line into components and assuming format: category/name/price/image_url
             const parts = line.split('/');
             if (parts.length >= 4) {
-                // Handle image URL with query parameters (e.g., "?x-oss-process=image...")
-                const imageUrl = parts.slice(3).join('/').trim(); // Combine all parts after the 3rd element
+                const imageUrl = parts.slice(3).join('/').trim();
                 products.push({
                     category: parts[0].trim(),
                     name: parts[1].trim(),
@@ -468,10 +829,13 @@ fetch('test.txt')
                 });
             }
         });
-        renderCategories();
-        renderCart();
+
+        renderCategories(); // عرض الفئات والمنتجات
+        createFilterButtons(); // إنشاء أزرار الفلترة
+        renderCart(); // عرض السلة
     })
     .catch(error => console.error('Error loading products:', error));
+
 
 function renderCategories() {
     categoriesContainer.innerHTML = ''; // Clear previous categories
@@ -502,7 +866,7 @@ function renderCategories() {
             productDiv.appendChild(productImage);
 
             const productDetails = document.createElement('div');
-            productDetails.innerHTML = `<strong>${product.name}</strong><br>Price: ${product.price.toFixed(2)} ₪`;
+            productDetails.innerHTML = `<strong>${product.name}</strong><br><br> ${product.price.toFixed(2)} ₪`;
             productDiv.appendChild(productDetails);
 
             // Quantity input and control buttons
@@ -522,7 +886,7 @@ function renderCategories() {
             increaseButton.onclick = () => updateQuantity(quantityInput, 1);
 
             const decreaseButton = document.createElement('button');
-            decreaseButton.textContent = '-';
+            decreaseButton.textContent = '−';
             decreaseButton.onclick = () => updateQuantity(quantityInput, -1);
 
             quantityDiv.appendChild(decreaseButton);
@@ -531,7 +895,7 @@ function renderCategories() {
 
             // Add To Cart Button
             const addToCartButton = document.createElement('button');
-            addToCartButton.textContent = 'Add to Cart';
+            addToCartButton.textContent = 'إضافة للسلة';
             addToCartButton.classList.add('add-to-cart-btn'); // Adding a class for better styling
             addToCartButton.onclick = () => {
                 addToCart(product, quantityInput.value);
@@ -555,6 +919,174 @@ function renderCategories() {
         categoriesContainer.appendChild(categoryDiv);
     });
 }
+function createFilterButtons() {
+    const filterButtonsContainer = document.getElementById('filter-buttons');
+    filterButtonsContainer.innerHTML = ''; // تفريغ المحتوى السابق
+
+    // إضافة زر "All" الافتراضي
+    const allButton = document.createElement('button');
+    allButton.textContent = 'ALL';
+    allButton.className = 'filter-btn active'; // الزر الافتراضي نشط
+    allButton.onclick = () => filterProducts('All');
+    filterButtonsContainer.appendChild(allButton);
+
+    // إنشاء أزرار للفئات
+    const categories = [...new Set(products.map(p => p.category))];
+    categories.forEach(category => {
+        const button = document.createElement('button');
+        button.textContent = category;
+        button.className = 'filter-btn';
+        button.onclick = () => filterProducts(category);
+        filterButtonsContainer.appendChild(button);
+    });
+}
+
+// فلترة المنتجات بناءً على الفئة
+function filterProducts(category) {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    filterButtons.forEach(btn => btn.classList.remove('active')); // إزالة التنشيط عن جميع الأزرار
+
+    const activeButton = Array.from(filterButtons).find(btn => btn.textContent === category);
+    if (activeButton) activeButton.classList.add('active'); // تنشيط الزر الحالي
+
+    const filteredProducts = category === 'All' ? products : products.filter(p => p.category === category);
+    renderFilteredProducts(filteredProducts);
+}
+
+// إعادة عرض المنتجات بناءً على الفلترة
+function renderFilteredProducts(filteredProducts) {
+    categoriesContainer.innerHTML = ''; // مسح المنتجات الحالية
+
+    const categories = [...new Set(filteredProducts.map(p => p.category))];
+    categories.forEach(category => {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'category';
+
+        const categoryTitle = document.createElement('h2');
+        categoryTitle.textContent = category;
+        categoryDiv.appendChild(categoryTitle);
+
+        const categoryProducts = filteredProducts.filter(p => p.category === category);
+        categoryProducts.forEach(product => {
+            const productDiv = document.createElement('div');
+            productDiv.className = 'product';
+
+            // إضافة الصورة و التفاصيل
+            const productImage = document.createElement('img');
+            productImage.src = product.image;
+            productImage.alt = product.name;
+
+            const productDetails = document.createElement('div');
+            productDetails.innerHTML = `<strong>${product.name}</strong><br><br> ${product.price.toFixed(2)} ₪`;
+            productDiv.appendChild(productImage);
+            productDiv.appendChild(productDetails);
+
+            // إضافة زر + و - وحقل الكمية
+            const quantityDiv = document.createElement('div');
+            quantityDiv.classList.add('quantity-controls');
+
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'number';
+            quantityInput.value = 1;
+            quantityInput.min = 1; // تعيين الحد الأدنى للعدد
+            quantityInput.style.width = '50px';
+            quantityInput.addEventListener('focus', () => quantityInput.select()); // لتحديد النص عند الضغط
+
+            const increaseButton = document.createElement('button');
+            increaseButton.textContent = '+';
+            increaseButton.onclick = () => updateQuantity(quantityInput, 1);
+
+            const decreaseButton = document.createElement('button');
+            decreaseButton.textContent = '−';
+            decreaseButton.onclick = () => updateQuantity(quantityInput, -1);
+
+            quantityDiv.appendChild(decreaseButton);
+            quantityDiv.appendChild(quantityInput);
+            quantityDiv.appendChild(increaseButton);
+
+            // إخفاء/إظهار عناصر الكمية بناءً على حالة المنتج في السلة
+            const existingProduct = cart.find(item => item.name === product.name);
+            if (existingProduct) {
+                // إذا كان المنتج موجودًا في السلة، إظهار الكمية
+                quantityDiv.style.display = 'block';
+                quantityInput.value = existingProduct.quantity; // تعيين الكمية من السلة
+            } else {
+                quantityDiv.style.display = 'none';
+            }
+
+            // إضافة زر "إضافة للسلة"
+            const addToCartButton = document.createElement('button');
+            addToCartButton.textContent = 'إضافة للسلة';
+            addToCartButton.classList.add('add-to-cart-btn');
+            addToCartButton.onclick = () => {
+                addToCart(product, 1);  // إضافة المنتج إلى السلة
+                quantityDiv.style.display = 'block';  // إظهار الكمية بعد إضافته
+                addToCartButton.style.display = 'none';  // إخفاء زر "إضافة للسلة"
+            };
+
+            // إذا كان المنتج موجودًا في السلة، إخفاء زر "إضافة للسلة"
+            if (existingProduct) {
+                addToCartButton.style.display = 'none';
+            }
+
+            productDiv.appendChild(addToCartButton);
+            productDiv.appendChild(quantityDiv);
+            categoryDiv.appendChild(productDiv);
+        });
+
+        categoriesContainer.appendChild(categoryDiv);
+    });
+}
+
+document.getElementById('search-box').addEventListener('input', (event) => {
+    const searchTerm = event.target.value.toLowerCase().trim(); // النص المدخل بعد تحويله إلى حروف صغيرة وإزالة الفراغات الزائدة
+    const cleanedSearchTerm = searchTerm.replace(/\s+/g, ''); // النص المدخل بدون فراغات
+
+    // تصفية المنتجات بناءً على وجود النص المدخل في الاسم أو الفئة
+    const filteredProducts = products.filter(product => {
+        const productName = product.name.toLowerCase().replace(/\s+/g, '');  // إزالة الفراغات من الاسم
+        const productCategory = product.category.toLowerCase().replace(/\s+/g, '');  // إزالة الفراغات من الفئة
+
+        // التحقق من أن النص المدخل موجود في الاسم أو الفئة
+        return productName.includes(cleanedSearchTerm) || 
+               productCategory.includes(cleanedSearchTerm);
+    });
+
+    // ترتيب النتائج بحيث تكون الأقرب في الأعلى
+    const sortedProducts = filteredProducts.sort((a, b) => {
+        const productNameA = a.name.toLowerCase().replace(/\s+/g, '');
+        const productNameB = b.name.toLowerCase().replace(/\s+/g, '');
+
+        // إذا كان المنتج يحتوي على النص بشكل كامل، نعطيه الأولوية
+        const aExactMatch = productNameA === cleanedSearchTerm ? 1 : 0;
+        const bExactMatch = productNameB === cleanedSearchTerm ? 1 : 0;
+
+        if (aExactMatch !== bExactMatch) {
+            return bExactMatch - aExactMatch; // الأولوية للتطابق الكامل
+        }
+
+        // إذا لم يكن هناك تطابق كامل، نرتب حسب قرب التطابق
+        const aIncludes = productNameA.includes(cleanedSearchTerm) ? 1 : 0;
+        const bIncludes = productNameB.includes(cleanedSearchTerm) ? 1 : 0;
+
+        if (aIncludes !== bIncludes) {
+            return bIncludes - aIncludes; // الأولوية للتطابق الجزئي
+        }
+
+        // إذا كان كلاهما يحتوي على النص، نرتب حسب الطول (الأقصر أقرب)
+        return productNameA.length - productNameB.length;
+    });
+
+    renderFilteredProducts(sortedProducts); // عرض المنتجات المصفاة مرتبة
+});
+
+// إعادة تهيئة حقل البحث عند فقدان التركيز
+document.getElementById('search-box').addEventListener('blur', () => {
+    document.getElementById('search-box').value = ''; // مسح النص في الحقل
+});
+
+
+
 
 // Add product to cart
 function addToCart(product, quantity) {
@@ -593,9 +1125,11 @@ function updateQuantity(input, change) {
 // Handle changes to the quantity input directly (when the user modifies it)
 function handleQuantityChange(event) {
     const quantityInput = event.target;
-    const newQuantity = parseInt(quantityInput.value);
+    let newQuantity = parseInt(quantityInput.value);
+
+    // إذا كانت القيمة المدخلة صحيحة
     if (newQuantity >= 1) {
-        const productName = quantityInput.closest('.product').querySelector('strong').textContent;
+        const productName = quantityInput.dataset.product; // استخدام dataset لتحديد المنتج
         const product = cart.find(item => item.name === productName);
         if (product) {
             product.quantity = newQuantity;
@@ -603,9 +1137,11 @@ function handleQuantityChange(event) {
             renderCart();
         }
     } else {
-        quantityInput.value = 1; // Ensure minimum value is 1
+        // إذا كانت القيمة المدخلة أقل من 1، إعادة ضبطها إلى 1
+        quantityInput.value = 1;
     }
 }
+
 
 // Remove product from cart
 function removeFromCart(productName) {
@@ -630,10 +1166,15 @@ function renderCart() {
 
         const itemDetails = document.createElement('div');
         itemDetails.innerHTML = `
-            <strong>${item.name}</strong><br>
-            Price: ${item.price.toFixed(2)} ₪<br>
-            Quantity: <input type="number" value="${item.quantity}" min="1" class="cart-quantity" data-product="${item.name}">
-        `;
+    <strong>${item.name}</strong><br>
+    Price: ${item.price.toFixed(2)} ₪<br>
+    Quantity: <input 
+        type="number" 
+        value="${item.quantity}" 
+        min="1" 
+        class="cart-quantity" 
+        data-product="${item.name}">
+`;
         cartItemDiv.appendChild(itemDetails);
 
         const removeButton = document.createElement('button');
@@ -653,18 +1194,19 @@ function renderCart() {
     // Event listener to handle quantity change in cart
     document.querySelectorAll('.cart-quantity').forEach(input => {
         input.addEventListener('change', (event) => {
-            handleQuantityChange(event);
-        });
+    handleQuantityChange(event);
+});
 
-        input.addEventListener('blur', (event) => {
-            handleQuantityChange(event);
-        });
+input.addEventListener('blur', (event) => {
+    handleQuantityChange(event);
+});
 
-        input.addEventListener('keypress', (event) => {
-            if (event.key === 'Enter') {
-                handleQuantityChange(event);
-            }
-        });
+input.addEventListener('keypress', (event) => {
+    if (event.key === 'Enter') {
+        handleQuantityChange(event);
+    }
+});
+
     });
 }
 
@@ -683,63 +1225,91 @@ confirmButton.onclick = () => {
         return;
     }
 
-// الحصول على التاريخ والوقت الحالي بتنسيق "يوم/شهر/سنة ساعة:دقيقةم اليوم"
-function formatDateTime() {
-    const now = new Date();
-    const day = now.getDate().toString().padStart(2, '0');
-    const month = (now.getMonth() + 1).toString().padStart(2, '0');
-    const year = now.getFullYear();
-    let hours = now.getHours();
-    const minutes = now.getMinutes().toString().padStart(2, '0');
-    const ampm = hours >= 12 ? 'م' : 'ص';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // الساعة 0 تصبح 12
-    const dayOfWeek = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"][now.getDay()];
-    return `${day}/${month}/${year} ${hours}:${minutes}${ampm} ${dayOfWeek}`;
-}
+    // الحصول على التاريخ والوقت الحالي بتنسيق "يوم/شهر/سنة ساعة:دقيقةم اليوم"
+    function formatDateTime() {
+        const now = new Date();
+        const day = now.getDate().toString().padStart(2, '0');
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const year = now.getFullYear();
+        let hours = now.getHours();
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const ampm = hours >= 12 ? 'م' : 'ص';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // الساعة 0 تصبح 12
+        const dayOfWeek = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"][now.getDay()];
+        return `${day}/${month}/${year} ${hours}:${minutes}${ampm} ${dayOfWeek}`;
+    }
 
-// رقم الفاتورة (ثابت دائمًا ####)
-const invoiceNumber = "####";
+    // رقم الفاتورة (ثابت دائمًا ####)
+    const invoiceNumber = "####";
 
-// إضافة الوقت والتاريخ الحالي إلى الفاتورة
-let text = `⭐️ Shehadeh Centre ⭐️\n`;
-text += `━━━━━━━━━━━━━━━\n`;
-text += `📅 التاريخ: ${formatDateTime()}\n`;
-text += `📄 رقم الفاتورة: ${invoiceNumber}\n`;
-text += `━━━━━━━━━━━━━━━\n\n`;
-text += `👤 اسم العميل: ${customerName}\n`;
-text += `☎️ رقم الهاتف: ${customerPhone}\n`;
-text += `━━━━━━━━━━━━━━━\n\n`;
-text += `🛒 تفاصيل المنتجات:\n`;
+    // إنشاء نص الفاتورة
+    let text = `⭐️ Shehadeh Centre ⭐️\n`;
+    text += `━━━━━━━━━━━━━━━\n`;
+    text += `📅 التاريخ: ${formatDateTime()}\n`;
+    text += `📄 رقم الفاتورة: ${invoiceNumber}\n`;
+    text += `━━━━━━━━━━━━━━━\n\n`;
+    text += `👤 اسم العميل: ${customerName}\n`;
+    text += `☎️ رقم الهاتف: ${customerPhone}\n`;
+    text += `━━━━━━━━━━━━━━━\n\n`;
+    text += `🛒 تفاصيل المنتجات:\n`;
 
-let total = 0;
-cart.forEach(item => {
-    text += `\t${item.name}: ${item.quantity}x${item.price.toFixed(2)}\n`;
-    text += `─ ─ ─ ─ ─ ─ ─ ─ ─ ─\n`;
-    total += item.price * item.quantity;
-});
+    let total = 0;
+    cart.forEach(item => {
+        text += `\t${item.name}: ${item.quantity}x${item.price.toFixed(2)}\n`;
+        text += `─ ─ ─ ─ ─ ─ ─ ─ ─ ─\n`;
+        total += item.price * item.quantity;
+    });
 
-text += `💰 الإجمالي: ${total.toFixed(2)}\n`;
-text += `━━━━━━━━━━━━━━━\n`;
-text += `شكرًا لاختياركم خدماتنا! 🙏`;
+    text += `💰 الإجمالي: ${total.toFixed(2)}\n`;
+    text += `━━━━━━━━━━━━━━━\n`;
+    text += `شكرًا لاختياركم خدماتنا! 🙏`;
 
-// رابط الواتساب مع الرقم المحدد
-const whatsappURL = `https://wa.me/972566888825?text=${encodeURIComponent(text)}`;
-window.open(whatsappURL, '_blank');
+    // رابط الواتساب مع الرقم المحدد
+    const whatsappURL = `https://wa.me/972566888825?text=${encodeURIComponent(text)}`;
+    window.open(whatsappURL, '_blank');
 
-// لتحديث السلة وحفظها
-cart = [];
-saveCart();
-renderCart();
+    // لتحديث السلة وحفظها
+    cart = [];
+    saveCart();
+    renderCart();
 
-// إغلاق النافذة المنبثقة
-popup.style.display = 'none';
+    // إعادة ضبط حالة المنتجات
+    resetProductStates();
 
+    // إغلاق النافذة المنبثقة
+    popup.style.display = 'none';
 };
 
+// دالة لإعادة ضبط حالة المنتجات
+function resetProductStates() {
+    const productsElements = document.querySelectorAll('.product'); // الحصول على جميع العناصر التي تمثل المنتجات
+    productsElements.forEach(productElement => {
+        // إعادة ضبط زر "إضافة للسلة"
+        const addToCartButton = productElement.querySelector('.add-to-cart-btn');
+        if (addToCartButton) {
+            addToCartButton.style.display = 'block'; // إظهار زر "إضافة للسلة"
+        }
+
+        // إعادة ضبط عناصر التحكم في الكمية
+        const quantityDiv = productElement.querySelector('.quantity-controls');
+        if (quantityDiv) {
+            quantityDiv.style.display = 'none'; // إخفاء عناصر التحكم في الكمية
+        }
+
+        // إعادة ضبط حقل الكمية إلى القيمة الافتراضية
+        const quantityInput = productElement.querySelector('input[type="number"]');
+        if (quantityInput) {
+            quantityInput.value = 1; // إعادة تعيين الكمية إلى 1
+        }
+    });
+}
+
+// Event handler for cancel button
 cancelButton.onclick = () => {
     popup.style.display = 'none';
 };
+
 // الحصول على الأزرار الخاصة بإظهار وإخفاء السلة
 const showCartButton = document.getElementById('show-cart-button');
 const hideCartButton = document.getElementById('hide-cart-button');
@@ -777,7 +1347,113 @@ hideCartButton.onclick = function() {
             }
             lastTouchEnd = now;
         }, { passive: false });
+
+            // وظيفة الصعود للأعلى
+            document.getElementById("scrollUp").addEventListener("click", () => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+
+        // وظيفة النزول للأسفل
+        document.getElementById("scrollDown").addEventListener("click", () => {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: "smooth"
+            });
+        });
  
+        // التحقق من حالة تسجيل الدخول عند تحميل الصفحة
+        document.addEventListener("DOMContentLoaded", function() {
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
+            if (isLoggedIn === "true") {
+                showContentSection();
+            }
+        });
+
+        // دالة إرسال رسالة واتساب للحصول على رمز التحقق
+        function sendWhatsAppMessage() {
+            const whatsappNumber = "+972569813333";
+            const message = `مرحبًا، أريد الحصول على رمز التحقق للدخول إلى الموقع.`;
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, "_blank");
+        }
+
+        // دالة لتوليد الكود بناءً على الوقت الحالي
+        function generateCode() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1; // شهر 0-11 لذا نضيف 1
+            const date = now.getDate();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+
+            // جمع الأجزاء لإنشاء رمز مميز يعتمد على التاريخ والوقت
+            const code = `${year}${month < 10 ? '0' + month : month}${date < 10 ? '0' + date : date}${hours < 10 ? '0' + hours : hours}${minutes < 10 ? '0' + minutes : minutes}`;
+
+            return code.slice(-6); // أخذ آخر 6 أرقام من التاريخ والوقت
+        }
+
+        // دالة التحقق من رمز التحقق المُدخل
+        function verifyOTP() {
+            // قراءة رمز التحقق الذي أدخله المستخدم
+            const userOTP = document.getElementById("otp-code").value.trim();
+
+            // توليد الكود الصحيح باستخدام نفس الدالة
+            const correctOTP = generateCode();
+
+            // التحقق مما إذا كان الكود المدخل يطابق الكود الصحيح
+            if (userOTP === correctOTP) {
+                alert("تم تسجيل الدخول بنجاح!");
+
+                // حفظ حالة تسجيل الدخول في التخزين المحلي
+                localStorage.setItem("isLoggedIn", "true");
+
+                // حفظ وقت تسجيل الدخول
+                localStorage.setItem("loginTimestamp", Date.now());
+
+                // عرض محتوى الموقع وإخفاء قسم إدخال رمز التحقق
+                showContentSection();
+            } else {
+                alert("رمز التحقق غير صحيح. يرجى المحاولة مرة أخرى.");
+            }
+        }
+
+        // دالة لإظهار محتوى الموقع وإخفاء قسم إدخال رمز التحقق
+        function showContentSection() {
+            document.getElementById("otp-section").style.display = "none";
+            document.getElementById("content-section").style.display = "block";
+        }
+
+        // تحقق من انتهاء صلاحية الجلسة (6 أشهر)
+        function checkSessionExpiry() {
+            const loginTimestamp = localStorage.getItem("loginTimestamp");
+            if (loginTimestamp) {
+                const sixMonthsInMilliseconds = 6 * 30 * 24 * 60 * 60 * 1000;
+                const currentTime = Date.now();
+                if (currentTime - loginTimestamp > sixMonthsInMilliseconds) {
+                    localStorage.removeItem("isLoggedIn");
+                    localStorage.removeItem("loginTimestamp");
+                    alert("انتهت صلاحية تسجيل الدخول. يرجى تسجيل الدخول مرة أخرى.");
+                    location.reload();
+                }
+            }
+        }
+
+        // عرض الكود على الشاشة (اختياري - للتأكد من مطابقته أثناء الاختبار)
+        window.onload = function() {
+            const codeElement = document.getElementById('verification-code');
+            codeElement.textContent = generateCode();
+            setInterval(() => {
+                codeElement.textContent = generateCode();
+            }, 120000); // تحديث الكود كل 120 ثانية
+        }
+
+        // استدعاء دالة التحقق من انتهاء الصلاحية عند تحميل الصفحة
+        checkSessionExpiry();
+
+
 </script>
 </body>
 </html>
