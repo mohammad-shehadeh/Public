@@ -29,9 +29,18 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        .category-btn {
-            transition: all 0.3s ease;
-            border-radius: 25px;
+        .quantity-controls {
+            display: none;
+        }
+
+        .in-cart .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .in-cart .add-to-cart-btn {
+            display: none;
         }
 
         .cart-item {
@@ -41,22 +50,6 @@
         @keyframes slideIn {
             from { opacity: 0; transform: translateX(50px); }
             to { opacity: 1; transform: translateX(0); }
-        }
-
-        #cartBadge {
-            transition: all 0.3s ease;
-        }
-
-        .whatsapp-btn {
-            background-color: #25D366;
-            color: white;
-            border-radius: 25px;
-            padding: 10px 20px;
-            transition: all 0.3s ease;
-        }
-
-        .whatsapp-btn:hover {
-            background-color: #128C7E;
         }
     </style>
 </head>
@@ -113,19 +106,18 @@
             <button class="btn btn-danger w-100 mb-2" onclick="clearCart()">
                 <i class="fas fa-trash"></i> إفراغ السلة
             </button>
-            <button class="whatsapp-btn w-100" onclick="shareOnWhatsApp()">
+            <button class="btn btn-success w-100" onclick="shareOnWhatsApp()">
                 <i class="fab fa-whatsapp"></i> مشاركة عبر واتساب
             </button>
         </div>
     </div>
 
     <script>
-        // بيانات التخزين
         let cart = JSON.parse(localStorage.getItem('store_cart')) || [];
         let products = [];
         let categories = new Set();
 
-        // جلب بيانات المنتجات من الملف
+        // تحسين معالجة الملف النصي
         async function loadProducts() {
             try {
                 const response = await fetch('test.txt');
@@ -133,17 +125,23 @@
                 const lines = data.split('\n').filter(line => line.trim() !== '');
 
                 products = lines.map(line => {
-                    const [company, name, price, image] = line.split('/');
+                    // استخدام regex لمعالجة ال URLs بشكل صحيح
+                    const parts = line.split(/(?<!https?:)\/(?!\/)/).slice(0,4);
+                    if(parts.length !== 4) {
+                        console.error('خطأ في تنسيق السطر:', line);
+                        return null;
+                    }
+                    
+                    const [company, name, price, image] = parts.map(p => p.trim());
                     return {
-                        company: company.trim(),
-                        name: name.trim(),
-                        price: parseFloat(price.trim()),
-                        image: image.trim(),
+                        company,
+                        name,
+                        price: parseFloat(price.replace(/[^0-9.]/g, '')),
+                        image: image.startsWith('http') ? image : `./${image}`,
                         id: Date.now() + Math.random()
                     };
-                });
+                }).filter(p => p !== null);
 
-                // استخراج التصنيفات
                 products.forEach(p => categories.add(p.company));
                 renderCategories();
                 renderProducts();
@@ -154,7 +152,6 @@
             }
         }
 
-        // عرض التصنيفات
         function renderCategories() {
             const container = document.getElementById('categories');
             container.innerHTML = `
@@ -173,48 +170,51 @@
             `;
         }
 
-        // تصفية المنتجات
-        function filterProducts(category) {
-            document.querySelectorAll('.category-btn').forEach(btn => 
-                btn.classList.remove('active'));
-            document.querySelector(`[data-category="${category}"]`).classList.add('active');
-            
-            const filtered = category === 'all' 
-                ? products 
-                : products.filter(p => p.company === category);
-            
-            renderProducts(filtered);
-        }
-
-        // عرض المنتجات
         function renderProducts(productsToShow = products) {
             const container = document.getElementById('productsContainer');
-            container.innerHTML = productsToShow.map(product => `
+            container.innerHTML = productsToShow.map(product => {
+                const inCart = cart.find(item => item.id === product.id);
+                return `
                 <div class="col-md-4 mb-4">
-                    <div class="product-card card h-100">
+                    <div class="product-card card h-100 ${inCart ? 'in-cart' : ''}">
                         <img src="${product.image}" 
                              class="card-img-top" 
                              alt="${product.name}"
-                             style="height: 250px; object-fit: cover;">
+                             style="height: 250px; object-fit: cover;"
+                             onerror="this.src='https://via.placeholder.com/300?text=صورة+غير+متوفرة'">
                         <div class="card-body">
                             <h5 class="card-title">${product.name}</h5>
                             <p class="text-muted">${product.company}</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="h5 text-primary">${product.price.toFixed(2)} ر.س</span>
-                                <button class="btn btn-primary" 
-                                        onclick="addToCart('${product.id}')">
+                                <div class="quantity-controls">
+                                    <button class="btn btn-sm btn-secondary" 
+                                            onclick="updateCartItem('${product.id}', -1)">
+                                        -
+                                    </button>
+                                    <span>${inCart ? inCart.quantity : 0}</span>
+                                    <button class="btn btn-sm btn-secondary" 
+                                            onclick="updateCartItem('${product.id}', 1)">
+                                        +
+                                    </button>
+                                </div>
+                                <button class="add-to-cart-btn btn btn-primary" 
+                                        onclick="addToCart('${product.id}')"
+                                        ${inCart ? 'style="display:none;"' : ''}>
                                     <i class="fas fa-cart-plus"></i> إضافة
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
-        // إدارة السلة
         function addToCart(productId) {
             const product = products.find(p => p.id === productId);
+            if(!product) return;
+
             const existing = cart.find(item => item.id === productId);
 
             if (existing) {
@@ -227,9 +227,20 @@
             showCartNotification(product.name);
         }
 
+        function updateCartItem(productId, delta) {
+            const item = cart.find(item => item.id === productId);
+            if(!item) return;
+
+            item.quantity += delta;
+            if(item.quantity < 1) cart = cart.filter(i => i.id !== productId);
+            
+            updateCart();
+        }
+
         function updateCart() {
             localStorage.setItem('store_cart', JSON.stringify(cart));
             renderCart();
+            renderProducts();
             updateCartBadge();
         }
 
@@ -240,22 +251,23 @@
                     <div class="d-flex align-items-center gap-3">
                         <img src="${item.image}" 
                              style="width: 60px; height: 60px; object-fit: cover;" 
-                             class="rounded">
+                             class="rounded"
+                             onerror="this.src='https://via.placeholder.com/60?text=صورة+غير+متوفرة'">
                         <div class="flex-grow-1">
                             <h6>${item.name}</h6>
                             <div class="d-flex align-items-center gap-2">
                                 <button class="btn btn-sm btn-secondary" 
-                                        onclick="updateQuantity(${index}, -1)">
+                                        onclick="updateCartItem('${item.id}', -1)">
                                     -
                                 </button>
                                 <span>${item.quantity}</span>
                                 <button class="btn btn-sm btn-secondary" 
-                                        onclick="updateQuantity(${index}, 1)">
+                                        onclick="updateCartItem('${item.id}', 1)">
                                     +
                                 </button>
                                 <span class="ms-2">${(item.price * item.quantity).toFixed(2)} ر.س</span>
                                 <button class="btn btn-danger btn-sm ms-auto" 
-                                        onclick="removeFromCart(${index})">
+                                        onclick="removeFromCart('${item.id}')">
                                     <i class="fas fa-times"></i>
                                 </button>
                             </div>
@@ -264,21 +276,13 @@
                 </div>
             `).join('');
 
-            document.getElementById('subtotal').textContent = 
-                cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2) + ' ر.س';
-            
-            document.getElementById('total').textContent = 
-                cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2) + ' ر.س';
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('subtotal').textContent = subtotal.toFixed(2) + ' ر.س';
+            document.getElementById('total').textContent = subtotal.toFixed(2) + ' ر.س';
         }
 
-        function updateQuantity(index, delta) {
-            cart[index].quantity += delta;
-            if (cart[index].quantity < 1) cart.splice(index, 1);
-            updateCart();
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
+        function removeFromCart(productId) {
+            cart = cart.filter(i => i.id !== productId);
             updateCart();
         }
 
@@ -287,7 +291,6 @@
             updateCart();
         }
 
-        // إشعار الإضافة للسلة
         function showCartNotification(productName) {
             const notification = document.createElement('div');
             notification.className = 'position-fixed bottom-0 end-0 m-3 p-3 bg-success text-white rounded';
@@ -299,27 +302,25 @@
             setTimeout(() => notification.remove(), 2000);
         }
 
-        // تحديث عدد العناصر في السلة
         function updateCartBadge() {
             const total = cart.reduce((sum, item) => sum + item.quantity, 0);
             document.getElementById('cartBadge').textContent = total;
         }
 
-        // مشاركة عبر واتساب
         function shareOnWhatsApp() {
             if (cart.length === 0) return alert('السلة فارغة');
             
-            const message = `فاتورة شراء من المتجر:\n\n${
-                cart.map(item => 
-                    `- ${item.name} (${item.quantity}x): ${(item.price * item.quantity).toFixed(2)} ر.س`
-                ).join('\n')
-            }\n\nالإجمالي: ${document.getElementById('total').textContent}`;
+            const itemsText = cart.map(item => 
+                `- ${item.name} (${item.quantity}x): ${(item.price * item.quantity).toFixed(2)} ر.س`
+            ).join('%0A');
 
-            const encodedMessage = encodeURIComponent(message);
-            window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
+            
+            const message = `فاتورة شراء من المتجر:%0A%0A${itemsText}%0A%0Aالإجمالي: ${total} ر.س`;
+            
+            window.open(`https://wa.me/?text=${message}`, '_blank');
         }
 
-        // بدء التحميل
         loadProducts();
     </script>
 
