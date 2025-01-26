@@ -277,42 +277,48 @@ function clearCart() {
     renderCart();
     renderProducts();
 }
-
 async function shareOnWhatsApp() {
     try {
-        // تحديد عنصر سلة المشتريات
-        const cartElement = document.getElementById('cartItems');
+        const cartElement = document.getElementById('cartOffcanvas'); // العنصر الذي يحتوي على السلة
 
         if (!cartElement || !cartElement.innerHTML.trim()) {
-            alert('سلة المشتريات فارغة. أضف منتجات أولاً!');
+            alert('سلة المشتريات فارغة. الرجاء إضافة منتجات أولاً!');
             return;
         }
 
-        // التقاط لقطة شاشة باستخدام html2canvas
+        // التقاط لقطة شاشة للسلة باستخدام html2canvas
         const canvas = await html2canvas(cartElement, {
             scale: 2, // لتحسين جودة الصورة
-            backgroundColor: '#fff', // لتحديد خلفية بيضاء بدلاً من شفافة
+            backgroundColor: '#fff', // لخلفية بيضاء
         });
 
-        // تحويل الصورة إلى رابط بيانات
+        // تحويل لقطة الشاشة إلى بيانات صورة
         const imageData = canvas.toDataURL('image/png');
 
-        // فتح WhatsApp مع صورة الفاتورة
-        const whatsappNumber = '+972569813333'; // رقم الواتساب (قم بتعديله)
-        const message = `هذه هي فاتورتك من متجرنا:`;
+        // إنشاء ملف PDF باستخدام jspdf
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF();
+
+        // إضافة الصورة إلى ملف PDF (عرض كامل الصفحة)
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = (canvas.height * pageWidth) / canvas.width; // الحفاظ على نسبة العرض إلى الارتفاع
+        pdf.addImage(imageData, 'PNG', 0, 0, pageWidth, pageHeight);
+
+        // حفظ ملف PDF أو مشاركته
+        const pdfBlob = pdf.output('blob'); // تحويل PDF إلى Blob
+        const pdfURL = URL.createObjectURL(pdfBlob);
+
+        // فتح واتساب مع رابط الفاتورة
+        const whatsappNumber = '1234567890'; // رقم الواتساب (عدله حسب الحاجة)
+        const message = `فاتورتك جاهزة! قم بتحميلها من الرابط التالي: ${pdfURL}`;
         const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
         window.open(whatsappLink, '_blank');
 
-        // عرض الصورة على الشاشة (للتجربة فقط)
-        const imgPreview = document.createElement('img');
-        imgPreview.src = imageData;
-        imgPreview.style.width = '100%';
-        imgPreview.style.marginTop = '20px';
-        document.body.appendChild(imgPreview);
-
+        // للتجربة فقط: تنزيل ملف PDF مباشرة
+        pdf.save('invoice.pdf');
     } catch (error) {
-        console.error('خطأ أثناء مشاركة الفاتورة:', error);
-        alert('حدث خطأ أثناء مشاركة الفاتورة. الرجاء المحاولة مجددًا!');
+        console.error('خطأ أثناء إنشاء الفاتورة:', error);
+        alert('حدث خطأ أثناء إنشاء الفاتورة. الرجاء المحاولة مجددًا!');
     }
 }
 
