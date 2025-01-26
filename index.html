@@ -447,6 +447,14 @@ ${index + 1}. ${item.name} ${item.company ? `: ${item.company}` : ''}
 }
 
 window.addEventListener('DOMContentLoaded', loadProducts);
+    // مثال باستخدام JavaScript خالص
+window.onload = function() {
+    const cardBody = document.querySelector(".card-body");
+    const companyHeader = document.createElement("div");
+    companyHeader.className = "company-header";
+    companyHeader.textContent = "اسم الشركة"; // أو ${product.company}
+    cardBody.insertBefore(companyHeader, cardBody.firstChild);
+};
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
