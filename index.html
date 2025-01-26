@@ -287,7 +287,6 @@ async function shareOnWhatsApp() {
         invoiceContent.style.backgroundColor = '#f8f9fa';
         invoiceContent.style.borderRadius = '12px';
         invoiceContent.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-        invoiceContent.style.width = '210mm'; // عرض مناسب لورقة A4
 
         // تنسيق التاريخ والوقت
         const now = new Date();
@@ -371,25 +370,12 @@ async function shareOnWhatsApp() {
 
         document.body.appendChild(invoiceContent);
         
-        const pdf = new jspdf.jsPDF({
-            orientation: 'portrait',
-            unit: 'mm',
-            format: 'a4',
-            putOnlyUsedFonts: true,
-            compress: true
-        });
-
-        await html2canvas(invoiceContent, {
-            scale: 0.7, // تقليل المقياس لالتقاط المحتوى كاملاً
-            useCORS: true,
-            scrollY: -window.scrollY
-        }).then(canvas => {
+        const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+        await html2canvas(invoiceContent).then(canvas => {
             const imgData = canvas.toDataURL('image/png');
-            const imgWidth = pdf.internal.pageSize.getWidth();
+            const imgWidth = 190;
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            
-            // إضافة المحتوى كصورة طويلة قابلة للتمرير
-            pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+            pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
         });
         
         document.body.removeChild(invoiceContent);
