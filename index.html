@@ -279,37 +279,40 @@ function clearCart() {
 }
 
 async function shareOnWhatsApp() {
-    if (store.cart.length === 0) {
-        alert('السلة فارغة');
-        return;
-    }
-
     try {
-        const cartElement = document.querySelector('#cartItems');
-        
-        // التقاط لقطة شاشة لسلة المشتريات
+        // تحديد عنصر سلة المشتريات
+        const cartElement = document.getElementById('cartItems');
+
+        if (!cartElement || !cartElement.innerHTML.trim()) {
+            alert('سلة المشتريات فارغة. أضف منتجات أولاً!');
+            return;
+        }
+
+        // التقاط لقطة شاشة باستخدام html2canvas
         const canvas = await html2canvas(cartElement, {
             scale: 2, // لتحسين جودة الصورة
-            backgroundColor: null // لتجنب الخلفية البيضاء
+            backgroundColor: '#fff', // لتحديد خلفية بيضاء بدلاً من شفافة
         });
 
-        // تحويل الصورة إلى رابط بيانات (Base64)
+        // تحويل الصورة إلى رابط بيانات
         const imageData = canvas.toDataURL('image/png');
 
-        // فتح WhatsApp مع الصورة
+        // فتح WhatsApp مع صورة الفاتورة
+        const whatsappNumber = '+972569813333'; // رقم الواتساب (قم بتعديله)
         const message = `هذه هي فاتورتك من متجرنا:`;
-        const link = `https://wa.me/${store.phoneNumber}?text=${encodeURIComponent(message)}`;
-        window.open(link, '_blank');
+        const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+        window.open(whatsappLink, '_blank');
 
-        // عرض الصورة أو السماح بتنزيلها (اختياري)
-        const imgElement = document.createElement('img');
-        imgElement.src = imageData;
-        imgElement.style.width = '100%';
-        document.body.appendChild(imgElement);
+        // عرض الصورة على الشاشة (للتجربة فقط)
+        const imgPreview = document.createElement('img');
+        imgPreview.src = imageData;
+        imgPreview.style.width = '100%';
+        imgPreview.style.marginTop = '20px';
+        document.body.appendChild(imgPreview);
 
     } catch (error) {
-        console.error('Error capturing screenshot:', error);
-        alert('حدث خطأ أثناء مشاركة الفاتورة!');
+        console.error('خطأ أثناء مشاركة الفاتورة:', error);
+        alert('حدث خطأ أثناء مشاركة الفاتورة. الرجاء المحاولة مجددًا!');
     }
 }
 
