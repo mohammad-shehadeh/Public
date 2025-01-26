@@ -317,11 +317,14 @@ function renderProducts(products = store.products) {
                          class="card-img-top" 
                          style="height: 200px; object-fit: contain;"
                          onerror="this.src='https://via.placeholder.com/200'">
-                    <div class="card-body">
-                        <h5 class="card-title">${product.name}</h5>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="h5 text-success">${product.price.toFixed(2)} <span class="currency">₪</span></span>
-                            ${inCart ? `
+                 <div class="card-body">
+    <!-- اسم الشركة المضاف -->
+    <div class="product-company mb-1">${product.company}</div>
+    
+    <h5 class="card-title">${product.name}</h5>
+    <div class="d-flex justify-content-between align-items-center">
+        <span class="h5 text-success">${product.price.toFixed(2)} <span class="currency">₪</span></span>
+        ${inCart ? `
                                 <div class="quantity-controls btn-group shadow">
                                     <button class="btn btn-sm btn-outline-secondary" 
                                             onclick="updateCart(${product.id}, -1)">-</button>
