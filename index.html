@@ -298,7 +298,7 @@ async function shareOnWhatsApp() {
         // إنشاء محتوى الفاتورة النصية
         let invoiceText = `
 📋 *فاتورة شراء* 📋
-🏬 ${store.name || "متجرنا"}
+🏬 ${store.name || "Shehadeh Center"}
 ══════════════════════
 
 📅 *التاريخ:* ${formattedDate}
@@ -307,8 +307,8 @@ async function shareOnWhatsApp() {
 
 📦 *المنتجات المطلوبة:*
 ${store.cart.map((item, index) => `
-${index + 1}. ${item.name} ${item.company ? `(الشركة: ${item.company})` : ''}
-   الكمية: ${item.quantity} ✖️ السعر: ${item.price.toFixed(2)} ₪
+${index + 1}. ${item.name} ${item.company ? `: ${item.company}` : ''}
+   الكمية: ${item.quantity} ❌ السعر: ${item.price.toFixed(2)} ₪
    الإجمالي: ${(item.price * item.quantity).toFixed(2)} ₪
    ${'▬'.repeat(25)}`).join('\n')}
 
@@ -316,13 +316,13 @@ ${index + 1}. ${item.name} ${item.company ? `(الشركة: ${item.company})` : 
 💰 *الإجمالي النهائي:* ${store.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)} ₪
 ══════════════════════
 
-📮 *معلومات المتجر:*
+📮 *Shehadeh Center:*
 📞 ${store.phoneNumber}
-🏠 ${store.address || 'العنوان غير محدد'}
+🏠 ${store.address || 'الخليل'}
 
-🆔 رقم الفاتورة: #${Math.floor(100000 + Math.random() * 900000)}
+🆔 رقم الفاتورة: ####
 
-شكراً لثقتكم بنا 🌟
+شكراً لكم 🌟
         `.trim();
 
         // ترميز الرسالة للواتساب
