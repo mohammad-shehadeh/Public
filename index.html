@@ -288,8 +288,8 @@ async function shareOnWhatsApp() {
 
         // التقاط لقطة شاشة للسلة باستخدام html2canvas
         const canvas = await html2canvas(cartElement, {
-            scale: 3, // تحسين جودة الصورة
-            backgroundColor: '#fff', // خلفية بيضاء لتجنب الشفافية
+            scale: 2, // لتحسين جودة الصورة
+            backgroundColor: '#fff', // لخلفية بيضاء
         });
 
         // تحويل لقطة الشاشة إلى بيانات صورة
@@ -297,28 +297,24 @@ async function shareOnWhatsApp() {
 
         // إنشاء ملف PDF باستخدام jspdf
         const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('p', 'mm', 'a4'); // إعداد الصفحة للطباعة (A4)
+        const pdf = new jsPDF();
 
-        // حساب حجم الصورة لجعلها ملائمة لصفحة A4
+        // إضافة الصورة إلى ملف PDF (عرض كامل الصفحة)
         const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        const imgWidth = canvas.width / 3; // تقليل الحجم (متوافق مع scale)
-        const imgHeight = (imgWidth * canvas.height) / canvas.width;
-
-        // إضافة الصورة بحيث تملأ صفحة واحدة كاملة
+        const pageHeight = (canvas.height * pageWidth) / canvas.width; // الحفاظ على نسبة العرض إلى الارتفاع
         pdf.addImage(imageData, 'PNG', 0, 0, pageWidth, pageHeight);
 
-        // تحويل PDF إلى Blob
+        // حفظ ملف PDF أو مشاركته
         const pdfBlob = pdf.output('blob'); // تحويل PDF إلى Blob
         const pdfURL = URL.createObjectURL(pdfBlob);
 
         // فتح واتساب مع رابط الفاتورة
-        const whatsappNumber = '+972569813333'; // رقم الواتساب (تعديله حسب الحاجة)
+        const whatsappNumber = '1234567890'; // رقم الواتساب (عدله حسب الحاجة)
         const message = `فاتورتك جاهزة! قم بتحميلها من الرابط التالي: ${pdfURL}`;
         const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
         window.open(whatsappLink, '_blank');
 
-        // حفظ ملف PDF للتأكد من النتيجة
+        // للتجربة فقط: تنزيل ملف PDF مباشرة
         pdf.save('invoice.pdf');
     } catch (error) {
         console.error('خطأ أثناء إنشاء الفاتورة:', error);
