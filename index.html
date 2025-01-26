@@ -282,30 +282,65 @@ async function shareOnWhatsApp() {
     if (store.cart.length === 0) return alert('السلة فارغة');
 
     try {
-        // إنشاء محتوى الفاتورة
         const invoiceContent = document.createElement('div');
         invoiceContent.style.padding = '20px';
+        invoiceContent.style.fontFamily = 'Arial, sans-serif';
+        
+        // تصميم الفاتورة
         invoiceContent.innerHTML = `
-            <h2 style="text-align: center; color: #2c3e50;">فاتورة شراء</h2>
-            ${store.cart.map(item => `
-                <div style="margin: 20px 0; border-bottom: 1px solid #ddd; padding-bottom: 10px;">
-                    <img src="${item.image}" 
-                         style="width: 100px; height: 100px; object-fit: contain;"
-                         onerror="this.src='https://via.placeholder.com/100'">
-                    <h3>${item.name}</h3>
-                    <p>الكمية: ${item.quantity}</p>
-                    <p>السعر: ${(item.price * item.quantity).toFixed(2)} ₪</p>
-                </div>
-            `).join('')}
-            <h2 style="text-align: right; margin-top: 20px;">
-                الإجمالي: ${store.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)} ₪
-            </h2>
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h1 style="color: #2c3e50;">فاتورة شراء</h1>
+                <p style="color: #666;">${new Date().toLocaleDateString('ar-EG')}</p>
+            </div>
+            
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+                <thead>
+                    <tr style="background: #f8f9fa;">
+                        <th style="padding: 12px; border: 1px solid #ddd;">صورة المنتج</th>
+                        <th style="padding: 12px; border: 1px solid #ddd;">اسم المنتج</th>
+                        <th style="padding: 12px; border: 1px solid #ddd;">الشركة</th>
+                        <th style="padding: 12px; border: 1px solid #ddd;">السعر</th>
+                        <th style="padding: 12px; border: 1px solid #ddd;">الكمية</th>
+                        <th style="padding: 12px; border: 1px solid #ddd;">الإجمالي</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${store.cart.map(item => `
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">
+                                <img src="${item.image}" 
+                                     style="width: 80px; height: 80px; object-fit: contain;"
+                                     onerror="this.src='https://via.placeholder.com/80'">
+                            </td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">${item.name}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">${item.company}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${item.price.toFixed(2)} ₪</td>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${item.quantity}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${(item.price * item.quantity).toFixed(2)} ₪</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            
+            <div style="text-align: left; margin-top: 20px;">
+                <h2 style="color: #2c3e50;">
+                    الإجمالي النهائي: 
+                    <span style="color: #e74c3c;">
+                        ${store.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)} ₪
+                    </span>
+                </h2>
+            </div>
+            
+            <div style="margin-top: 50px; text-align: center; color: #666;">
+                <p>شكراً لاختياركم متجرنا</p>
+                <p>للتواصل: ${store.phoneNumber}</p>
+            </div>
         `;
 
-        // إضافة العنصر إلى DOM لالتقاطه
+        // إضافة العنصر إلى DOM
         document.body.appendChild(invoiceContent);
-
-        // تحويل إلى PDF
+        
+        // إنشاء PDF
         const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
         await html2canvas(invoiceContent).then(canvas => {
             const imgData = canvas.toDataURL('image/png');
@@ -313,20 +348,20 @@ async function shareOnWhatsApp() {
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
             pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
         });
-
-        // حذف العنصر المؤقت
+        
+        // تنظيف DOM
         document.body.removeChild(invoiceContent);
-
+        
         // حفظ الملف
         pdf.save('invoice.pdf');
-
-        // فتح واتساب مع رسالة توضيحية
-        const message = "تم حفظ الفاتورة، يرجى إرسال الملف المرفق يدويًا.";
+        
+        // فتح واتساب
+        const message = "الفاتورة جاهزة، يرجى إرفاق الملف الموجود في التنزيلات.";
         window.open(`https://wa.me/${store.phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
 
     } catch (error) {
-        console.error('حدث خطأ في إنشاء الفاتورة:', error);
-        alert('تعذر إنشاء الفاتورة، يرجى المحاولة مرة أخرى.');
+        console.error('Error:', error);
+        alert('حدث خطأ في إنشاء الفاتورة!');
     }
 }
 
