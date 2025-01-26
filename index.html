@@ -308,15 +308,15 @@ async function shareOnWhatsApp() {
                     ${store.cart.map(item => `
                         <tr>
                             <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">
-                                <img src="${item.image}" 
+                                <img src="${item.image || 'https://via.placeholder.com/80'}" 
                                      style="width: 80px; height: 80px; object-fit: contain;"
                                      onerror="this.src='https://via.placeholder.com/80'">
                             </td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">${item.name}</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">${item.company}</td>
-                            <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${item.price.toFixed(2)} ₪</td>
-                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${item.quantity}</td>
-                            <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${(item.price * item.quantity).toFixed(2)} ₪</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">${item.name || 'غير متوفر'}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">${item.company || 'غير متوفر'}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${item.price ? item.price.toFixed(2) : '0.00'} ₪</td>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${item.quantity || 1}</td>
+                            <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${item.price ? (item.price * (item.quantity || 1)).toFixed(2) : '0.00'} ₪</td>
                         </tr>
                     `).join('')}
                 </tbody>
@@ -326,7 +326,7 @@ async function shareOnWhatsApp() {
                 <h2 style="color: #2c3e50;">
                     الإجمالي النهائي: 
                     <span style="color: #e74c3c;">
-                        ${store.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)} ₪
+                        ${store.cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0).toFixed(2)} ₪
                     </span>
                 </h2>
             </div>
@@ -364,6 +364,7 @@ async function shareOnWhatsApp() {
         alert('حدث خطأ في إنشاء الفاتورة!');
     }
 }
+
 
 window.addEventListener('DOMContentLoaded', loadProducts);
 </script>
