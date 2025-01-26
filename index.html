@@ -278,50 +278,121 @@ function clearCart() {
     renderProducts();
 }
 async function shareOnWhatsApp() {
+    if (store.cart.length === 0) return alert('السلة فارغة');
+
     try {
-        const cartElement = document.getElementById('cartOffcanvas'); // العنصر الذي يحتوي على السلة
+        const invoiceContent = document.createElement('div');
+        invoiceContent.style.width = '190mm'; // عرض مناسب لورقة A4
+        invoiceContent.style.minHeight = '277mm'; // ارتفاع مناسب لورقة A4
+        invoiceContent.style.padding = '20px';
+        invoiceContent.style.fontFamily = "'Segoe UI', Tahoma, sans-serif";
+        invoiceContent.style.backgroundColor = '#f8f9fa';
+        invoiceContent.style.boxSizing = 'border-box';
 
-        if (!cartElement || !cartElement.innerHTML.trim()) {
-            alert('سلة المشتريات فارغة. الرجاء إضافة منتجات أولاً!');
-            return;
-        }
-
-        // التقاط لقطة شاشة للسلة باستخدام html2canvas
-        const canvas = await html2canvas(cartElement, {
-            scale: 2, // لتحسين جودة الصورة
-            backgroundColor: '#fff', // لخلفية بيضاء
+        // توليد التاريخ والوقت
+        const now = new Date();
+        const formattedDate = now.toLocaleDateString('ar-EG', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+        const formattedTime = now.toLocaleTimeString('ar-EG', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
         });
 
-        // تحويل لقطة الشاشة إلى بيانات صورة
-        const imageData = canvas.toDataURL('image/png');
+        invoiceContent.innerHTML = `
+            <div style="text-align: center; margin-bottom: 20px; padding: 15px; background: #2c3e50; border-radius: 8px; color: white;">
+                <h1 style="margin: 0; font-weight: 300; font-size: 1.8em">فاتورة شراء</h1>
+                <div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px; font-size: 0.9em">
+                    <div style="background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 20px;">
+                        📅 ${formattedDate}
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 20px;">
+                        🕒 ${formattedTime}
+                    </div>
+                </div>
+            </div>
 
-        // إنشاء ملف PDF باستخدام jspdf
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF();
+            <div style="margin-bottom: 20px; display: grid; gap: 12px;">
+                ${store.cart.map((item, index) => `
+                    <div style="padding: 15px; background: white; border-radius: 8px; 
+                        box-shadow: 0 1px 4px rgba(0,0,0,0.05); border-left: 4px solid #${Math.floor(Math.random()*16777215).toString(16).padStart(6, '0')}">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div style="flex: 2;">
+                                <div style="color: #2c3e50; font-weight: 500; margin-bottom: 3px;">
+                                    ${index + 1}. ${item.name}
+                                </div>
+                                <div style="display: flex; gap: 10px; color: #7f8c8d; font-size: 0.85em;">
+                                    <span>🏷️ ${item.company}</span>
+                                    <span>✖️ ${item.quantity}</span>
+                                </div>
+                            </div>
+                            <div style="flex: 1; text-align: right;">
+                                <div style="color: #27ae60; font-weight: bold; font-size: 1em;">
+                                    ${(item.price * item.quantity).toFixed(2)} ₪
+                                </div>
+                                <div style="font-size: 0.85em; color: #95a5a6;">
+                                    ${item.price.toFixed(2)} ₪/وحدة
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
 
-        // إضافة الصورة إلى ملف PDF (عرض كامل الصفحة)
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = (canvas.height * pageWidth) / canvas.width; // الحفاظ على نسبة العرض إلى الارتفاع
-        pdf.addImage(imageData, 'PNG', 0, 0, pageWidth, pageHeight);
+            <div style="margin-top: auto; padding: 15px; background: white; border-radius: 8px; 
+                box-shadow: 0 1px 4px rgba(0,0,0,0.05); position: sticky; bottom: 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2 style="margin: 0; color: #2c3e50; font-size: 1.2em;">الإجمالي النهائي</h2>
+                    <div style="font-size: 1.4em; color: #e74c3c; font-weight: bold;">
+                        ${store.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)} ₪
+                    </div>
+                </div>
+            </div>
 
-        // حفظ ملف PDF أو مشاركته
-        const pdfBlob = pdf.output('blob'); // تحويل PDF إلى Blob
-        const pdfURL = URL.createObjectURL(pdfBlob);
+            <div style="margin-top: 20px; text-align: center; color: #7f8c8d; font-size: 0.85em; 
+                padding: 15px; border-top: 1px solid #ecf0f1;">
+                <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 10px;">
+                    <div>📞 ${store.phoneNumber}</div>
+                    <div>🏠 ${store.address || 'غير محدد'}</div>
+                </div>
+                <p style="margin: 5px 0; color: #3498db;">شكراً لاختياركم متجرنا</p>
+                <p style="margin: 5px 0;">رقم الفاتورة: #${Math.floor(100000 + Math.random() * 900000)}</p>
+            </div>
+        `;
 
-        // فتح واتساب مع رابط الفاتورة
-        const whatsappNumber = '1234567890'; // رقم الواتساب (عدله حسب الحاجة)
-        const message = `فاتورتك جاهزة! قم بتحميلها من الرابط التالي: ${pdfURL}`;
-        const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-        window.open(whatsappLink, '_blank');
-
-        // للتجربة فقط: تنزيل ملف PDF مباشرة
+        document.body.appendChild(invoiceContent);
+        
+        const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+        await html2canvas(invoiceContent, { scale: 0.8 }).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            
+            // حساب الأبعاد مع الهوامش
+            const margin = 5;
+            const width = pdfWidth - (margin * 2);
+            const height = (canvas.height * width) / canvas.width;
+            
+            // ضبط الصورة في منتصف الصفحة
+            const yPosition = (pdfHeight - height) / 2;
+            
+            pdf.addImage(imgData, 'PNG', margin, yPosition, width, height);
+        });
+        
+        document.body.removeChild(invoiceContent);
         pdf.save('invoice.pdf');
+        
+        const message = "الفاتورة جاهزة، يرجى إرفاق الملف الموجود في التنزيلات.";
+        window.open(`https://wa.me/${store.phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+
     } catch (error) {
-        console.error('خطأ أثناء إنشاء الفاتورة:', error);
-        alert('حدث خطأ أثناء إنشاء الفاتورة. الرجاء المحاولة مجددًا!');
+        console.error('Error:', error);
+        alert('حدث خطأ في إنشاء الفاتورة!');
     }
 }
-
 
 window.addEventListener('DOMContentLoaded', loadProducts);
 </script>
