@@ -153,15 +153,22 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
 <body>
-    <nav class="navbar navbar-dark bg-primary">
+    <!-- الهيدر -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-            <span class="navbar-brand">المتجر الإلكتروني</span>
-            <div class="text-white">
-                <i class="fas fa-shopping-cart" 
-                   data-bs-toggle="offcanvas" 
-                   data-bs-target="#cartOffcanvas"></i>
-                <span id="cartBadge" class="badge bg-danger">0</span>
-            </div>
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-store"></i>  Shehadeh Center
+            </a>
+            <div class="d-flex align-items-center">
+                <div class="position-relative me-3">
+                    <i class="fas fa-shopping-cart text-white fs-4" 
+                       data-bs-toggle="offcanvas" 
+                       data-bs-target="#cartOffcanvas"></i>
+                    <span id="cartBadge" 
+                          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        0
+                    </span>
+                </div>
         </div>
     </nav>
 
@@ -225,7 +232,7 @@ async function loadProducts() {
         initStore();
     } catch (error) {
         console.error('حدث خطأ:', error);
-        alert('تعذر تحميل المنتجات! تأكد من وجود ملف test.txt');
+        alert('تعذر تحميل المنتجات! يوجد مشكلة في السيرفرات');
     }
 }
 
