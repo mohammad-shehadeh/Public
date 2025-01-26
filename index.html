@@ -287,14 +287,21 @@ async function shareOnWhatsApp() {
         invoiceContent.style.backgroundColor = '#f8f9fa';
         invoiceContent.style.borderRadius = '12px';
         invoiceContent.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-        invoiceContent.style.width = '210mm'; // عرض مناسب للطباعة
+        invoiceContent.style.width = '210mm'; // عرض مناسب لورقة A4
+        invoiceContent.style.minHeight = '297mm'; // ارتفاع مناسب لورقة A4
+        invoiceContent.style.boxSizing = 'border-box';
 
+        // توليد التاريخ والوقت
         const now = new Date();
-        const formattedDate = now.toLocaleDateString('ar-EG');
-        const formattedTime = now.toLocaleTimeString('ar-EG', { 
-            hour: 'numeric', 
+        const formattedDate = now.toLocaleDateString('ar-EG', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+        const formattedTime = now.toLocaleTimeString('ar-EG', {
+            hour: 'numeric',
             minute: '2-digit',
-            hour12: true 
+            hour12: true
         });
 
         invoiceContent.innerHTML = `
@@ -370,29 +377,33 @@ async function shareOnWhatsApp() {
         const pdf = new jspdf.jsPDF({
             orientation: 'portrait',
             unit: 'mm',
-            format: 'a4'
+            format: 'a4',
+            putOnlyUsedFonts: true,
+            compress: true
         });
 
         await html2canvas(invoiceContent, {
             scale: 0.7,
-            scrollY: -window.scrollY,
-            useCORS: true
+            useCORS: true,
+            logging: true,
+            scrollY: -window.scrollY
         }).then(canvas => {
-            const imgData = canvas.toDataURL('image/png');
-            const imgWidth = 210; // mm
+            const imgData = canvas.toDataURL('image/png', 1.0);
+            const imgWidth = pdf.internal.pageSize.getWidth();
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
             
-            let heightLeft = imgHeight;
             let position = 0;
-
+            
+            // إضافة الصفحة الأولى
             pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-            heightLeft -= pdf.internal.pageSize.getHeight();
-
-            while (heightLeft >= 0) {
-                position = heightLeft - imgHeight;
+            
+            // إضافة صفحات إضافية إذا لزم الأمر
+            let remainingHeight = imgHeight - pdf.internal.pageSize.getHeight();
+            while (remainingHeight > 0) {
                 pdf.addPage();
+                position = -remainingHeight;
                 pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pdf.internal.pageSize.getHeight();
+                remainingHeight -= pdf.internal.pageSize.getHeight();
             }
         });
         
