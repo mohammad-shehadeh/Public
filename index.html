@@ -156,11 +156,12 @@
     <nav class="navbar navbar-dark bg-primary">
         <div class="container">
             <span class="navbar-brand">المتجر الإلكتروني</span>
-            <div class="text-white">
-                <i class="fas fa-shopping-cart" 
-                   data-bs-toggle="offcanvas" 
-                   data-bs-target="#cartOffcanvas"></i>
-                <span id="cartBadge" class="badge bg-danger">0</span>
+            <!-- زر سلة التسوق -->
+            <div class="cart-icon text-white" 
+                 data-bs-toggle="offcanvas" 
+                 data-bs-target="#cartOffcanvas">
+                <i class="fas fa-shopping-cart fa-lg"></i>
+                <span id="cartBadge" class="cart-badge">0</span>
             </div>
         </div>
     </nav>
@@ -204,9 +205,9 @@ const store = {
 
 let currentCategory = 'all';
 
-async function loadProducts() {
+async function loadProducts(fileName = 'test.txt') {
     try {
-        const response = await fetch('test.txt');
+        const response = await fetch(fileName);
         const data = await response.text();
         
         store.products = data.split('\n').filter(line => line.trim()).map((line, index) => {
@@ -221,11 +222,12 @@ async function loadProducts() {
             };
         });
 
+        store.categories.clear();
         store.products.forEach(p => store.categories.add(p.company));
         initStore();
     } catch (error) {
         console.error('حدث خطأ:', error);
-        alert('تعذر تحميل المنتجات! تأكد من وجود ملف test.txt');
+        alert('تعذر تحميل المنتجات! تأكد من وجود الملف المحدد.');
     }
 }
 
@@ -266,6 +268,70 @@ function filterProducts(category) {
     renderProducts(filteredProducts);
     event.target.classList.add('active');
 }
+
+function renderProducts(products = store.products) {
+    const container = document.getElementById('products');
+    container.innerHTML = products.map(product => {
+        if (product.type === 'header') {
+            return `<h3 class="col-12">${product.name}</h3>`;
+        }
+        return `
+            <div class="col-md-4 mb-4">
+                <div class="product card">
+                    <img src="${product.image}" class="card-img-top" alt="${product.name}">
+                    <div class="card-body">
+                        <h5 class="card-title">${product.name}</h5>
+                        <p class="card-text">السعر: ${product.price} ريال</p>
+                        <p class="card-text">الكمية المتاحة: ${product.stock}</p>
+                        <button class="btn btn-primary" onclick="addToCart(${product.id})">إضافة إلى السلة</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function addToCart(productId) {
+    const product = store.products.find(p => p.id === productId);
+    if (product && product.stock > 0) {
+        const cartItem = store.cart.find(item => item.id === productId);
+        if (cartItem) {
+            cartItem.quantity += 1;
+        } else {
+            store.cart.push({ ...product, quantity: 1 });
+        }
+        product.stock -= 1;
+        renderCart();
+    }
+}
+
+function renderCart() {
+    const cartItemsContainer = document.getElementById('cartItems');
+    const cartBadge = document.getElementById('cartBadge');
+    const cartTotal = document.getElementById('cartTotal');
+
+    cartItemsContainer.innerHTML = store.cart.map(item => `
+        <div class="cart-item mb-3">
+            <h6>${item.name}</h6>
+            <p>الكمية: ${item.quantity} - السعر: ${item.price * item.quantity} ريال</p>
+        </div>
+    `).join('');
+
+    const total = store.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    cartTotal.textContent = total;
+    cartBadge.textContent = store.cart.reduce((sum, item) => sum + item.quantity, 0);
+}
+
+function checkout() {
+    alert('تم إتمام الشراء بنجاح!');
+    store.cart = [];
+    renderCart();
+}
+
+// تحميل الملف الافتراضي عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+    loadProducts('test.txt');
+});
 
 function updateCart(productId, quantityChange) {
     const product = store.products.find(p => p.id === productId);
