@@ -8,51 +8,149 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #e74c3c;
+            --primary-color: #1a1a2e;
+            --secondary-color: #ffd700;
+            --accent-color: #0f3460;
+            --gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
         }
-
+    
         body {
-            background-color: #f8f9fa;
-            font-family: 'Tajawal', sans-serif;
+            background: #f9f9f9;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            line-height: 1.8;
         }
-
-        .product-card {
-            transition: transform 0.3s;
-            border: 1px solid #eee;
-            border-radius: 10px;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .category-btn.active {
-            background-color: var(--primary-color) !important;
-            color: white !important;
-        }
-
-        .cart-item {
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .currency {
-            font-family: Arial, sans-serif;
-        }
-
+    
         .company-header {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
+            background: var(--gradient);
+            color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .company-header:before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -30px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,215,0,0.1);
+            border-radius: 50%;
+        }
+    
+        .product-card {
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            background: white;
+            position: relative;
+        }
+    
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+    
+        .product-image {
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s;
+            border-radius: 15px 15px 0 0;
+        }
+    
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+    
+        .category-btn {
+            border: 2px solid var(--accent-color);
+            border-radius: 25px;
+            transition: all 0.3s;
+            font-weight: 700;
+            margin: 5px;
+        }
+    
+        .category-btn.active {
+            background: var(--gradient) !important;
+            color: white !important;
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+        }
+    
+        .price-tag {
+            background: var(--gradient);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(26,26,46,0.15);
+        }
+    
+        .cart-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+    
+        .arabic-pattern {
+            position: absolute;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+    
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+    
+        .featured-product {
+            animation: float 4s ease-in-out infinite;
+        }
+    
+        .section-title {
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+    
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 50%;
+            transform: translateX(50%);
+            width: 100px;
+            height: 3px;
+            background: var(--secondary-color);
+        }
+    
+        .product-details {
+            background: linear-gradient(45deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         }
     </style>
+    
+    <!-- أضف هذه الروابط في head -->
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
 <body>
     <nav class="navbar navbar-dark bg-primary">
@@ -308,7 +406,7 @@ async function shareOnWhatsApp() {
 📦 *المنتجات المطلوبة:*
 ${store.cart.map((item, index) => `
 ${index + 1}. ${item.name} ${item.company ? `: ${item.company}` : ''}
-   الكمية: ${item.quantity} ❌ السعر: ${item.price.toFixed(2)} ₪
+   الكمية: ${item.quantity} X السعر: ${item.price.toFixed(2)} ₪
    الإجمالي: ${(item.price * item.quantity).toFixed(2)} ₪
    ${'▬'.repeat(25)}`).join('\n')}
 
