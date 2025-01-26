@@ -279,89 +279,37 @@ function clearCart() {
 }
 
 async function shareOnWhatsApp() {
-    if (store.cart.length === 0) return alert('السلة فارغة');
+    if (store.cart.length === 0) {
+        alert('السلة فارغة');
+        return;
+    }
 
     try {
-        const invoiceContent = document.createElement('div');
-        invoiceContent.style.padding = '20px';
-        invoiceContent.style.fontFamily = 'Arial, sans-serif';
+        const cartElement = document.querySelector('#cartItems');
         
-        // تصميم الفاتورة
-        invoiceContent.innerHTML = `
-            <div style="text-align: center; margin-bottom: 30px;">
-                <h1 style="color: #2c3e50;">فاتورة شراء</h1>
-                <p style="color: #666;">${new Date().toLocaleDateString('ar-EG')}</p>
-            </div>
-            
-            <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
-                <thead>
-                    <tr style="background: #f8f9fa;">
-                        <th style="padding: 12px; border: 1px solid #ddd;">صورة المنتج</th>
-                        <th style="padding: 12px; border: 1px solid #ddd;">اسم المنتج</th>
-                        <th style="padding: 12px; border: 1px solid #ddd;">الشركة</th>
-                        <th style="padding: 12px; border: 1px solid #ddd;">السعر</th>
-                        <th style="padding: 12px; border: 1px solid #ddd;">الكمية</th>
-                        <th style="padding: 12px; border: 1px solid #ddd;">الإجمالي</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${store.cart.map(item => `
-                        <tr>
-                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">
-                                <img src="${item.image || 'https://via.placeholder.com/80'}" 
-                                     style="width: 80px; height: 80px; object-fit: contain;"
-                                     onerror="this.src='https://via.placeholder.com/80'">
-                            </td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">${item.name || 'غير متوفر'}</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">${item.company || 'غير متوفر'}</td>
-                            <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${item.price ? item.price.toFixed(2) : '0.00'} ₪</td>
-                            <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${item.quantity || 1}</td>
-                            <td style="padding: 10px; border: 1px solid #ddd; text-align: right;">${item.price ? (item.price * (item.quantity || 1)).toFixed(2) : '0.00'} ₪</td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-            
-            <div style="text-align: left; margin-top: 20px;">
-                <h2 style="color: #2c3e50;">
-                    الإجمالي النهائي: 
-                    <span style="color: #e74c3c;">
-                        ${store.cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0).toFixed(2)} ₪
-                    </span>
-                </h2>
-            </div>
-            
-            <div style="margin-top: 50px; text-align: center; color: #666;">
-                <p>شكراً لاختياركم متجرنا</p>
-                <p>للتواصل: ${store.phoneNumber}</p>
-            </div>
-        `;
-
-        // إضافة العنصر إلى DOM
-        document.body.appendChild(invoiceContent);
-        
-        // إنشاء PDF
-        const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
-        await html2canvas(invoiceContent).then(canvas => {
-            const imgData = canvas.toDataURL('image/png');
-            const imgWidth = 190;
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+        // التقاط لقطة شاشة لسلة المشتريات
+        const canvas = await html2canvas(cartElement, {
+            scale: 2, // لتحسين جودة الصورة
+            backgroundColor: null // لتجنب الخلفية البيضاء
         });
-        
-        // تنظيف DOM
-        document.body.removeChild(invoiceContent);
-        
-        // حفظ الملف
-        pdf.save('invoice.pdf');
-        
-        // فتح واتساب
-        const message = "الفاتورة جاهزة، يرجى إرفاق الملف الموجود في التنزيلات.";
-        window.open(`https://wa.me/${store.phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+
+        // تحويل الصورة إلى رابط بيانات (Base64)
+        const imageData = canvas.toDataURL('image/png');
+
+        // فتح WhatsApp مع الصورة
+        const message = `هذه هي فاتورتك من متجرنا:`;
+        const link = `https://wa.me/${store.phoneNumber}?text=${encodeURIComponent(message)}`;
+        window.open(link, '_blank');
+
+        // عرض الصورة أو السماح بتنزيلها (اختياري)
+        const imgElement = document.createElement('img');
+        imgElement.src = imageData;
+        imgElement.style.width = '100%';
+        document.body.appendChild(imgElement);
 
     } catch (error) {
-        console.error('Error:', error);
-        alert('حدث خطأ في إنشاء الفاتورة!');
+        console.error('Error capturing screenshot:', error);
+        alert('حدث خطأ أثناء مشاركة الفاتورة!');
     }
 }
 
