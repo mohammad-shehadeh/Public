@@ -380,16 +380,15 @@ async function shareOnWhatsApp() {
         });
 
         await html2canvas(invoiceContent, {
-            scale: 0.5, // تقليل مقياس الصورة لاحتواء المحتوى الطويل
+            scale: 0.7, // تقليل المقياس لالتقاط المحتوى كاملاً
             useCORS: true,
-            logging: true,
             scrollY: -window.scrollY
         }).then(canvas => {
-            const imgData = canvas.toDataURL('image/png', 1.0);
+            const imgData = canvas.toDataURL('image/png');
             const imgWidth = pdf.internal.pageSize.getWidth();
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
             
-            // إضافة محتوى كامل في صفحة واحدة مع إمكانية التمرير
+            // إضافة المحتوى كصورة طويلة قابلة للتمرير
             pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
         });
         
