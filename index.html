@@ -227,18 +227,31 @@
             </div>
         </div>
     </nav>
-    <input type="text" id="search-box" placeholder="🔍 أبحث عن منتج" />
-    <div id="filter-buttons"></div>
 
     <div class="container mt-4">
+        <!-- قسم البحث -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="input-group">
+                    <input type="text" id="search-box" class="form-control" placeholder="ابحث عن منتج..." aria-label="ابحث عن منتج">
+                    <span class="input-group-text">
+                        <i class="bi bi-search"></i> <!-- أيقونة البحث -->
+                    </span>
+                </div>
+            </div>
+        </div>
+    
+        <!-- قسم التصنيفات -->
         <div class="row mb-4">
             <div class="col-12">
                 <div id="categories" class="d-flex flex-wrap gap-3"></div>
             </div>
         </div>
+    
+        <!-- قسم عرض المنتجات -->
         <div class="row g-4 row-cols-1 row-cols-md-3 row-cols-lg-4" id="productsContainer"></div>
     </div>
-    
+        
     <!-- سلة المشتريات -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas">
         <div class="offcanvas-header">
