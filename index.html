@@ -416,8 +416,36 @@ function renderCart() {
 
 // وظيفة لحذف عنصر من العربة
 function removeItem(itemId) {
+    // إعادة كمية المنتج في الكتالوج إلى صفر
+    const catalogItem = store.catalog.find(item => item.id === itemId);
+    if (catalogItem) {
+        catalogItem.quantity = 0; // إعادة الكمية إلى صفر
+    }
+
+    // إزالة العنصر من العربة
     store.cart = store.cart.filter(item => item.id !== itemId);
-    renderCart();
+
+    // تحديث العرض
+    renderCatalog(); // لإعادة عرض الكتالوج
+    renderCart(); // لإعادة عرض السلة
+}
+
+// تحديث الكتالوج (هذه دالة افتراضية يجب أن تكون لديك)
+function renderCatalog() {
+    const catalogContainer = document.getElementById('catalogItems');
+    catalogContainer.innerHTML = store.catalog.map(item => `
+        <div class="catalog-item mb-3 p-2 border-bottom">
+            <img src="${item.image}" 
+                 style="width: 60px; height: 60px; object-fit: contain;" 
+                 class="rounded">
+            <h6>${item.name}</h6>
+            <span>${item.price} ₪</span>
+            <button class="btn btn-sm btn-primary" 
+                    onclick="addToCart(${item.id})">
+                أضف إلى السلة
+            </button>
+        </div>
+    `).join('');
 }
 
 
