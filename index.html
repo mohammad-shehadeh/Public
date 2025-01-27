@@ -379,8 +379,6 @@ function renderProducts(products = store.products) {
 
 function renderCart() {
     const container = document.getElementById('cartItems');
-    
-    // إصلاح مشكلة عرض العناصر
     container.innerHTML = store.cart.map(item => `
         <div class="cart-item mb-3 p-2 border-bottom">
             <div class="d-flex align-items-center gap-3">
@@ -388,47 +386,40 @@ function renderCart() {
                      style="width: 60px; height: 60px; object-fit: contain;" 
                      class="rounded">
                 <div class="flex-grow-1">
-                    <h6 class="mb-1">${item.name}</h6>
+                    <h6>${item.name}</h6>
                     <div class="d-flex align-items-center gap-2">
                         <button class="btn btn-sm btn-outline-secondary" 
                                 onclick="updateCart(${item.id}, -1)">-</button>
-                        <span class="px-2">${item.quantity}</span>
+                        <span>${item.quantity}</span>
                         <button class="btn btn-sm btn-outline-secondary" 
-                                onclick="updateCart(${item.id}, +1)">+</button>
-                        <span class="ms-2 fw-bold">${(item.price * item.quantity).toFixed(2)} ₪</span>
+                                onclick="updateCart(${item.id}, 1)">+</button>
+                        <span class="ms-2">${(item.price * item.quantity).toFixed(2)} ₪</span>
+                        <button class="btn btn-sm btn-danger ms-3" 
+                                onclick="removeItem(${item.id})">X</button>
                     </div>
                 </div>
             </div>
         </div>
     `).join('');
 
-    // إصلاح مشكلة حساب الإجمالي
+    // حساب الإجمالي
     const total = store.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    
-    // إصلاح تحديث العناصر
     document.getElementById('total').textContent = total.toFixed(2) + ' ₪';
     document.getElementById('cartBadge').textContent = store.cart.reduce((sum, item) => sum + item.quantity, 0);
     
-    // إضافة تحديث للعرض المسبق إذا كان موجودًا
-    if(document.getElementById('totalPreview')) {
-        document.getElementById('totalPreview').textContent = total.toFixed(2) + ' ₪';
+    // تحديث عرض الإجمالي في العنصر المضاف
+    const totalPreview = document.getElementById('totalPreview');
+    if (totalPreview) {
+        totalPreview.textContent = total.toFixed(2) + ' ₪';
     }
 }
 
-// دالة التحديث المعدلة
-function updateCart(productId, change) {
-    const itemIndex = store.cart.findIndex(item => item.id === productId);
-    
-    if(itemIndex > -1) {
-        store.cart[itemIndex].quantity += change;
-        
-        if(store.cart[itemIndex].quantity < 1) {
-            store.cart.splice(itemIndex, 1);
-        }
-    }
-    
+// وظيفة لحذف عنصر من العربة
+function removeItem(itemId) {
+    store.cart = store.cart.filter(item => item.id !== itemId);
     renderCart();
 }
+
 
 function saveCart() {
     localStorage.setItem('cart', JSON.stringify(store.cart));
