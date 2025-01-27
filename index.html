@@ -166,6 +166,32 @@
     .currency {
         font-family: Arial, sans-serif;
     }
+    /* تصميم مربع البحث */
+#search-box {
+    width: 100%; /* ليكون بعرض الحاوية */
+    max-width: 350px; /* أقصى عرض */
+    margin: 10px auto; /* محاذاة وسط الصفحة */
+    padding: 8px 12px; /* حشوة داخلية */
+    font-size: 16px; /* حجم النص */
+    border: 1px solid #ddd; /* إطار خفيف */
+    border-radius: 20px; /* زوايا مستديرة */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* ظل خفيف */
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+#search-box:focus {
+    border-color: #007bff; /* لون الإطار عند التركيز */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* ظل عند التركيز */
+}
+
+/* جعل الأزرار ومربع البحث ضمن حاوية واحدة */
+.search-filter-container {
+    display: flex;
+    flex-direction: column; /* ترتيب عمودي */
+    align-items: center; /* محاذاة الوسط */
+    gap: 10px; /* مسافة بين العناصر */
+}
     </style>
     
     <!-- أضف هذه الروابط في head -->
@@ -201,6 +227,8 @@
             </div>
         </div>
     </nav>
+    <input type="text" id="search-box" placeholder="🔍 أبحث عن منتج" />
+    <div id="filter-buttons"></div>
 
     <div class="container mt-4">
         <div class="row mb-4">
@@ -376,6 +404,52 @@ function renderProducts(products = store.products) {
         }
     });
 }
+document.getElementById('search-box').addEventListener('input', (event) => {
+    const searchTerm = event.target.value.toLowerCase().trim(); // النص المدخل بعد تحويله إلى حروف صغيرة وإزالة الفراغات الزائدة
+    const cleanedSearchTerm = searchTerm.replace(/\s+/g, ''); // النص المدخل بدون فراغات
+
+    // تصفية المنتجات بناءً على وجود النص المدخل في الاسم أو الفئة
+    const filteredProducts = products.filter(product => {
+        const productName = product.name.toLowerCase().replace(/\s+/g, '');  // إزالة الفراغات من الاسم
+        const productCategory = product.category.toLowerCase().replace(/\s+/g, '');  // إزالة الفراغات من الفئة
+
+        // التحقق من أن النص المدخل موجود في الاسم أو الفئة
+        return productName.includes(cleanedSearchTerm) || 
+               productCategory.includes(cleanedSearchTerm);
+    });
+
+    // ترتيب النتائج بحيث تكون الأقرب في الأعلى
+    const sortedProducts = filteredProducts.sort((a, b) => {
+        const productNameA = a.name.toLowerCase().replace(/\s+/g, '');
+        const productNameB = b.name.toLowerCase().replace(/\s+/g, '');
+
+        // إذا كان المنتج يحتوي على النص بشكل كامل، نعطيه الأولوية
+        const aExactMatch = productNameA === cleanedSearchTerm ? 1 : 0;
+        const bExactMatch = productNameB === cleanedSearchTerm ? 1 : 0;
+
+        if (aExactMatch !== bExactMatch) {
+            return bExactMatch - aExactMatch; // الأولوية للتطابق الكامل
+        }
+
+        // إذا لم يكن هناك تطابق كامل، نرتب حسب قرب التطابق
+        const aIncludes = productNameA.includes(cleanedSearchTerm) ? 1 : 0;
+        const bIncludes = productNameB.includes(cleanedSearchTerm) ? 1 : 0;
+
+        if (aIncludes !== bIncludes) {
+            return bIncludes - aIncludes; // الأولوية للتطابق الجزئي
+        }
+
+        // إذا كان كلاهما يحتوي على النص، نرتب حسب الطول (الأقصر أقرب)
+        return productNameA.length - productNameB.length;
+    });
+
+    renderFilteredProducts(sortedProducts); // عرض المنتجات المصفاة مرتبة
+});
+
+// إعادة تهيئة حقل البحث عند فقدان التركيز
+document.getElementById('search-box').addEventListener('blur', () => {
+    document.getElementById('search-box').value = ''; // مسح النص في الحقل
+});
 
 function renderCart() {
     const container = document.getElementById('cartItems');
