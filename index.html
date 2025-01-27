@@ -379,6 +379,8 @@ function renderProducts(products = store.products) {
 
 function renderCart() {
     const container = document.getElementById('cartItems');
+    
+    // إصلاح مشكلة عرض العناصر
     container.innerHTML = store.cart.map(item => `
         <div class="cart-item mb-3 p-2 border-bottom">
             <div class="d-flex align-items-center gap-3">
@@ -386,68 +388,47 @@ function renderCart() {
                      style="width: 60px; height: 60px; object-fit: contain;" 
                      class="rounded">
                 <div class="flex-grow-1">
-                    <h6>${item.name}</h6>
+                    <h6 class="mb-1">${item.name}</h6>
                     <div class="d-flex align-items-center gap-2">
                         <button class="btn btn-sm btn-outline-secondary" 
                                 onclick="updateCart(${item.id}, -1)">-</button>
-                        <span>${item.quantity}</span>
+                        <span class="px-2">${item.quantity}</span>
                         <button class="btn btn-sm btn-outline-secondary" 
-                                onclick="updateCart(${item.id}, 1)">+</button>
-                        <span class="ms-2">${(item.price * item.quantity).toFixed(2)} ₪</span>
-                        <button class="btn btn-sm btn-danger ms-3" 
-                                onclick="removeItem(${item.id})">X</button>
+                                onclick="updateCart(${item.id}, +1)">+</button>
+                        <span class="ms-2 fw-bold">${(item.price * item.quantity).toFixed(2)} ₪</span>
                     </div>
                 </div>
             </div>
         </div>
     `).join('');
 
-    // حساب الإجمالي
+    // إصلاح مشكلة حساب الإجمالي
     const total = store.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    // إصلاح تحديث العناصر
     document.getElementById('total').textContent = total.toFixed(2) + ' ₪';
     document.getElementById('cartBadge').textContent = store.cart.reduce((sum, item) => sum + item.quantity, 0);
     
-    // تحديث عرض الإجمالي في العنصر المضاف
-    const totalPreview = document.getElementById('totalPreview');
-    if (totalPreview) {
-        totalPreview.textContent = total.toFixed(2) + ' ₪';
+    // إضافة تحديث للعرض المسبق إذا كان موجودًا
+    if(document.getElementById('totalPreview')) {
+        document.getElementById('totalPreview').textContent = total.toFixed(2) + ' ₪';
     }
 }
 
-// وظيفة لحذف عنصر من العربة
-function removeItem(itemId) {
-    // إعادة كمية المنتج في الكتالوج إلى صفر
-    const catalogItem = store.catalog.find(item => item.id === itemId);
-    if (catalogItem) {
-        catalogItem.quantity = 0; // إعادة الكمية إلى صفر
+// دالة التحديث المعدلة
+function updateCart(productId, change) {
+    const itemIndex = store.cart.findIndex(item => item.id === productId);
+    
+    if(itemIndex > -1) {
+        store.cart[itemIndex].quantity += change;
+        
+        if(store.cart[itemIndex].quantity < 1) {
+            store.cart.splice(itemIndex, 1);
+        }
     }
-
-    // إزالة العنصر من العربة
-    store.cart = store.cart.filter(item => item.id !== itemId);
-
-    // تحديث العرض
-    renderCatalog(); // لإعادة عرض الكتالوج
-    renderCart(); // لإعادة عرض السلة
+    
+    renderCart();
 }
-
-// تحديث الكتالوج (هذه دالة افتراضية يجب أن تكون لديك)
-function renderCatalog() {
-    const catalogContainer = document.getElementById('catalogItems');
-    catalogContainer.innerHTML = store.catalog.map(item => `
-        <div class="catalog-item mb-3 p-2 border-bottom">
-            <img src="${item.image}" 
-                 style="width: 60px; height: 60px; object-fit: contain;" 
-                 class="rounded">
-            <h6>${item.name}</h6>
-            <span>${item.price} ₪</span>
-            <button class="btn btn-sm btn-primary" 
-                    onclick="addToCart(${item.id})">
-                أضف إلى السلة
-            </button>
-        </div>
-    `).join('');
-}
-
 
 function saveCart() {
     localStorage.setItem('cart', JSON.stringify(store.cart));
