@@ -166,32 +166,7 @@
     .currency {
         font-family: Arial, sans-serif;
     }
-    /* تصميم مربع البحث */
-#search-box {
-    width: 100%; /* ليكون بعرض الحاوية */
-    max-width: 350px; /* أقصى عرض */
-    margin: 10px auto; /* محاذاة وسط الصفحة */
-    padding: 8px 12px; /* حشوة داخلية */
-    font-size: 16px; /* حجم النص */
-    border: 1px solid #ddd; /* إطار خفيف */
-    border-radius: 20px; /* زوايا مستديرة */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* ظل خفيف */
-    outline: none;
-    transition: all 0.3s ease;
-}
-
-#search-box:focus {
-    border-color: #007bff; /* لون الإطار عند التركيز */
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* ظل عند التركيز */
-}
-
-/* جعل الأزرار ومربع البحث ضمن حاوية واحدة */
-.search-filter-container {
-    display: flex;
-    flex-direction: column; /* ترتيب عمودي */
-    align-items: center; /* محاذاة الوسط */
-    gap: 10px; /* مسافة بين العناصر */
-}
+    
     </style>
     
     <!-- أضف هذه الروابط في head -->
@@ -206,7 +181,12 @@
             <a class="navbar-brand fw-bold" href="#" style="font-size: 1.5rem;">
                 <i class="fas fa-store me-2"></i>مركز شحادة
             </a>
-            
+            <!-- زر السهم المفرد -->
+<!-- زر الصعود للأعلى -->
+<button id="scrollUp" class="btn btn-light btn-sm mx-3" aria-label="Scroll Up" title="Scroll Up">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
             <div class="d-flex align-items-center gap-3">
                 <div class="bg-light rounded p-2 d-flex align-items-center">
                     <span class="text-dark me-2">الإجمالي:</span>
@@ -229,29 +209,14 @@
     </nav>
 
     <div class="container mt-4">
-        <!-- قسم البحث -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="input-group">
-                    <input type="text" id="search-box" class="form-control" placeholder="ابحث عن منتج..." aria-label="ابحث عن منتج">
-                    <span class="input-group-text">
-                        <i class="bi bi-search"></i> <!-- أيقونة البحث -->
-                    </span>
-                </div>
-            </div>
-        </div>
-    
-        <!-- قسم التصنيفات -->
         <div class="row mb-4">
             <div class="col-12">
                 <div id="categories" class="d-flex flex-wrap gap-3"></div>
             </div>
         </div>
-    
-        <!-- قسم عرض المنتجات -->
         <div class="row g-4 row-cols-1 row-cols-md-3 row-cols-lg-4" id="productsContainer"></div>
     </div>
-        
+    
     <!-- سلة المشتريات -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas">
         <div class="offcanvas-header">
@@ -328,7 +293,7 @@ function renderCategories() {
 function filterProducts(category) {
     currentCategory = category;
     document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-
+    
     let filteredProducts;
     if (category === 'all') {
         const companies = Array.from(new Set(store.products.map(p => p.company)));
@@ -340,59 +305,10 @@ function filterProducts(category) {
     } else {
         filteredProducts = store.products.filter(p => p.company === category);
     }
-
+    
     renderProducts(filteredProducts);
     event.target.classList.add('active');
 }
-
-// إضافة البحث
-document.getElementById('search-box').addEventListener('input', (event) => {
-    const searchTerm = event.target.value.toLowerCase().trim(); // النص المدخل بعد تحويله إلى حروف صغيرة وإزالة الفراغات الزائدة
-    const cleanedSearchTerm = searchTerm.replace(/\s+/g, ''); // النص المدخل بدون فراغات
-
-    let filteredProducts;
-
-    // تصفية المنتجات بناءً على النص المدخل والفئة الحالية
-    if (currentCategory === 'all') {
-        filteredProducts = store.products.filter(product => {
-            const productName = product.name.toLowerCase().replace(/\s+/g, '');
-            const productCategory = product.category.toLowerCase().replace(/\s+/g, '');
-            return productName.includes(cleanedSearchTerm) || productCategory.includes(cleanedSearchTerm);
-        });
-    } else {
-        filteredProducts = store.products.filter(product => {
-            const productName = product.name.toLowerCase().replace(/\s+/g, '');
-            const productCategory = product.category.toLowerCase().replace(/\s+/g, '');
-            return (product.company === currentCategory) && 
-                   (productName.includes(cleanedSearchTerm) || productCategory.includes(cleanedSearchTerm));
-        });
-    }
-
-    renderProducts(filteredProducts);
-});
-
-// دالة عرض المنتجات (تأكد من وجودها لديك)
-function renderProducts(products) {
-    const container = document.getElementById('products');
-    container.innerHTML = products.map(product => {
-        if (product.type === 'header') {
-            return `<h3 class="company-header">${product.name}</h3>`;
-        } else {
-            return `
-                <div class="product-card">
-                    <h4>${product.name}</h4>
-                    <p>Company: ${product.company}</p>
-                    <p>Category: ${product.category}</p>
-                </div>
-            `;
-        }
-    }).join('');
-}
-
-// إعادة تهيئة حقل البحث عند فقدان التركيز
-document.getElementById('search-box').addEventListener('blur', () => {
-    document.getElementById('search-box').value = ''; // مسح النص في الحقل
-});
 
 function updateCart(productId, quantityChange) {
     const product = store.products.find(p => p.id === productId);
@@ -584,6 +500,14 @@ ${index + 1}. ${item.name} ${item.company ? `: ${item.company}` : ''}
 
 window.addEventListener('DOMContentLoaded', loadProducts);
     // مثال باستخدام JavaScript خالص
+
+// وظيفة الصعود للأعلى
+document.getElementById("scrollUp").addEventListener("click", () => {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth" // التمرير بسلاسة
+    });
+});
 
 </script>
 
