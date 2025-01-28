@@ -18,4 +18,3 @@ yesido/tws05/77/https://m.media-amazon.com/images/I/51wFkFDnZRL.jpg
 yesido/tws06 jl/43/https://m.media-amazon.com/images/I/51VJn9xde1L.jpg
 yesido/tws16/75/https://icdn.tradew.com/file/202308/1575939/jpg/8057297.jpg?x-oss-process=image/quality,Q_90
 yesido/tws11/85/https://icdn.tradew.com/file/202308/1575939/jpg/8057874.jpg?x-oss-process=image/quality,Q_90
-yesido/tws21
