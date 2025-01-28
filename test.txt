@@ -9,12 +9,13 @@ yesido/mg03/75/https://www.newface.com.tr/img/products/main/yesido-mg03-kablosuz
 yesido/sf18/200/https://www.mytrendyphone.eu/images/YESIDO-SF18-3-Axis-Smartphone-Holder-Gimbal-Stabilizer-Face-Tracking-Selfie-StickNone-22042024-00-p.webp
 yesido/sf14/70/https://kimostore.net/cdn/shop/files/yesido-sf14-gimbal-stabilizer-selfie-stick-tripod-kimo-store-1.jpg?v=1715048041
 yesido/tv12/145/https://icdn.tradew.com/file/202308/1575939/jpg/8067715.jpg?x-oss-process=image/resize,w_500/quality,Q_90
-yesido/yp36/140/
-yesido/sf15/70/
-yesido/ysp17/55/
-yesido/ysp13/72/
-yesido/tws06/75/
-yesido/tws05/77/
-yesido/tws06 jl/43/
-yesido/tws16/75/
-yesido/tws11/85/
+yesido/yp36/140/https://ls6iibytsc.eu.scalesta-cdn.com/zyPKWc0waqQIsSXHyrr02iEnM3w=/filters:format(webp):fill(fff):quality(90)/www.tnateeshq8.com/images/detailed/216/webp.jpg
+yesido/sf15/70/https://m.media-amazon.com/images/I/61-UqcZyAAL.jpg
+yesido/ysp17/55/https://sc04.alicdn.com/kf/H138a99ecd6bc4c75b7a387768d45f389O.jpg
+yesido/ysp13/72/https://stargallery.ae/wp-content/uploads/2024/02/YSP13-8.jpg
+yesido/tws06/75/https://m.media-amazon.com/images/I/51VJn9xde1L.jpg
+yesido/tws05/77/https://m.media-amazon.com/images/I/51wFkFDnZRL.jpg
+yesido/tws06 jl/43/https://m.media-amazon.com/images/I/51VJn9xde1L.jpg
+yesido/tws16/75/https://icdn.tradew.com/file/202308/1575939/jpg/8057297.jpg?x-oss-process=image/quality,Q_90
+yesido/tws11/85/https://icdn.tradew.com/file/202308/1575939/jpg/8057874.jpg?x-oss-process=image/quality,Q_90
+yesido/tws21
