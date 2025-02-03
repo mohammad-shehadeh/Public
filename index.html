@@ -1153,9 +1153,13 @@ function renderFilteredProducts(filteredProducts) {
             productDiv.appendChild(productImage);
             productDiv.appendChild(categoryElement); // إضافة الفئة بعد الصورة
 
+            // حساب السعر وعرضه
+            const price = isNaN(product.price) ? "غير متوفر" : product.price.toFixed(2) + " ₪";
+            const priceClass = isNaN(product.price) ? "unavailable" : "";
+
             // إضافة التفاصيل (اسم المنتج والسعر)
             const productDetails = document.createElement('div');
-            productDetails.innerHTML = `<strong>${product.name}</strong><br><br> ${product.price.toFixed(2)} ₪`;
+            productDetails.innerHTML = `<strong>${product.name}</strong><br><br> <span class="${priceClass}">${price}</span>`;
             productDiv.appendChild(productDetails);
 
             // إضافة زر + و - وحقل الكمية
@@ -1195,15 +1199,17 @@ function renderFilteredProducts(filteredProducts) {
             const addToCartButton = document.createElement('button');
             addToCartButton.textContent = 'إضافة للسلة';
             addToCartButton.classList.add('add-to-cart-btn');
-            addToCartButton.onclick = () => {
-                addToCart(product, 1);  // إضافة المنتج إلى السلة
-                quantityDiv.style.display = 'block';  // إظهار الكمية بعد إضافته
-                addToCartButton.style.display = 'none';  // إخفاء زر "إضافة للسلة"
-            };
 
-            // إذا كان المنتج موجودًا في السلة، إخفاء زر "إضافة للسلة"
-            if (existingProduct) {
-                addToCartButton.style.display = 'none';
+            // إذا كان السعر غير متوفر، تعطيل زر "إضافة للسلة"
+            if (isNaN(product.price)) {
+                addToCartButton.disabled = true;
+                addToCartButton.style.backgroundColor = '#d3d3d3';  // اللون السكني
+            } else {
+                addToCartButton.onclick = () => {
+                    addToCart(product, 1);  // إضافة المنتج إلى السلة
+                    quantityDiv.style.display = 'block';  // إظهار الكمية بعد إضافته
+                    addToCartButton.style.display = 'none';  // إخفاء زر "إضافة للسلة"
+                };
             }
 
             productDiv.appendChild(addToCartButton);
@@ -1217,18 +1223,17 @@ function renderFilteredProducts(filteredProducts) {
 
 
 document.getElementById('search-box').addEventListener('input', (event) => {
-    const searchTerm = event.target.value.toLowerCase().trim();
-    const cleanedSearchTerm = searchTerm.replace(/\s+/g, '');
+    const searchTerm = event.target.value.toLowerCase().trim(); // النص المدخل بعد تحويله إلى حروف صغيرة وإزالة الفراغات الزائدة
+    const cleanedSearchTerm = searchTerm.replace(/\s+/g, ''); // النص المدخل بدون فراغات
 
-    if (!searchTerm) {
-        renderCategories(); // إعادة عرض جميع الفئات والمنتجات عند إفراغ البحث
-        return;
-    }
-
+    // تصفية المنتجات بناءً على وجود النص المدخل في الاسم أو الفئة
     const filteredProducts = products.filter(product => {
-        const productName = product.name.toLowerCase().replace(/\s+/g, '');
-        const productCategory = product.category.toLowerCase().replace(/\s+/g, '');
-        return productName.includes(cleanedSearchTerm) || productCategory.includes(cleanedSearchTerm);
+        const productName = product.name.toLowerCase().replace(/\s+/g, '');  // إزالة الفراغات من الاسم
+        const productCategory = product.category.toLowerCase().replace(/\s+/g, '');  // إزالة الفراغات من الفئة
+
+        // التحقق من أن النص المدخل موجود في الاسم أو الفئة
+        return productName.includes(cleanedSearchTerm) || 
+               productCategory.includes(cleanedSearchTerm);
     });
 
     // ترتيب النتائج بحيث تكون الأقرب في الأعلى
@@ -1236,34 +1241,34 @@ document.getElementById('search-box').addEventListener('input', (event) => {
         const productNameA = a.name.toLowerCase().replace(/\s+/g, '');
         const productNameB = b.name.toLowerCase().replace(/\s+/g, '');
 
+        // إذا كان المنتج يحتوي على النص بشكل كامل، نعطيه الأولوية
         const aExactMatch = productNameA === cleanedSearchTerm ? 1 : 0;
         const bExactMatch = productNameB === cleanedSearchTerm ? 1 : 0;
 
         if (aExactMatch !== bExactMatch) {
-            return bExactMatch - aExactMatch;
+            return bExactMatch - aExactMatch; // الأولوية للتطابق الكامل
         }
 
+        // إذا لم يكن هناك تطابق كامل، نرتب حسب قرب التطابق
         const aIncludes = productNameA.includes(cleanedSearchTerm) ? 1 : 0;
         const bIncludes = productNameB.includes(cleanedSearchTerm) ? 1 : 0;
 
         if (aIncludes !== bIncludes) {
-            return bIncludes - aIncludes;
+            return bIncludes - aIncludes; // الأولوية للتطابق الجزئي
         }
 
+        // إذا كان كلاهما يحتوي على النص، نرتب حسب الطول (الأقصر أقرب)
         return productNameA.length - productNameB.length;
     });
 
-    if (sortedProducts.length > 0) {
-        renderFilteredProducts(sortedProducts);
-    } else {
-        categoriesContainer.innerHTML = '<p style="text-align: center; font-size: 18px;">لم يتم العثور على نتائج</p>';
-    }
+    renderFilteredProducts(sortedProducts); // عرض المنتجات المصفاة مرتبة
 });
 
-// إعادة تهيئة البحث عند فقدان التركيز
+// إعادة تهيئة حقل البحث عند فقدان التركيز
 document.getElementById('search-box').addEventListener('blur', () => {
-    document.getElementById('search-box').value = '';
+    document.getElementById('search-box').value = ''; // مسح النص في الحقل
 });
+
 
 
 
