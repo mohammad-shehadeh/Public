@@ -1211,17 +1211,16 @@ function renderFilteredProducts(filteredProducts) {
             addToCartButton.textContent = 'إضافة للسلة';
             addToCartButton.classList.add('add-to-cart-btn');
 
-            // إذا كان السعر غير متوفر، تعطيل زر "إضافة للسلة"
             if (isNaN(product.price)) {
-                addToCartButton.disabled = true;
-                addToCartButton.style.backgroundColor = '#d3d3d3';  // اللون السكني
-            } else {
-                addToCartButton.onclick = () => {
-                    addToCart(product, 1);  // إضافة المنتج إلى السلة
-                    quantityDiv.style.display = 'block';  // إظهار الكمية بعد إضافته
-                    addToCartButton.style.display = 'none';  // إخفاء زر "إضافة للسلة"
-                };
-            }
+    addToCartButton.disabled = true;  // تعطيل الزر
+} else {
+    addToCartButton.onclick = () => {
+        addToCart(product, 1);  // إضافة المنتج إلى السلة
+        quantityDiv.style.display = 'block';  // إظهار الكمية بعد إضافته
+        addToCartButton.style.display = 'none';  // إخفاء زر "إضافة للسلة"
+    };
+}
+
 
             productDiv.appendChild(addToCartButton);
             productDiv.appendChild(quantityDiv);
