@@ -10,7 +10,6 @@
     <meta property="og:image" content="https://img.freepik.com/premium-vector/vector-price-text-logo-design_867743-461.jpg">
     <meta property="og:type" content="website">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -155,32 +154,20 @@ header h1 {
     cursor: pointer;
     margin-top: 1em;
 }  
-.cart-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
+      .cart-item {
+          margin-bottom: 1em;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+      }
 
-.cart-item-img {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-.cart-item-details {
-    flex-grow: 1;
-    font-size: 14px;
-}
-
-.cart-remove {
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
-}
-
+      .cart-item button {
+          background-color: red;
+          color: white;
+          border: none;
+          cursor: pointer;
+          padding: 0.2em 0.5em;
+      }
 
 /* تصميم زر المشاركة بنفس حجم زر إخفاء السلة */
 .share-button {
@@ -540,7 +527,6 @@ header h1 {
         background-color: #ff0000;  /* العودة إلى اللون الأول (أخضر) */
     }
 }
-
 input[type="number"] {
     pointer-events: none; /* يمنع التفاعل مع العنصر */
     background-color: #f0f0f0; /* لون خلفية اختياري لإظهار أنه غير نشط */
@@ -762,115 +748,32 @@ input[type="text"]:focus, input[type="tel"]:focus {
     transform: translateY(0);
 }
 
-.red-glow {
-    font-size: 150%; /* زيادة حجم الخط 50% */
-    font-weight: bold;
-    color: #ff0000;
-    text-shadow: 0 0 0px transparent;
-    animation: smooth-glow 2s ease-in-out infinite alternate;
-}
-
-@keyframes smooth-glow {
-    0% {
-        text-shadow: 0 0 0px transparent;
-    }
-    100% {
-        text-shadow: 0 0 8px #ff3333, 0 0 16px #ff4d4d, 0 0 20px #cc2900, 0 0 26px #aa2200;
-    }
-}
-
-/* تنسيق أزرار الفلترة */
-.filter-btn {
-    background: #333;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    margin: 5px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: all 0.3s;
-}
-
-/* توهج عند النشط */
-.filter-btn.active {
-    background: #4CAF50;
-    box-shadow: 0 0 15px #4CAF50;
-    animation: filter-glow 1s ease-in-out infinite alternate;
-}
-
-@keyframes filter-glow {
-    from {
-        box-shadow: 0 0 5px #4CAF50;
-    }
-    to {
-        box-shadow: 0 0 20px #4CAF50;
-    }
-}
-.price {
-    color: #007a33; /* أخضر غامق */
-    font-weight: bold;
-    font-size: 1.1em;
-    text-shadow: 0 0 3px rgba(0, 122, 51, 0.3); /* توهج خفيف أكثر هدوءًا */
-}
-.price-container {
-    direction: ltr;
-    unicode-bidi: embed;
-    display: inline-block;
-}
-.unavailable {
-    color: red;
-}
-
-/* إخفاء زر اختيار الملف */
-#select-file-button {
-    display: none; /* إخفاء الزر */
-}
-
-/* تحسين تصميم الأزرار */
-#file-buttons button {
-    background-color: white; /* خلفية الزر باللون الأبيض */
-    color: black; /* لون النص بالأسود */
-    font-weight: bold; /* جعل النص عريض */
-    border: 1px solid #ccc; /* حد الزر بلون رمادي فاتح */
-    border-radius: 25px; /* جعل الحواف بيضاوية */
-    padding: 8px 12px; /* تقليل التباعد الداخلي لجعل الزر أصغر */
-    font-size: 14px; /* تقليل حجم الخط */
-    cursor: pointer; /* عند المرور على الزر يظهر شكل المؤشر اليدوي */
-    transition: background-color 0.3s ease, transform 0.3s ease; /* تأثير عند المرور */
-    margin-right: 2mm; /* المسافة بين الأزرار */
-}
-
-/* تأثير عند المرور على الأزرار */
-#file-buttons button:hover {
-    background-color: #f1f1f1; /* تغيير اللون عند المرور */
-    transform: scale(1.05); /* تكبير الزر بشكل طفيف */
-}
-
-/* التباعد بين الأزرار بشكل عام */
-#file-buttons button:not(:last-child) {
-    margin-right: 2mm; /* المسافة بين الأزرار */
-}
-
   </style>
 </head>
+<body>
+    <!-- قسم إدخال رمز التحقق -->
+    <div id="otp-section" class="custom-otp-style">
+        <h5>سجل دخولك لمرة واحدة للتحقق من أنك ضمن أصحاب المحلات وسوف يتم فتح الموقع بشكل دائمًا حيث يتطلب إدخال رمز تحقق لمرة واحدة فقط ولن يتم طلب الرمز أو التسجيل مرة أخرى.</h5>
+        <button onclick="sendWhatsAppMessage()">الحصول على رمز التحقق</button>
+        <h2>إدخال رمز التحقق</h2>
+        <input type="text" id="otp-code" placeholder="ادخل رمز التحقق" />
+        <button onclick="verifyOTP()">تسجيل الدخول</button>
+    </div>
+    
+</body>
+
+
+    <!-- محتوى الموقع -->
+    <div id="content-section" style="display: none;">
         <header>
             <h1>Shehadeh Center</h1>
-            <div id="file-buttons"></div> <!-- عنصر لعرض الأزرار -->
-<button id="select-file-button">اختيار ملف</button> <!-- زر لاختيار الملف يدويًا -->
-<br>
             <div id="filter-buttons">
                 <!-- الأزرار سيتم إنشاؤها ديناميكيًا بواسطة JavaScript -->
             </div>
             <input type="text" id="search-box" placeholder="🔍 أبحث عن منتج" />
             <div id="filter-buttons"></div>
-            <button class="toggle-cart d-flex align-items-center gap-2" id="show-cart-button">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="cart-text">سلة التسوق</span>
-                <i class="fas fa-shopping-cart"></i><br>
-                <span id="cart-total" class="fw-bold price-container">0.00 ₪</span>
-            </button>
-            
-                    </header>
+            <button class="toggle-cart" id="show-cart-button">إظهار الفاتورة</button>
+        </header>
         
         <main>
             <div id="categories"></div>
@@ -902,72 +805,38 @@ const checkoutButton = document.getElementById('checkout-button');
 const popup = document.getElementById('popup');
 const confirmButton = document.getElementById('confirm-button');
 const cancelButton = document.getElementById('cancel-button');
+
 const customerNameInput = document.getElementById('customer-name');
 const customerPhoneInput = document.getElementById('customer-phone');
-const selectFileButton = document.getElementById('select-file-button'); // زر لاختيار الملف
 
 let products = [];
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-// إضافة أزرار لاختيار الكتالوج
-const fileButtonsContainer = document.getElementById('file-buttons'); // تأكد من وجود عنصر في HTML لعرض الأزرار
-const fileButtons = [
-    { label: 'أسعار الأجهزة', fileName: 'test.txt' },
-    { label: 'أسعار الشاشات', fileName: 'lcd.txt' },
-    { label: 'الإكسسوارات', fileName: 'abc.txt' }
-];
+// Load products from test.txt
+fetch('test.txt')
+    .then(response => response.text())
+    .then(data => {
+        const lines = data.split('\n');
+        lines.forEach(line => {
+            const parts = line.split('/');
+            if (parts.length >= 4) {
+                const imageUrl = parts.slice(3).join('/').trim();
+                products.push({
+                    category: parts[0].trim(),
+                    name: parts[1].trim(),
+                    price: parseFloat(parts[2].trim()),
+                    image: imageUrl
+                });
+            }
+        });
 
-// إضافة الأزرار
-fileButtons.forEach(buttonInfo => {
-    const button = document.createElement('button');
-    button.textContent = buttonInfo.label;
-    button.onclick = () => loadProductsFromFile(buttonInfo.fileName); // تحميل البيانات من الملف المحدد
-    fileButtonsContainer.appendChild(button);
-});
-
-// تحميل البيانات من الملف الافتراضي عند تحميل الصفحة
-window.addEventListener('load', () => {
-    loadProductsFromFile('test.txt'); // يمكنك تغيير 'test.txt' إلى أي ملف تود تحميله كافتراضي
-});
-
-// دالة لتحميل المنتجات من الملف
-function loadProductsFromFile(fileName) {
-    products = []; // إعادة تعيين المنتجات القديمة
-
-    fetch(fileName)
-        .then(response => response.text())
-        .then(data => {
-            const lines = data.split('\n');
-            lines.forEach(line => {
-                const parts = line.split('/');
-                if (parts.length >= 4) {
-                    const imageUrl = parts.slice(3).join('/').trim();
-                    products.push({
-                        category: parts[0].trim(),
-                        name: parts[1].trim(),
-                        price: parseFloat(parts[2].trim()),
-                        image: imageUrl
-                    });
-                }
-            });
-
-            renderCategories(); // عرض الفئات والمنتجات
-            createFilterButtons(); // إنشاء أزرار الفلترة
-            renderCart(); // عرض السلة
-        })
-        .catch(error => console.error('Error loading products:', error));
-}
+        renderCategories(); // عرض الفئات والمنتجات
+        createFilterButtons(); // إنشاء أزرار الفلترة
+        renderCart(); // عرض السلة
+    })
+    .catch(error => console.error('Error loading products:', error));
 
 
-// عند الضغط على زر "اختيار ملف"
-selectFileButton.onclick = () => {
-    const selectedFile = prompt('أدخل اسم الملف (test.txt أو lcd.txt أو abc.txt):');
-    if (selectedFile) {
-        loadProductsFromFile(selectedFile);
-    }
-};
-
-// دالة لعرض الفئات (مثال)
 function renderCategories() {
     categoriesContainer.innerHTML = ''; // Clear previous categories
     const categories = [...new Set(products.map(p => p.category))];
@@ -984,60 +853,33 @@ function renderCategories() {
             const productDiv = document.createElement('div');
             productDiv.className = 'product';
 
-            // إنشاء وإضافة عنصر الصورة مع التعامل مع الأخطاء
+            // Creating and adding image element with error handling
             const productImage = document.createElement('img');
             productImage.src = product.image;
-            productImage.alt = product.name;
+            productImage.alt = product.name; // Adding alt text for better accessibility
 
+            // Error handling for image load failure
             productImage.onerror = () => {
-                productImage.src = 'default-image.jpg';
+                productImage.src = 'default-image.jpg'; // Use a default image if the image URL is invalid
             };
 
             productDiv.appendChild(productImage);
 
-            // إنشاء عنصر لعرض الفئة
-            const categoryElement = document.createElement('div');
-            categoryElement.className = "product-category";
-            categoryElement.textContent = product.category; // إضافة اسم الفئة
-
-            productDiv.appendChild(categoryElement); // إضافة الفئة أسفل الصورة
-
             const productDetails = document.createElement('div');
-
-            // تقسيم اسم المنتج عند <br> وتنسيقه
-            const nameParts = product.name.split('<br>');
-            let nameHtml;
-            if (nameParts.length > 1) {
-                // تطبيق تأثير الإضاءة الحمراء فقط على النص بعد أول <br>
-                nameHtml = `
-                    <strong>${nameParts[0]}<br>
-                    <span class="red-glow">${nameParts.slice(1).join('<br>')}</span></strong>
-                `;
-            } else {
-                nameHtml = `<strong>${product.name}</strong>`;
-            }
-
-            const price = isNaN(product.price) ? "غير متوفر" : product.price.toFixed(2) + " ₪";
-            const priceClass = isNaN(product.price) ? "unavailable" : "";
-
-            productDetails.innerHTML = `
-                ${nameHtml}<br><br>
-                <span class="price ${priceClass}">${price}</span>
-            `;
-
+            productDetails.innerHTML = `<strong>${product.name}</strong><br><br> ${product.price.toFixed(2)} ₪`;
             productDiv.appendChild(productDetails);
 
             // Quantity input and control buttons
             const quantityDiv = document.createElement('div');
             quantityDiv.classList.add('quantity-controls');
-            quantityDiv.style.display = 'none';
+            quantityDiv.style.display = 'none'; // Initially hidden
 
             const quantityInput = document.createElement('input');
             quantityInput.type = 'number';
             quantityInput.value = 1;
-            quantityInput.min = 1;
+            quantityInput.min = 1; // Minimum quantity is 1
             quantityInput.style.width = '50px';
-            quantityInput.addEventListener('focus', () => quantityInput.select());
+            quantityInput.addEventListener('focus', () => quantityInput.select()); // Automatically select text when clicked
 
             const increaseButton = document.createElement('button');
             increaseButton.textContent = '+';
@@ -1053,21 +895,21 @@ function renderCategories() {
 
             // Add To Cart Button
             const addToCartButton = document.createElement('button');
-            addToCartButton.innerHTML = '<i class="fas fa-shopping-cart me-2"></i> إضافة للسلة';
-            addToCartButton.classList.add('add-to-cart-btn');
+            addToCartButton.textContent = 'إضافة للسلة';
+            addToCartButton.classList.add('add-to-cart-btn'); // Adding a class for better styling
             addToCartButton.onclick = () => {
                 addToCart(product, quantityInput.value);
-                quantityDiv.style.display = 'block';
-                addToCartButton.style.display = 'none';
+                quantityDiv.style.display = 'block'; // Show quantity controls after adding to cart
+                addToCartButton.style.display = 'none'; // Hide the "Add to Cart" button
             };
             productDiv.appendChild(addToCartButton);
 
-            // Check if product exists in cart
+            // Check if the product is already in the cart
             const existingProduct = cart.find(item => item.name === product.name);
             if (existingProduct) {
-                quantityDiv.style.display = 'block';
-                addToCartButton.style.display = 'none';
-                quantityInput.value = existingProduct.quantity;
+                quantityDiv.style.display = 'block'; // Show quantity controls if the product is already in the cart
+                addToCartButton.style.display = 'none'; // Hide "Add to Cart" button if product is in cart
+                quantityInput.value = existingProduct.quantity; // Set the input to the correct quantity
             }
 
             productDiv.appendChild(quantityDiv);
@@ -1079,54 +921,43 @@ function renderCategories() {
 }
 function createFilterButtons() {
     const filterButtonsContainer = document.getElementById('filter-buttons');
-    filterButtonsContainer.innerHTML = '';
+    filterButtonsContainer.innerHTML = ''; // تفريغ المحتوى السابق
 
-    // زر ALL الافتراضي
+    // إضافة زر "All" الافتراضي
     const allButton = document.createElement('button');
     allButton.textContent = 'ALL';
-    allButton.className = 'filter-btn active'; // كلاس active عند التحميل
-    allButton.onclick = () => {
-        filterProducts('All');
-        setActiveButton(allButton); // تحديث النشط
-    };
+    allButton.className = 'filter-btn active'; // الزر الافتراضي نشط
+    allButton.onclick = () => filterProducts('All');
     filterButtonsContainer.appendChild(allButton);
 
-    // أزرار الفئات
+    // إنشاء أزرار للفئات
     const categories = [...new Set(products.map(p => p.category))];
     categories.forEach(category => {
         const button = document.createElement('button');
         button.textContent = category;
         button.className = 'filter-btn';
-        button.onclick = () => {
-            filterProducts(category);
-            setActiveButton(button); // تحديث النشط
-        };
+        button.onclick = () => filterProducts(category);
         filterButtonsContainer.appendChild(button);
     });
 }
 
-// دالة لتحديث الزر النشط
-function setActiveButton(activeButton) {
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    activeButton.classList.add('active');
-}
-
-// دالة الفلترة المعدلة
+// فلترة المنتجات بناءً على الفئة
 function filterProducts(category) {
-    const filteredProducts = category === 'All' 
-        ? products 
-        : products.filter(p => p.category === category);
-    
-    categoriesContainer.innerHTML = '';
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    filterButtons.forEach(btn => btn.classList.remove('active')); // إزالة التنشيط عن جميع الأزرار
+
+    const activeButton = Array.from(filterButtons).find(btn => btn.textContent === category);
+    if (activeButton) activeButton.classList.add('active'); // تنشيط الزر الحالي
+
+    const filteredProducts = category === 'All' ? products : products.filter(p => p.category === category);
     renderFilteredProducts(filteredProducts);
 }
 
-// دالة لعرض المنتجات المفلترة
+// إعادة عرض المنتجات بناءً على الفلترة
 function renderFilteredProducts(filteredProducts) {
+    categoriesContainer.innerHTML = ''; // مسح المنتجات الحالية
+
     const categories = [...new Set(filteredProducts.map(p => p.category))];
-    
     categories.forEach(category => {
         const categoryDiv = document.createElement('div');
         categoryDiv.className = 'category';
@@ -1137,60 +968,29 @@ function renderFilteredProducts(filteredProducts) {
 
         const categoryProducts = filteredProducts.filter(p => p.category === category);
         categoryProducts.forEach(product => {
-
             const productDiv = document.createElement('div');
             productDiv.className = 'product';
 
-            // إضافة الصورة مع معالجة الخطأ
+            // إضافة الصورة و التفاصيل
             const productImage = document.createElement('img');
             productImage.src = product.image;
             productImage.alt = product.name;
-            productImage.onerror = () => {
-                productImage.src = 'default-image.jpg';
-            };
-            productDiv.appendChild(productImage);
 
-            // إضافة اسم الفئة بين الصورة واسم المنتج
-            const categoryElement = document.createElement('div');
-            categoryElement.className = "product-category";
-            categoryElement.textContent = product.category; // إضافة اسم الفئة
-            productDiv.appendChild(categoryElement); // إضافة الفئة بعد الصورة
-
-            // معالجة اسم المنتج مع <br>
             const productDetails = document.createElement('div');
-            const nameParts = product.name.split('<br>');
-            let nameHtml;
-            if (nameParts.length > 1) {
-                nameHtml = `
-                    <strong>${nameParts[0]}<br>
-                    <span class="red-glow">${nameParts.slice(1).join('<br>')}</span></strong>
-                `;
-            } else {
-                nameHtml = `<strong>${product.name}</strong>`;
-            }
-
-            const price = isNaN(product.price) ? "غير متوفر" : product.price.toFixed(2) + " ₪";
-            const priceClass = isNaN(product.price) ? "unavailable" : "";
-
-            productDetails.innerHTML = `
-                ${nameHtml}<br><br>
-                <span class="price ${priceClass}">${price}</span>
-            `;
-
-
+            productDetails.innerHTML = `<strong>${product.name}</strong><br><br> ${product.price.toFixed(2)} ₪`;
+            productDiv.appendChild(productImage);
             productDiv.appendChild(productDetails);
 
-            // إعداد عناصر التحكم بالكمية
+            // إضافة زر + و - وحقل الكمية
             const quantityDiv = document.createElement('div');
             quantityDiv.classList.add('quantity-controls');
-            quantityDiv.style.display = 'none';
 
             const quantityInput = document.createElement('input');
             quantityInput.type = 'number';
             quantityInput.value = 1;
-            quantityInput.min = 1;
+            quantityInput.min = 1; // تعيين الحد الأدنى للعدد
             quantityInput.style.width = '50px';
-            quantityInput.addEventListener('focus', () => quantityInput.select());
+            quantityInput.addEventListener('focus', () => quantityInput.select()); // لتحديد النص عند الضغط
 
             const increaseButton = document.createElement('button');
             increaseButton.textContent = '+';
@@ -1204,23 +1004,27 @@ function renderFilteredProducts(filteredProducts) {
             quantityDiv.appendChild(quantityInput);
             quantityDiv.appendChild(increaseButton);
 
-            // التحقق من وجود المنتج في السلة
+            // إخفاء/إظهار عناصر الكمية بناءً على حالة المنتج في السلة
             const existingProduct = cart.find(item => item.name === product.name);
             if (existingProduct) {
+                // إذا كان المنتج موجودًا في السلة، إظهار الكمية
                 quantityDiv.style.display = 'block';
-                quantityInput.value = existingProduct.quantity;
+                quantityInput.value = existingProduct.quantity; // تعيين الكمية من السلة
+            } else {
+                quantityDiv.style.display = 'none';
             }
 
-            // إعداد زر الإضافة للسلة
+            // إضافة زر "إضافة للسلة"
             const addToCartButton = document.createElement('button');
-            addToCartButton.innerHTML = '<i class="fas fa-shopping-cart me-2"></i> إضافة للسلة';
+            addToCartButton.textContent = 'إضافة للسلة';
             addToCartButton.classList.add('add-to-cart-btn');
             addToCartButton.onclick = () => {
-                addToCart(product, quantityInput.value);
-                quantityDiv.style.display = 'block';
-                addToCartButton.style.display = 'none';
+                addToCart(product, 1);  // إضافة المنتج إلى السلة
+                quantityDiv.style.display = 'block';  // إظهار الكمية بعد إضافته
+                addToCartButton.style.display = 'none';  // إخفاء زر "إضافة للسلة"
             };
 
+            // إذا كان المنتج موجودًا في السلة، إخفاء زر "إضافة للسلة"
             if (existingProduct) {
                 addToCartButton.style.display = 'none';
             }
@@ -1235,17 +1039,18 @@ function renderFilteredProducts(filteredProducts) {
 }
 
 document.getElementById('search-box').addEventListener('input', (event) => {
-    const searchTerm = event.target.value.toLowerCase().trim(); // النص المدخل بعد تحويله إلى حروف صغيرة وإزالة الفراغات الزائدة
-    const cleanedSearchTerm = searchTerm.replace(/\s+/g, ''); // النص المدخل بدون فراغات
+    const searchTerm = event.target.value.toLowerCase().trim();
+    const cleanedSearchTerm = searchTerm.replace(/\s+/g, '');
 
-    // تصفية المنتجات بناءً على وجود النص المدخل في الاسم أو الفئة
+    if (!searchTerm) {
+        renderCategories(); // إعادة عرض جميع الفئات والمنتجات عند إفراغ البحث
+        return;
+    }
+
     const filteredProducts = products.filter(product => {
-        const productName = product.name.toLowerCase().replace(/\s+/g, '');  // إزالة الفراغات من الاسم
-        const productCategory = product.category.toLowerCase().replace(/\s+/g, '');  // إزالة الفراغات من الفئة
-
-        // التحقق من أن النص المدخل موجود في الاسم أو الفئة
-        return productName.includes(cleanedSearchTerm) || 
-               productCategory.includes(cleanedSearchTerm);
+        const productName = product.name.toLowerCase().replace(/\s+/g, '');
+        const productCategory = product.category.toLowerCase().replace(/\s+/g, '');
+        return productName.includes(cleanedSearchTerm) || productCategory.includes(cleanedSearchTerm);
     });
 
     // ترتيب النتائج بحيث تكون الأقرب في الأعلى
@@ -1253,34 +1058,34 @@ document.getElementById('search-box').addEventListener('input', (event) => {
         const productNameA = a.name.toLowerCase().replace(/\s+/g, '');
         const productNameB = b.name.toLowerCase().replace(/\s+/g, '');
 
-        // إذا كان المنتج يحتوي على النص بشكل كامل، نعطيه الأولوية
         const aExactMatch = productNameA === cleanedSearchTerm ? 1 : 0;
         const bExactMatch = productNameB === cleanedSearchTerm ? 1 : 0;
 
         if (aExactMatch !== bExactMatch) {
-            return bExactMatch - aExactMatch; // الأولوية للتطابق الكامل
+            return bExactMatch - aExactMatch;
         }
 
-        // إذا لم يكن هناك تطابق كامل، نرتب حسب قرب التطابق
         const aIncludes = productNameA.includes(cleanedSearchTerm) ? 1 : 0;
         const bIncludes = productNameB.includes(cleanedSearchTerm) ? 1 : 0;
 
         if (aIncludes !== bIncludes) {
-            return bIncludes - aIncludes; // الأولوية للتطابق الجزئي
+            return bIncludes - aIncludes;
         }
 
-        // إذا كان كلاهما يحتوي على النص، نرتب حسب الطول (الأقصر أقرب)
         return productNameA.length - productNameB.length;
     });
 
-    renderFilteredProducts(sortedProducts); // عرض المنتجات المصفاة مرتبة
+    if (sortedProducts.length > 0) {
+        renderFilteredProducts(sortedProducts);
+    } else {
+        categoriesContainer.innerHTML = '<p style="text-align: center; font-size: 18px;">لم يتم العثور على نتائج</p>';
+    }
 });
 
-// إعادة تهيئة حقل البحث عند فقدان التركيز
+// إعادة تهيئة البحث عند فقدان التركيز
 document.getElementById('search-box').addEventListener('blur', () => {
-    document.getElementById('search-box').value = ''; // مسح النص في الحقل
+    document.getElementById('search-box').value = '';
 });
-
 
 
 
@@ -1353,58 +1158,87 @@ function saveCart() {
 
 // Render the cart
 function renderCart() {
-    cartItemsContainer.innerHTML = ''; // Clear previous cart items
+    cartItemsContainer.innerHTML = ''; // مسح المحتوى السابق للسلة
     let total = 0;
 
     cart.forEach(item => {
-        const cartItemDiv = document.createElement('div');
-        cartItemDiv.className = 'cart-item';
+    const cartItemDiv = document.createElement('div');
+    cartItemDiv.className = 'cart-item d-flex align-items-center justify-content-between p-2 border-bottom';
 
-        const itemDetails = document.createElement('div');
-        itemDetails.innerHTML = `
-    <strong>${item.name}</strong><br>
-    Price: ${item.price.toFixed(2)} ₪<br>
-    Quantity: <input 
-        type="number" 
-        value="${item.quantity}" 
-        min="1" 
-        class="cart-quantity" 
-        data-product="${item.name}">
-`;
-        cartItemDiv.appendChild(itemDetails);
+    // 🖼️ عنصر لصورة المنتج
+    const itemImage = document.createElement('img');
+    itemImage.src = item.image; // تأكد من أن كائن المنتج يحتوي على `image`
+    itemImage.alt = item.name;
+    itemImage.className = 'cart-item-img';
 
+    // 📄 تفاصيل المنتج (اسم الفئة + اسم المنتج، سعر، كمية)
+    const itemDetails = document.createElement('div');
+    itemDetails.className = 'cart-item-details flex-grow-1 ms-2';
+    itemDetails.innerHTML = `
+        <strong>${item.category} - ${item.name}</strong><br>
+        السعر: ₪ ${item.price.toFixed(2)} <br>
+        الكمية: <input 
+            type="number" 
+            value="${item.quantity}" 
+            min="1" 
+            class="cart-quantity" 
+            data-product="${item.name}">
+    `;
+        // ❌ زر الحذف
         const removeButton = document.createElement('button');
-        removeButton.textContent = 'X';
-        removeButton.onclick = () => removeFromCart(item.name);
+        removeButton.className = 'cart-remove btn btn-danger btn-sm ms-2';
+        removeButton.innerHTML = '&times;';
+        removeButton.onclick = () => {
+            removeFromCart(item.name);
+            updateCartTotal(); // تحديث المجموع بعد الحذف
+        };
+
+        // 📌 تجميع العناصر داخل العنصر الرئيسي
+        cartItemDiv.appendChild(itemImage);
+        cartItemDiv.appendChild(itemDetails);
         cartItemDiv.appendChild(removeButton);
 
+        // حساب الإجمالي
         total += item.price * item.quantity;
         cartItemsContainer.appendChild(cartItemDiv);
     });
 
+    // 🛒 عرض إجمالي السعر في السلة
     const totalDiv = document.createElement('div');
-    totalDiv.className = 'cart-total';
-    totalDiv.innerHTML = `<strong>Total: ${total.toFixed(2)} ₪</strong>`;
+    totalDiv.className = 'cart-total text-end mt-3 fw-bold';
+    totalDiv.innerHTML = `الإجمالي: ₪ ${total.toFixed(2)}`;
     cartItemsContainer.appendChild(totalDiv);
 
-    // Event listener to handle quantity change in cart
+    // 🔄 تحديث إجمالي السعر بجانب أيقونة السلة
+    updateCartTotal();
+
+    // 🔄 تحديث الكمية عند التغيير
     document.querySelectorAll('.cart-quantity').forEach(input => {
         input.addEventListener('change', (event) => {
-    handleQuantityChange(event);
-});
+            handleQuantityChange(event);
+            updateCartTotal(); // تحديث المجموع عند تغيير الكمية
+        });
 
-input.addEventListener('blur', (event) => {
-    handleQuantityChange(event);
-});
+        input.addEventListener('blur', (event) => {
+            handleQuantityChange(event);
+            updateCartTotal(); // تحديث المجموع عند فقدان التركيز
+        });
 
-input.addEventListener('keypress', (event) => {
-    if (event.key === 'Enter') {
-        handleQuantityChange(event);
-    }
-});
-
+        input.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                handleQuantityChange(event);
+                updateCartTotal(); // تحديث المجموع عند الضغط على Enter
+            }
+        });
     });
 }
+
+// ✅ وظيفة تحديث إجمالي السعر بجانب السلة
+function updateCartTotal() {
+    let total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    document.getElementById('cart-total').innerHTML = `${total.toFixed(2)} ₪`;
+}
+
 
 // Event handler for checkout button
 checkoutButton.onclick = () => {
@@ -1451,11 +1285,27 @@ confirmButton.onclick = () => {
     text += `🛒 تفاصيل المنتجات:\n`;
 
     let total = 0;
-    cart.forEach(item => {
-        text += `\t${item.name}: ${item.quantity}x${item.price.toFixed(2)}\n`;
-        text += `─ ─ ─ ─ ─ ─ ─ ─ ─ ─\n`;
-        total += item.price * item.quantity;
-    });
+cart.forEach(item => {
+    // إزالة <br> من اسم المنتج
+    let cleanName = item.name.replace(/<br>/g, ' ');
+
+    // إزالة كلمة "بار" إذا وُجدت
+    cleanName = cleanName.replace(/بار/g, '').trim();
+
+    // حساب إجمالي سعر هذا الصنف
+    let itemTotal = item.price * item.quantity;
+
+    // كتابة الفئة واسم المنتج في سطر منفصل
+    text += `\t${item.category} - ${cleanName}\n`;
+
+    // كتابة العدد، السعر، والإجمالي في سطر آخر
+    text += `\t${item.quantity} x ${item.price.toFixed(2)} = ${itemTotal.toFixed(2)} ₪\n`;
+
+    // خط فاصل
+    text += `─ ─ ─ ─ ─ ─ ─ ─ ─ ─\n`;
+
+    total += itemTotal;
+});
 
     text += `💰 الإجمالي: ${total.toFixed(2)}\n`;
     text += `━━━━━━━━━━━━━━━\n`;
@@ -1560,96 +1410,6 @@ hideCartButton.onclick = function() {
             });
         });
  
-        // التحقق من حالة تسجيل الدخول عند تحميل الصفحة
-        document.addEventListener("DOMContentLoaded", function() {
-            const isLoggedIn = localStorage.getItem("isLoggedIn");
-            if (isLoggedIn === "true") {
-                showContentSection();
-            }
-        });
-
-        // دالة إرسال رسالة واتساب للحصول على رمز التحقق
-        function sendWhatsAppMessage() {
-            const whatsappNumber = "+972569813333";
-            const message = `مرحبًا، أريد الحصول على رمز التحقق للدخول إلى الموقع.`;
-            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, "_blank");
-        }
-
-        // دالة لتوليد الكود بناءً على الوقت الحالي
-        function generateCode() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = now.getMonth() + 1; // شهر 0-11 لذا نضيف 1
-            const date = now.getDate();
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-
-            // جمع الأجزاء لإنشاء رمز مميز يعتمد على التاريخ والوقت
-            const code = `${year}${month < 10 ? '0' + month : month}${date < 10 ? '0' + date : date}${hours < 10 ? '0' + hours : hours}${minutes < 10 ? '0' + minutes : minutes}`;
-
-            return code.slice(-6); // أخذ آخر 6 أرقام من التاريخ والوقت
-        }
-
-        // دالة التحقق من رمز التحقق المُدخل
-        function verifyOTP() {
-            // قراءة رمز التحقق الذي أدخله المستخدم
-            const userOTP = document.getElementById("otp-code").value.trim();
-
-            // توليد الكود الصحيح باستخدام نفس الدالة
-            const correctOTP = generateCode();
-
-            // التحقق مما إذا كان الكود المدخل يطابق الكود الصحيح
-            if (userOTP === correctOTP) {
-                alert("تم تسجيل الدخول بنجاح!");
-
-                // حفظ حالة تسجيل الدخول في التخزين المحلي
-                localStorage.setItem("isLoggedIn", "true");
-
-                // حفظ وقت تسجيل الدخول
-                localStorage.setItem("loginTimestamp", Date.now());
-
-                // عرض محتوى الموقع وإخفاء قسم إدخال رمز التحقق
-                showContentSection();
-            } else {
-                alert("رمز التحقق غير صحيح. يرجى المحاولة مرة أخرى.");
-            }
-        }
-
-        // دالة لإظهار محتوى الموقع وإخفاء قسم إدخال رمز التحقق
-        function showContentSection() {
-            document.getElementById("otp-section").style.display = "none";
-            document.getElementById("content-section").style.display = "block";
-        }
-
-        // تحقق من انتهاء صلاحية الجلسة (6 أشهر)
-        function checkSessionExpiry() {
-            const loginTimestamp = localStorage.getItem("loginTimestamp");
-            if (loginTimestamp) {
-                const sixMonthsInMilliseconds = 6 * 30 * 24 * 60 * 60 * 1000;
-                const currentTime = Date.now();
-                if (currentTime - loginTimestamp > sixMonthsInMilliseconds) {
-                    localStorage.removeItem("isLoggedIn");
-                    localStorage.removeItem("loginTimestamp");
-                    alert("انتهت صلاحية تسجيل الدخول. يرجى تسجيل الدخول مرة أخرى.");
-                    location.reload();
-                }
-            }
-        }
-
-        // عرض الكود على الشاشة (اختياري - للتأكد من مطابقته أثناء الاختبار)
-        window.onload = function() {
-            const codeElement = document.getElementById('verification-code');
-            codeElement.textContent = generateCode();
-            setInterval(() => {
-                codeElement.textContent = generateCode();
-            }, 120000); // تحديث الكود كل 120 ثانية
-        }
-
-        // استدعاء دالة التحقق من انتهاء الصلاحية عند تحميل الصفحة
-        checkSessionExpiry();
-
-
 </script>
 </body>
 </html>
