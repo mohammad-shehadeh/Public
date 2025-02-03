@@ -850,6 +850,17 @@ input[type="text"]:focus, input[type="tel"]:focus {
 #file-buttons button:not(:last-child) {
     margin-right: 2mm; /* المسافة بين الأزرار */
 }
+/* تنسيق الزر عند تعطيله */
+button[disabled] {
+    background-color: #d3d3d3;  /* اللون السكني */
+    color: #8e8e8e;  /* لون النص عند التعطيل */
+    cursor: not-allowed;  /* تغيير شكل المؤشر إلى غير قابل للنقر */
+    border: 1px solid #cccccc;  /* إضافة حدود بلون أفتح */
+}
+
+button[disabled] i {
+    color: #8e8e8e;  /* تغيير لون الأيقونة عند تعطيل الزر */
+}
 
   </style>
 </head>
