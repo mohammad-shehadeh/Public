@@ -1235,18 +1235,17 @@ function renderFilteredProducts(filteredProducts) {
 }
 
 document.getElementById('search-box').addEventListener('input', (event) => {
-    const searchTerm = event.target.value.toLowerCase().trim();
-    const cleanedSearchTerm = searchTerm.replace(/\s+/g, '');
+    const searchTerm = event.target.value.toLowerCase().trim(); // النص المدخل بعد تحويله إلى حروف صغيرة وإزالة الفراغات الزائدة
+    const cleanedSearchTerm = searchTerm.replace(/\s+/g, ''); // النص المدخل بدون فراغات
 
-    if (!searchTerm) {
-        renderCategories(); // إعادة عرض جميع الفئات والمنتجات عند إفراغ البحث
-        return;
-    }
-
+    // تصفية المنتجات بناءً على وجود النص المدخل في الاسم أو الفئة
     const filteredProducts = products.filter(product => {
-        const productName = product.name.toLowerCase().replace(/\s+/g, '');
-        const productCategory = product.category.toLowerCase().replace(/\s+/g, '');
-        return productName.includes(cleanedSearchTerm) || productCategory.includes(cleanedSearchTerm);
+        const productName = product.name.toLowerCase().replace(/\s+/g, '');  // إزالة الفراغات من الاسم
+        const productCategory = product.category.toLowerCase().replace(/\s+/g, '');  // إزالة الفراغات من الفئة
+
+        // التحقق من أن النص المدخل موجود في الاسم أو الفئة
+        return productName.includes(cleanedSearchTerm) || 
+               productCategory.includes(cleanedSearchTerm);
     });
 
     // ترتيب النتائج بحيث تكون الأقرب في الأعلى
@@ -1254,34 +1253,34 @@ document.getElementById('search-box').addEventListener('input', (event) => {
         const productNameA = a.name.toLowerCase().replace(/\s+/g, '');
         const productNameB = b.name.toLowerCase().replace(/\s+/g, '');
 
+        // إذا كان المنتج يحتوي على النص بشكل كامل، نعطيه الأولوية
         const aExactMatch = productNameA === cleanedSearchTerm ? 1 : 0;
         const bExactMatch = productNameB === cleanedSearchTerm ? 1 : 0;
 
         if (aExactMatch !== bExactMatch) {
-            return bExactMatch - aExactMatch;
+            return bExactMatch - aExactMatch; // الأولوية للتطابق الكامل
         }
 
+        // إذا لم يكن هناك تطابق كامل، نرتب حسب قرب التطابق
         const aIncludes = productNameA.includes(cleanedSearchTerm) ? 1 : 0;
         const bIncludes = productNameB.includes(cleanedSearchTerm) ? 1 : 0;
 
         if (aIncludes !== bIncludes) {
-            return bIncludes - aIncludes;
+            return bIncludes - aIncludes; // الأولوية للتطابق الجزئي
         }
 
+        // إذا كان كلاهما يحتوي على النص، نرتب حسب الطول (الأقصر أقرب)
         return productNameA.length - productNameB.length;
     });
 
-    if (sortedProducts.length > 0) {
-        renderFilteredProducts(sortedProducts);
-    } else {
-        categoriesContainer.innerHTML = '<p style="text-align: center; font-size: 18px;">لم يتم العثور على نتائج</p>';
-    }
+    renderFilteredProducts(sortedProducts); // عرض المنتجات المصفاة مرتبة
 });
 
-// إعادة تهيئة البحث عند فقدان التركيز
+// إعادة تهيئة حقل البحث عند فقدان التركيز
 document.getElementById('search-box').addEventListener('blur', () => {
-    document.getElementById('search-box').value = '';
+    document.getElementById('search-box').value = ''; // مسح النص في الحقل
 });
+
 
 
 
@@ -1354,87 +1353,58 @@ function saveCart() {
 
 // Render the cart
 function renderCart() {
-    cartItemsContainer.innerHTML = ''; // مسح المحتوى السابق للسلة
+    cartItemsContainer.innerHTML = ''; // Clear previous cart items
     let total = 0;
 
     cart.forEach(item => {
-    const cartItemDiv = document.createElement('div');
-    cartItemDiv.className = 'cart-item d-flex align-items-center justify-content-between p-2 border-bottom';
+        const cartItemDiv = document.createElement('div');
+        cartItemDiv.className = 'cart-item';
 
-    // 🖼️ عنصر لصورة المنتج
-    const itemImage = document.createElement('img');
-    itemImage.src = item.image; // تأكد من أن كائن المنتج يحتوي على `image`
-    itemImage.alt = item.name;
-    itemImage.className = 'cart-item-img';
-
-    // 📄 تفاصيل المنتج (اسم الفئة + اسم المنتج، سعر، كمية)
-    const itemDetails = document.createElement('div');
-    itemDetails.className = 'cart-item-details flex-grow-1 ms-2';
-    itemDetails.innerHTML = `
-        <strong>${item.category} - ${item.name}</strong><br>
-        السعر: ₪ ${item.price.toFixed(2)} <br>
-        الكمية: <input 
-            type="number" 
-            value="${item.quantity}" 
-            min="1" 
-            class="cart-quantity" 
-            data-product="${item.name}">
-    `;
-        // ❌ زر الحذف
-        const removeButton = document.createElement('button');
-        removeButton.className = 'cart-remove btn btn-danger btn-sm ms-2';
-        removeButton.innerHTML = '&times;';
-        removeButton.onclick = () => {
-            removeFromCart(item.name);
-            updateCartTotal(); // تحديث المجموع بعد الحذف
-        };
-
-        // 📌 تجميع العناصر داخل العنصر الرئيسي
-        cartItemDiv.appendChild(itemImage);
+        const itemDetails = document.createElement('div');
+        itemDetails.innerHTML = `
+    <strong>${item.name}</strong><br>
+    Price: ${item.price.toFixed(2)} ₪<br>
+    Quantity: <input 
+        type="number" 
+        value="${item.quantity}" 
+        min="1" 
+        class="cart-quantity" 
+        data-product="${item.name}">
+`;
         cartItemDiv.appendChild(itemDetails);
+
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'X';
+        removeButton.onclick = () => removeFromCart(item.name);
         cartItemDiv.appendChild(removeButton);
 
-        // حساب الإجمالي
         total += item.price * item.quantity;
         cartItemsContainer.appendChild(cartItemDiv);
     });
 
-    // 🛒 عرض إجمالي السعر في السلة
     const totalDiv = document.createElement('div');
-    totalDiv.className = 'cart-total text-end mt-3 fw-bold';
-    totalDiv.innerHTML = `الإجمالي: ₪ ${total.toFixed(2)}`;
+    totalDiv.className = 'cart-total';
+    totalDiv.innerHTML = `<strong>Total: ${total.toFixed(2)} ₪</strong>`;
     cartItemsContainer.appendChild(totalDiv);
 
-    // 🔄 تحديث إجمالي السعر بجانب أيقونة السلة
-    updateCartTotal();
-
-    // 🔄 تحديث الكمية عند التغيير
+    // Event listener to handle quantity change in cart
     document.querySelectorAll('.cart-quantity').forEach(input => {
         input.addEventListener('change', (event) => {
-            handleQuantityChange(event);
-            updateCartTotal(); // تحديث المجموع عند تغيير الكمية
-        });
+    handleQuantityChange(event);
+});
 
-        input.addEventListener('blur', (event) => {
-            handleQuantityChange(event);
-            updateCartTotal(); // تحديث المجموع عند فقدان التركيز
-        });
+input.addEventListener('blur', (event) => {
+    handleQuantityChange(event);
+});
 
-        input.addEventListener('keypress', (event) => {
-            if (event.key === 'Enter') {
-                handleQuantityChange(event);
-                updateCartTotal(); // تحديث المجموع عند الضغط على Enter
-            }
-        });
+input.addEventListener('keypress', (event) => {
+    if (event.key === 'Enter') {
+        handleQuantityChange(event);
+    }
+});
+
     });
 }
-
-// ✅ وظيفة تحديث إجمالي السعر بجانب السلة
-function updateCartTotal() {
-    let total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    document.getElementById('cart-total').innerHTML = `${total.toFixed(2)} ₪`;
-}
-
 
 // Event handler for checkout button
 checkoutButton.onclick = () => {
@@ -1481,27 +1451,11 @@ confirmButton.onclick = () => {
     text += `🛒 تفاصيل المنتجات:\n`;
 
     let total = 0;
-cart.forEach(item => {
-    // إزالة <br> من اسم المنتج
-    let cleanName = item.name.replace(/<br>/g, ' ');
-
-    // إزالة كلمة "بار" إذا وُجدت
-    cleanName = cleanName.replace(/بار/g, '').trim();
-
-    // حساب إجمالي سعر هذا الصنف
-    let itemTotal = item.price * item.quantity;
-
-    // كتابة الفئة واسم المنتج في سطر منفصل
-    text += `\t${item.category} - ${cleanName}\n`;
-
-    // كتابة العدد، السعر، والإجمالي في سطر آخر
-    text += `\t${item.quantity} x ${item.price.toFixed(2)} = ${itemTotal.toFixed(2)} ₪\n`;
-
-    // خط فاصل
-    text += `─ ─ ─ ─ ─ ─ ─ ─ ─ ─\n`;
-
-    total += itemTotal;
-});
+    cart.forEach(item => {
+        text += `\t${item.name}: ${item.quantity}x${item.price.toFixed(2)}\n`;
+        text += `─ ─ ─ ─ ─ ─ ─ ─ ─ ─\n`;
+        total += item.price * item.quantity;
+    });
 
     text += `💰 الإجمالي: ${total.toFixed(2)}\n`;
     text += `━━━━━━━━━━━━━━━\n`;
@@ -1606,6 +1560,96 @@ hideCartButton.onclick = function() {
             });
         });
  
+        // التحقق من حالة تسجيل الدخول عند تحميل الصفحة
+        document.addEventListener("DOMContentLoaded", function() {
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
+            if (isLoggedIn === "true") {
+                showContentSection();
+            }
+        });
+
+        // دالة إرسال رسالة واتساب للحصول على رمز التحقق
+        function sendWhatsAppMessage() {
+            const whatsappNumber = "+972569813333";
+            const message = `مرحبًا، أريد الحصول على رمز التحقق للدخول إلى الموقع.`;
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, "_blank");
+        }
+
+        // دالة لتوليد الكود بناءً على الوقت الحالي
+        function generateCode() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1; // شهر 0-11 لذا نضيف 1
+            const date = now.getDate();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+
+            // جمع الأجزاء لإنشاء رمز مميز يعتمد على التاريخ والوقت
+            const code = `${year}${month < 10 ? '0' + month : month}${date < 10 ? '0' + date : date}${hours < 10 ? '0' + hours : hours}${minutes < 10 ? '0' + minutes : minutes}`;
+
+            return code.slice(-6); // أخذ آخر 6 أرقام من التاريخ والوقت
+        }
+
+        // دالة التحقق من رمز التحقق المُدخل
+        function verifyOTP() {
+            // قراءة رمز التحقق الذي أدخله المستخدم
+            const userOTP = document.getElementById("otp-code").value.trim();
+
+            // توليد الكود الصحيح باستخدام نفس الدالة
+            const correctOTP = generateCode();
+
+            // التحقق مما إذا كان الكود المدخل يطابق الكود الصحيح
+            if (userOTP === correctOTP) {
+                alert("تم تسجيل الدخول بنجاح!");
+
+                // حفظ حالة تسجيل الدخول في التخزين المحلي
+                localStorage.setItem("isLoggedIn", "true");
+
+                // حفظ وقت تسجيل الدخول
+                localStorage.setItem("loginTimestamp", Date.now());
+
+                // عرض محتوى الموقع وإخفاء قسم إدخال رمز التحقق
+                showContentSection();
+            } else {
+                alert("رمز التحقق غير صحيح. يرجى المحاولة مرة أخرى.");
+            }
+        }
+
+        // دالة لإظهار محتوى الموقع وإخفاء قسم إدخال رمز التحقق
+        function showContentSection() {
+            document.getElementById("otp-section").style.display = "none";
+            document.getElementById("content-section").style.display = "block";
+        }
+
+        // تحقق من انتهاء صلاحية الجلسة (6 أشهر)
+        function checkSessionExpiry() {
+            const loginTimestamp = localStorage.getItem("loginTimestamp");
+            if (loginTimestamp) {
+                const sixMonthsInMilliseconds = 6 * 30 * 24 * 60 * 60 * 1000;
+                const currentTime = Date.now();
+                if (currentTime - loginTimestamp > sixMonthsInMilliseconds) {
+                    localStorage.removeItem("isLoggedIn");
+                    localStorage.removeItem("loginTimestamp");
+                    alert("انتهت صلاحية تسجيل الدخول. يرجى تسجيل الدخول مرة أخرى.");
+                    location.reload();
+                }
+            }
+        }
+
+        // عرض الكود على الشاشة (اختياري - للتأكد من مطابقته أثناء الاختبار)
+        window.onload = function() {
+            const codeElement = document.getElementById('verification-code');
+            codeElement.textContent = generateCode();
+            setInterval(() => {
+                codeElement.textContent = generateCode();
+            }, 120000); // تحديث الكود كل 120 ثانية
+        }
+
+        // استدعاء دالة التحقق من انتهاء الصلاحية عند تحميل الصفحة
+        checkSessionExpiry();
+
+
 </script>
 </body>
 </html>
