@@ -1156,16 +1156,6 @@ function renderFilteredProducts(filteredProducts) {
             categoryElement.textContent = product.category; // إضافة اسم الفئة
             productDiv.appendChild(categoryElement); // إضافة الفئة بعد الصورة
 
-
-            const price = isNaN(product.price) ? "غير متوفر" : product.price.toFixed(2) + " ₪";
-            const priceClass = isNaN(product.price) ? "unavailable" : "";
-
-            productDetails.innerHTML = `
-                ${nameHtml}<br><br>
-                <span class="price ${priceClass}">${price}</span>
-            `;
-
-
             productDiv.appendChild(productDetails);
 
             // إعداد عناصر التحكم بالكمية
