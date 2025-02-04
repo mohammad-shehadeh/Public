@@ -1,524 +1,69 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المتجر الإلكتروني</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #1a1a2e;
-            --secondary-color: #ffd700;
-            --accent-color: #0f3460;
-            --gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-        }
-    
-        body {
-            background: #f9f9f9;
-            font-family: 'IBM Plex Sans Arabic', sans-serif;
-            line-height: 1.8;
-        }
-    
-        .company-header {
-            background: var(--gradient);
-            color: white;
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .company-header:before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            right: -30px;
-            width: 150px;
-            height: 150px;
-            background: rgba(255,215,0,0.1);
-            border-radius: 50%;
-        }
-    
-        .product-card {
-            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            border: none;
-            border-radius: 15px;
-            overflow: hidden;
-            background: white;
-            position: relative;
-        }
-    
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
-        }
-    
-        .product-image {
-            height: 250px;
-            object-fit: cover;
-            transition: transform 0.3s;
-            border-radius: 15px 15px 0 0;
-        }
-    
-        .product-card:hover .product-image {
-            transform: scale(1.05);
-        }
-    
-        .category-btn {
-            border: 2px solid var(--accent-color);
-            border-radius: 25px;
-            transition: all 0.3s;
-            font-weight: 700;
-            margin: 5px;
-        }
-    
-        .category-btn.active {
-            background: var(--gradient) !important;
-            color: white !important;
-            border-color: var(--primary-color);
-            transform: scale(1.05);
-        }
-    
-        .price-tag {
-            background: var(--gradient);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 25px;
-            display: inline-block;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(26,26,46,0.15);
-        }
-    
-        .cart-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            z-index: 1000;
-        }
-    
-        .arabic-pattern {
-            position: absolute;
-            opacity: 0.05;
-            pointer-events: none;
-        }
-    
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
-        }
-    
-        .featured-product {
-            animation: float 4s ease-in-out infinite;
-        }
-    
-        .section-title {
-            position: relative;
-            padding-bottom: 15px;
-            margin-bottom: 40px;
-            text-align: center;
-        }
-    
-        .section-title:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            right: 50%;
-            transform: translateX(50%);
-            width: 100px;
-            height: 3px;
-            background: var(--secondary-color);
-        }
-    
-        .product-details {
-            background: linear-gradient(45deg, #ffffff 0%, #f8f9fa 100%);
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        }
-
-        .product-card {
-        transition: transform 0.3s, box-shadow 0.3s;
-        border: none;
-        border-radius: 15px;
-    }
-    
-    .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-    
-    .category-btn {
-        border-radius: 20px;
-        padding: 8px 20px;
-    }
-    
-    .currency {
-        font-family: Arial, sans-serif;
-    }
-    
-    </style>
-    
-    <!-- أضف هذه الروابط في head -->
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>تسجيل الدخول</title>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
 </head>
 <body>
-    <!-- الهيدر -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary py-3 fixed-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="#" style="font-size: 1.2rem;">
-                <i class="fas fa-store me-2"></i> Shehadeh center 
-            </a>
+    <h2>تسجيل الدخول برقم الهاتف</h2>
+    <input type="text" id="phoneNumber" placeholder="أدخل رقم الهاتف" />
+    <button onclick="sendOTP()">إرسال رمز التحقق</button>
+    <div id="recaptcha-container"></div>
+    
+    <input type="text" id="otp" placeholder="أدخل رمز التحقق" />
+    <button onclick="verifyOTP()">تحقق</button>
+    
+    <script>
+        // إعداد Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBP2bnt1DNNUO0dFtfiIovxMG-NM6yXPMM",
+            authDomain: "aasa-8a079.firebaseapp.com",
+            projectId: "aasa-8a079",
+            storageBucket: "aasa-8a079.appspot.com",
+            messagingSenderId: "849330713582",
+            appId: "1:849330713582:web:7a11b11ebdb5cdcc8b14ff"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        
+        window.onload = function() {
+            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+                'size': 'normal',
+                'callback': (response) => {
+                    console.log("reCAPTCHA verified");
+                }
+            });
+            recaptchaVerifier.render();
+        }
+        
+        function sendOTP() {
+            let phoneNumber = document.getElementById("phoneNumber").value;
+            let appVerifier = window.recaptchaVerifier;
             
-            <!-- زر السهم المفرد مع تقليل الهوامش والـ padding -->
-            <button id="scrollUp" class="btn btn-light btn-sm" aria-label="Scroll Up" title="Scroll Up" style="margin-top: -5px; padding: 0.2rem 0.5rem;">
-                <i class="fas fa-arrow-up"></i>
-            </button>
-    
-            <div class="d-flex align-items-center gap-3">
-                <div class="bg-light rounded p-2 d-flex align-items-center">
-                    <span class="text-dark me-2"></span>
-                    <span class="fw-bold text-success" id="totalPreview">0.00 ₪</span>
-                </div>
-                
-                <div class="position-relative">
-                    <button class="btn btn-light p-2" 
-                            data-bs-toggle="offcanvas" 
-                            data-bs-target="#cartOffcanvas">
-                        <i class="fas fa-shopping-cart text-primary fs-5"></i>
-                        <span id="cartBadge" 
-                              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            0
-                        </span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
-    
-    <!-- يمكن إضافة هوامش إضافية للمحتوى بحيث لا يتداخل مع الشريط العلوي الثابت -->
-    <div style="margin-top: 80px;">
-        <!-- محتوى الصفحة هنا -->
-    </div>
-    
-    <br>
-    <div class="container mt-4">
-        <div class="row mb-4">
-            <div class="col-12">
-                <div id="categories" class="d-flex flex-wrap gap-3"></div>
-            </div>
-        </div>
-        <div class="row g-4 row-cols-1 row-cols-md-3 row-cols-lg-4" id="productsContainer"></div>
-    </div>
-    
-    <!-- سلة المشتريات -->
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title">سلة المشتريات</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-        </div>
-        <div class="offcanvas-body">
-            <div id="cartItems"></div>
-            <hr>
-            <div class="row">
-                <div class="col-6">الإجمالي:</div>
-                <div class="col-6 text-end fw-bold" id="total">0.00 <span class="currency">₪</span></div>
-            </div>
-            <button class="btn btn-danger w-100 mt-3" onclick="clearCart()">إفراغ السلة</button>
-            <button class="btn btn-success w-100 mt-2" onclick="shareOnWhatsApp()">
-                <i class="fab fa-whatsapp"></i> إرسال الفاتورة
-            </button>
-        </div>
-    </div>
-
-<script>
-const store = {
-    cart: JSON.parse(localStorage.getItem('cart')) || [],
-    products: [],
-    categories: new Set(),
-    phoneNumber: "+972569813333"
-};
-
-let currentCategory = 'all';
-
-async function loadProducts() {
-    try {
-        const response = await fetch('test.txt');
-        const data = await response.text();
-        
-        store.products = data.split('\n').filter(line => line.trim()).map((line, index) => {
-            const [company, name, price, ...imageParts] = line.split('/');
-            return {
-                id: index + 1,
-                company: company.trim(),
-                name: name.trim(),
-                price: parseFloat(price.trim()),
-                image: imageParts.join('/').trim(),
-                stock: 50
-            };
-        });
-
-        store.products.forEach(p => store.categories.add(p.company));
-        initStore();
-    } catch (error) {
-        console.error('حدث خطأ:', error);
-        alert('تعذر تحميل المنتجات! يوجد مشكلة في السيرفرات');
-    }
-}
-
-function initStore() {
-    renderCategories();
-    renderProducts();
-    renderCart();
-}
-
-function renderCategories() {
-    const container = document.getElementById('categories');
-    container.innerHTML = `
-        <button class="btn btn-outline-primary category-btn active" 
-                onclick="filterProducts('all')">الكل</button>
-        ${Array.from(store.categories).map(category => `
-            <button class="btn btn-outline-primary category-btn" 
-                    onclick="filterProducts('${category}')">${category}</button>
-        `).join('')}
-    `;
-}
-
-function filterProducts(category) {
-    currentCategory = category;
-    document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
-    
-    let filteredProducts;
-    if (category === 'all') {
-        const companies = Array.from(new Set(store.products.map(p => p.company)));
-        filteredProducts = [];
-        companies.forEach(company => {
-            filteredProducts.push({ type: 'header', name: company });
-            filteredProducts.push(...store.products.filter(p => p.company === company));
-        });
-    } else {
-        filteredProducts = store.products.filter(p => p.company === category);
-    }
-    
-    renderProducts(filteredProducts);
-    event.target.classList.add('active');
-}
-
-function updateCart(productId, quantityChange) {
-    const product = store.products.find(p => p.id === productId);
-    const cartItem = store.cart.find(item => item.id === productId);
-
-    if (cartItem) {
-        cartItem.quantity += quantityChange;
-        if (cartItem.quantity < 1) {
-            store.cart = store.cart.filter(item => item.id !== productId);
+            firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+                .then(confirmationResult => {
+                    window.confirmationResult = confirmationResult;
+                    alert("تم إرسال رمز التحقق");
+                }).catch(error => {
+                    console.error(error);
+                    alert("حدث خطأ أثناء الإرسال");
+                });
         }
-    } else {
-        store.cart.push({...product, quantity: 1});
-    }
-
-    saveCart();
-    renderCart();
-    filterProducts(currentCategory);
-}
-
-function renderProducts(products = store.products) {
-    const container = document.getElementById('productsContainer');
-    container.innerHTML = '';
-    
-    products.forEach(item => {
-        if (item.type === 'header') {
-            const header = document.createElement('div');
-            header.className = 'col-12 mb-3 mt-4';
-            header.innerHTML = `
-                <div class="company-header">
-                    <h3 class="mb-0 text-primary">${item.name}</h3>
-                </div>
-            `;
-            container.appendChild(header);
-        } else {
-            const product = item;
-            const inCart = store.cart.find(cItem => cItem.id === product.id);
-            const productDiv = document.createElement('div');
-            productDiv.className = 'col-md-4 mb-4';
-            productDiv.innerHTML = `
-                <div class="product-card card h-100">
-                    <img src="${product.image}" 
-                         class="card-img-top" 
-                         style="height: 200px; object-fit: contain;"
-                         onerror="this.src='https://via.placeholder.com/200'">
-                 <div class="card-body">
-    <!-- اسم الشركة المضاف -->
-    <div class="product-company mb-1">${product.company}</div>
-    
-    <h5 class="card-title">${product.name}</h5>
-    <div class="d-flex justify-content-between align-items-center">
-        <span class="h5 text-success">${product.price.toFixed(2)} <span class="currency">₪</span></span>
-        ${inCart ? `
-                                <div class="quantity-controls btn-group shadow">
-                                    <button class="btn btn-sm btn-outline-secondary" 
-                                            onclick="updateCart(${product.id}, -1)">-</button>
-                                    <span class="px-3 bg-light">${inCart.quantity}</span>
-                                    <button class="btn btn-sm btn-outline-secondary" 
-                                            onclick="updateCart(${product.id}, 1)">+</button>
-                                </div>
-                            ` : `
-                                <button class="btn btn-primary shadow" 
-                                        onclick="updateCart(${product.id}, 1)">
-                                    <i class="fas fa-cart-plus"></i> إضافة
-                                </button>
-                            `}
-                        </div>
-                    </div>
-                </div>
-            `;
-            container.appendChild(productDiv);
+        
+        function verifyOTP() {
+            let otp = document.getElementById("otp").value;
+            
+            confirmationResult.confirm(otp).then(result => {
+                alert("تم تسجيل الدخول بنجاح");
+                console.log("المستخدم:", result.user);
+            }).catch(error => {
+                console.error(error);
+                alert("رمز التحقق غير صحيح");
+            });
         }
-    });
-}
-
-function renderCart() {
-    const container = document.getElementById('cartItems');
-    container.innerHTML = store.cart.map(item => `
-        <div class="cart-item mb-3 p-2 border-bottom">
-            <div class="d-flex align-items-center gap-3">
-                <img src="${item.image}" 
-                     style="width: 60px; height: 60px; object-fit: contain;" 
-                     class="rounded">
-                <div class="flex-grow-1">
-                    <h6>${item.name}</h6>
-                    <div class="d-flex align-items-center gap-2">
-                        <button class="btn btn-sm btn-outline-secondary" 
-                                onclick="updateCart(${item.id}, -1)">-</button>
-                        <span>${item.quantity}</span>
-                        <button class="btn btn-sm btn-outline-secondary" 
-                                onclick="updateCart(${item.id}, 1)">+</button>
-                        <span class="ms-2">${(item.price * item.quantity).toFixed(2)} ₪</span>
-                        <button class="btn btn-sm btn-danger ms-3" 
-                                onclick="removeItem(${item.id})">X</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `).join('');
-
-    // حساب الإجمالي
-    const total = store.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    document.getElementById('total').textContent = total.toFixed(2) + ' ₪';
-    document.getElementById('cartBadge').textContent = store.cart.reduce((sum, item) => sum + item.quantity, 0);
-    
-    // تحديث عرض الإجمالي في العنصر المضاف
-    const totalPreview = document.getElementById('totalPreview');
-    if (totalPreview) {
-        totalPreview.textContent = total.toFixed(2) + ' ₪';
-    }
-}
-
-// وظيفة لحذف عنصر من العربة
-function removeItem(itemId) {
-    store.cart = store.cart.filter(item => item.id !== itemId);
-    renderCart();
-}
-
-
-function saveCart() {
-    localStorage.setItem('cart', JSON.stringify(store.cart));
-}
-
-function clearCart() {
-    store.cart = [];
-    saveCart();
-    renderCart();
-    renderProducts();
-}
-async function shareOnWhatsApp() {
-    if (store.cart.length === 0) return alert('السلة فارغة');
-    
-    try {
-        // تنسيق التاريخ والوقت
-        const now = new Date();
-        const formattedDate = now.toLocaleDateString('ar-EG', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric'
-        });
-        
-        const formattedTime = now.toLocaleTimeString('ar-EG', {
-            hour: 'numeric',
-            minute: '2-digit',
-            hour12: true
-        });
-
-        // إنشاء محتوى الفاتورة النصية
-        let invoiceText = `
-📋 *فاتورة شراء* 📋
-🏬 ${store.name || "Shehadeh Center"}
-══════════════════════
-
-📅 *التاريخ:* ${formattedDate}
-🕒 *الوقت:* ${formattedTime}
-──────────────────────
-
-📦 *المنتجات المطلوبة:*
-${store.cart.map((item, index) => `
-${index + 1}. ${item.name} ${item.company ? `: ${item.company}` : ''}
-   الكمية: ${item.quantity} X السعر: ${item.price.toFixed(2)} ₪
-   الإجمالي: ${(item.price * item.quantity).toFixed(2)} ₪
-   ${'▬'.repeat(25)}`).join('\n')}
-
-──────────────────────
-💰 *الإجمالي النهائي:* ${store.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)} ₪
-══════════════════════
-
-📮 *Shehadeh Center:*
-📞 ${store.phoneNumber}
-🏠 ${store.address || 'الخليل'}
-
-🆔 رقم الفاتورة: ####
-
-شكراً لكم 🌟
-        `.trim();
-
-        // ترميز الرسالة للواتساب
-        const encodedMessage = encodeURIComponent(invoiceText);
-        const whatsappNumber = "+972569813333";
-        
-        // إرسال الرسالة عبر الواتساب
-        window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
-
-    } catch (error) {
-        console.error('Error:', error);
-        alert('حدث خطأ في مشاركة الفاتورة!');
-    }
-}
-
-window.addEventListener('DOMContentLoaded', loadProducts);
-    // مثال باستخدام JavaScript خالص
-
-// وظيفة الصعود للأعلى
-document.getElementById("scrollUp").addEventListener("click", () => {
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth" // التمرير بسلاسة
-    });
-});
-
-</script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </script>
 </body>
 </html>
