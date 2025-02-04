@@ -47,7 +47,7 @@
 <body>
     <div id="login-container">
         <h2>تسجيل الدخول باستخدام رقم الهاتف</h2>
-        <input type="text" id="phone-number" placeholder="أدخل رقم الهاتف (مثال: +966500000000)">
+        <input type="text" id="phone-number" placeholder="أدخل رقم الهاتف (بدون رمز الدولة)">
         <button id="send-code">إرسال رمز التحقق</button>
         <div id="recaptcha-container"></div>
         <input type="text" id="verification-code" placeholder="أدخل رمز التحقق" style="display: none;">
@@ -56,8 +56,8 @@
 
     <script type="module">
         // قم باستيراد الدوال التي تحتاجها من Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+        import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
 
         // تهيئة Firebase
         const firebaseConfig = {
@@ -81,11 +81,14 @@
 
         // إرسال رمز التحقق
         document.getElementById('send-code').addEventListener('click', () => {
-            const phoneNumber = document.getElementById('phone-number').value;
-            if (!phoneNumber) {
+            const userInput = document.getElementById('phone-number').value;
+            if (!userInput) {
                 alert("الرجاء إدخال رقم الهاتف");
                 return;
             }
+
+            // إضافة رمز الدولة +972 تلقائيًا
+            const phoneNumber = `+972${userInput}`;
 
             signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
                 .then((confirmationResult) => {
