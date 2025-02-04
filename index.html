@@ -3,67 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول</title>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <title>تسجيل الدخول باستخدام رقم الهاتف</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #recaptcha-container {
+            margin: 10px 0;
+        }
+    </style>
 </head>
 <body>
-    <h2>تسجيل الدخول برقم الهاتف</h2>
-    <input type="text" id="phoneNumber" placeholder="أدخل رقم الهاتف" />
-    <button onclick="sendOTP()">إرسال رمز التحقق</button>
-    <div id="recaptcha-container"></div>
-    
-    <input type="text" id="otp" placeholder="أدخل رمز التحقق" />
-    <button onclick="verifyOTP()">تحقق</button>
-    
-    <script>
-        // إعداد Firebase
+    <div id="login-container">
+        <h2>تسجيل الدخول باستخدام رقم الهاتف</h2>
+        <input type="text" id="phone-number" placeholder="أدخل رقم الهاتف (مثال: +966500000000)">
+        <button id="send-code">إرسال رمز التحقق</button>
+        <div id="recaptcha-container"></div>
+        <input type="text" id="verification-code" placeholder="أدخل رمز التحقق" style="display: none;">
+        <button id="verify-code" style="display: none;">تحقق</button>
+    </div>
+
+    <script type="module">
+        // قم باستيراد الدوال التي تحتاجها من Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+        // تهيئة Firebase
         const firebaseConfig = {
-            apiKey: "AIzaSyBP2bnt1DNNUO0dFtfiIovxMG-NM6yXPMM",
+            apiKey: "AIzaSyBWfV0Z1yKxJ-lGJHzi5gStMGTE3CNxmMg",
             authDomain: "aasa-8a079.firebaseapp.com",
             projectId: "aasa-8a079",
             storageBucket: "aasa-8a079.appspot.com",
             messagingSenderId: "849330713582",
-            appId: "1:849330713582:web:7a11b11ebdb5cdcc8b14ff"
+            appId: "1:849330713582:web:7a11b11ebdb5cdcc8b14ff",
+            measurementId: "G-LY2WSQ21GE"
         };
-        
-        firebase.initializeApp(firebaseConfig);
-        
-        window.onload = function() {
-            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-                'size': 'normal',
-                'callback': (response) => {
-                    console.log("reCAPTCHA verified");
-                }
-            });
-            recaptchaVerifier.render();
-        }
-        
-        function sendOTP() {
-            let phoneNumber = document.getElementById("phoneNumber").value;
-            let appVerifier = window.recaptchaVerifier;
-            
-            firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
-                .then(confirmationResult => {
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // تهيئة reCAPTCHA
+        let recaptchaVerifier;
+        window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+            'size': 'invisible',
+        }, auth);
+
+        // إرسال رمز التحقق
+        document.getElementById('send-code').addEventListener('click', () => {
+            const phoneNumber = document.getElementById('phone-number').value;
+            if (!phoneNumber) {
+                alert("الرجاء إدخال رقم الهاتف");
+                return;
+            }
+
+            signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
+                .then((confirmationResult) => {
                     window.confirmationResult = confirmationResult;
-                    alert("تم إرسال رمز التحقق");
-                }).catch(error => {
-                    console.error(error);
-                    alert("حدث خطأ أثناء الإرسال");
+                    alert("تم إرسال رمز التحقق إلى رقم الهاتف");
+                    document.getElementById('verification-code').style.display = 'block';
+                    document.getElementById('verify-code').style.display = 'block';
+                })
+                .catch((error) => {
+                    console.error("خطأ في إرسال رمز التحقق:", error);
+                    alert("حدث خطأ أثناء إرسال رمز التحقق: " + error.message);
                 });
-        }
-        
-        function verifyOTP() {
-            let otp = document.getElementById("otp").value;
-            
-            confirmationResult.confirm(otp).then(result => {
-                alert("تم تسجيل الدخول بنجاح");
-                console.log("المستخدم:", result.user);
-            }).catch(error => {
-                console.error(error);
-                alert("رمز التحقق غير صحيح");
-            });
-        }
+        });
+
+        // التحقق من رمز التحقق
+        document.getElementById('verify-code').addEventListener('click', () => {
+            const code = document.getElementById('verification-code').value;
+            if (!code) {
+                alert("الرجاء إدخال رمز التحقق");
+                return;
+            }
+
+            window.confirmationResult.confirm(code)
+                .then((result) => {
+                    alert("تم تسجيل الدخول بنجاح!");
+                    console.log("تم تسجيل الدخول:", result.user);
+                    // يمكنك توجيه المستخدم إلى صفحة أخرى هنا
+                })
+                .catch((error) => {
+                    console.error("خطأ في التحقق من الرمز:", error);
+                    alert("رمز التحقق غير صحيح: " + error.message);
+                });
+        });
     </script>
 </body>
 </html>
