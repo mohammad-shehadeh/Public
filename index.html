@@ -20,6 +20,7 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+            width: 300px;
         }
         input {
             width: 100%;
@@ -27,20 +28,26 @@
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
+            box-sizing: border-box;
         }
         button {
-            padding: 10px 20px;
+            width: 100%;
+            padding: 10px;
             background-color: #007bff;
             color: #fff;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            margin-top: 10px;
         }
         button:hover {
             background-color: #0056b3;
         }
         #recaptcha-container {
             margin: 10px 0;
+        }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -50,8 +57,8 @@
         <input type="text" id="phone-number" placeholder="أدخل رقم الهاتف (بدون رمز الدولة)">
         <button id="send-code">إرسال رمز التحقق</button>
         <div id="recaptcha-container"></div>
-        <input type="text" id="verification-code" placeholder="أدخل رمز التحقق" style="display: none;">
-        <button id="verify-code" style="display: none;">تحقق</button>
+        <input type="text" id="verification-code" placeholder="أدخل رمز التحقق" class="hidden">
+        <button id="verify-code" class="hidden">تحقق</button>
     </div>
 
     <script type="module">
@@ -80,47 +87,45 @@
         }, auth);
 
         // إرسال رمز التحقق
-        document.getElementById('send-code').addEventListener('click', () => {
-            const userInput = document.getElementById('phone-number').value;
-            if (!userInput) {
-                alert("الرجاء إدخال رقم الهاتف");
+        document.getElementById('send-code').addEventListener('click', async () => {
+            const userInput = document.getElementById('phone-number').value.trim();
+            if (!userInput || !/^\d+$/.test(userInput)) {
+                alert("الرجاء إدخال رقم هاتف صحيح (أرقام فقط)");
                 return;
             }
 
             // إضافة رمز الدولة +972 تلقائيًا
             const phoneNumber = `+972${userInput}`;
 
-            signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
-                .then((confirmationResult) => {
-                    window.confirmationResult = confirmationResult;
-                    alert("تم إرسال رمز التحقق إلى رقم الهاتف");
-                    document.getElementById('verification-code').style.display = 'block';
-                    document.getElementById('verify-code').style.display = 'block';
-                })
-                .catch((error) => {
-                    console.error("خطأ في إرسال رمز التحقق:", error);
-                    alert("حدث خطأ أثناء إرسال رمز التحقق: " + error.message);
-                });
+            try {
+                const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier);
+                window.confirmationResult = confirmationResult;
+                alert("تم إرسال رمز التحقق إلى رقم الهاتف");
+                document.getElementById('verification-code').classList.remove('hidden');
+                document.getElementById('verify-code').classList.remove('hidden');
+            } catch (error) {
+                console.error("خطأ في إرسال رمز التحقق:", error);
+                alert("حدث خطأ أثناء إرسال رمز التحقق: " + error.message);
+            }
         });
 
         // التحقق من رمز التحقق
-        document.getElementById('verify-code').addEventListener('click', () => {
-            const code = document.getElementById('verification-code').value;
+        document.getElementById('verify-code').addEventListener('click', async () => {
+            const code = document.getElementById('verification-code').value.trim();
             if (!code) {
                 alert("الرجاء إدخال رمز التحقق");
                 return;
             }
 
-            window.confirmationResult.confirm(code)
-                .then((result) => {
-                    alert("تم تسجيل الدخول بنجاح!");
-                    console.log("تم تسجيل الدخول:", result.user);
-                    // يمكنك توجيه المستخدم إلى صفحة أخرى هنا
-                })
-                .catch((error) => {
-                    console.error("خطأ في التحقق من الرمز:", error);
-                    alert("رمز التحقق غير صحيح: " + error.message);
-                });
+            try {
+                const result = await window.confirmationResult.confirm(code);
+                alert("تم تسجيل الدخول بنجاح!");
+                console.log("تم تسجيل الدخول:", result.user);
+                // يمكنك توجيه المستخدم إلى صفحة أخرى هنا
+            } catch (error) {
+                console.error("خطأ في التحقق من الرمز:", error);
+                alert("رمز التحقق غير صحيح: " + error.message);
+            }
         });
     </script>
 </body>
