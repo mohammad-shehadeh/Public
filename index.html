@@ -20,6 +20,8 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+            width: 100%;
+            max-width: 400px;
         }
         input {
             width: 100%;
@@ -42,24 +44,29 @@
         #recaptcha-container {
             margin: 10px 0;
         }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div id="login-container">
         <h2>تسجيل الدخول باستخدام رقم الهاتف</h2>
         <input type="text" id="phone-number" placeholder="أدخل رقم الهاتف (مثال: +966500000000)">
+        <div id="phone-error" class="error-message">الرجاء إدخال رقم الهاتف صحيح.</div>
         <button id="send-code">إرسال رمز التحقق</button>
         <div id="recaptcha-container"></div>
         <input type="text" id="verification-code" placeholder="أدخل رمز التحقق" style="display: none;">
         <button id="verify-code" style="display: none;">تحقق</button>
+        <div id="code-error" class="error-message">الرجاء إدخال رمز التحقق صحيح.</div>
     </div>
 
     <script type="module">
-        // قم باستيراد الدوال التي تحتاجها من Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
-        // تهيئة Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyBWfV0Z1yKxJ-lGJHzi5gStMGTE3CNxmMg",
             authDomain: "aasa-8a079.firebaseapp.com",
@@ -73,19 +80,20 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // تهيئة reCAPTCHA
         let recaptchaVerifier;
         window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
             'size': 'invisible',
         }, auth);
 
-        // إرسال رمز التحقق
         document.getElementById('send-code').addEventListener('click', () => {
             const phoneNumber = document.getElementById('phone-number').value;
-            if (!phoneNumber) {
-                alert("الرجاء إدخال رقم الهاتف");
+
+            const phoneRegex = /^\+?[0-9]{10,15}$/;
+            if (!phoneNumber || !phoneRegex.test(phoneNumber)) {
+                document.getElementById('phone-error').style.display = 'block';
                 return;
             }
+            document.getElementById('phone-error').style.display = 'none';
 
             signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
                 .then((confirmationResult) => {
@@ -100,19 +108,18 @@
                 });
         });
 
-        // التحقق من رمز التحقق
         document.getElementById('verify-code').addEventListener('click', () => {
             const code = document.getElementById('verification-code').value;
             if (!code) {
-                alert("الرجاء إدخال رمز التحقق");
+                document.getElementById('code-error').style.display = 'block';
                 return;
             }
+            document.getElementById('code-error').style.display = 'none';
 
             window.confirmationResult.confirm(code)
                 .then((result) => {
                     alert("تم تسجيل الدخول بنجاح!");
                     console.log("تم تسجيل الدخول:", result.user);
-                    // يمكنك توجيه المستخدم إلى صفحة أخرى هنا
                 })
                 .catch((error) => {
                     console.error("خطأ في التحقق من الرمز:", error);
