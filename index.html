@@ -43,9 +43,6 @@
         button:hover {
             background-color: #0056b3;
         }
-        #recaptcha-container {
-            margin: 10px 0;
-        }
         .hidden {
             display: none;
         }
@@ -54,7 +51,7 @@
 <body>
     <div id="login-container">
         <h2>تسجيل الدخول باستخدام رقم الهاتف</h2>
-        <input type="text" id="phone-number" placeholder="أدخل رقم الهاتف (بدون رمز الدولة)">
+        <input type="text" id="phone-number" placeholder="أدخل رقم الهاتف الكامل (مثال: +972501234567)">
         <button id="send-code">إرسال رمز التحقق</button>
         <div id="recaptcha-container"></div>
         <input type="text" id="verification-code" placeholder="أدخل رمز التحقق" class="hidden">
@@ -88,14 +85,11 @@
 
         // إرسال رمز التحقق
         document.getElementById('send-code').addEventListener('click', async () => {
-            const userInput = document.getElementById('phone-number').value.trim();
-            if (!userInput || !/^\d+$/.test(userInput)) {
-                alert("الرجاء إدخال رقم هاتف صحيح (أرقام فقط)");
+            const phoneNumber = document.getElementById('phone-number').value.trim();
+            if (!phoneNumber || !phoneNumber.startsWith("+")) {
+                alert("الرجاء إدخال رقم الهاتف الكامل مع رمز الدولة (مثال: +972501234567)");
                 return;
             }
-
-            // إضافة رمز الدولة +972 تلقائيًا
-            const phoneNumber = `+972${userInput}`;
 
             try {
                 const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier);
