@@ -896,80 +896,9 @@ button.disabled i, button[disabled] i {
     pointer-events: none;  /* تعطيل تفاعل المستخدم مع الأيقونة */
 }
 
-    #container {
-      background-color: #fff;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      text-align: center;
-      width: 100%;
-      max-width: 400px;
-      animation: fadeIn 0.5s;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      transition: 0.3s;
-    }
-    input:focus {
-      border-color: #007bff;
-      outline: none;
-      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    }
-    .password-container {
-      position: relative;
-    }
-    .toggle-password {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      font-size: 14px;
-      color: #007bff;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: 0.3s;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .error-message {
-      color: red;
-      font-size: 14px;
-      display: none;
-      margin-top: 5px;
-    }
   </style>
 </head>
-<body>
-  <div id="container">
-    <div id="login-container">
-      <h2>تسجيل الدخول</h2>
-      <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
-      <div class="password-container">
-        <input type="password" id="password" placeholder="أدخل كلمة المرور">
-        <span class="toggle-password">👁️</span>
-      </div>
-      <button id="email-login">تسجيل الدخول</button>
-      <div class="error-message" id="email-error"></div>
-    </div>
-         <div id="welcome-container" style="display: none;">
+        <header>
             <h1>Shehadeh Center</h1>
             <div id="file-buttons"></div> <!-- عنصر لعرض الأزرار -->
 <button id="select-file-button">اختيار ملف</button> <!-- زر لاختيار الملف يدويًا -->
@@ -1717,59 +1646,7 @@ hideCartButton.onclick = function() {
                 behavior: "smooth"
             });
         });
- import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBP2bnt1DNNUO0dFtfiIovxMG-NM6yXPMM",
-      authDomain: "aasa-8a079.firebaseapp.com",
-      projectId: "aasa-8a079",
-      storageBucket: "aasa-8a079.appspot.com",
-      messagingSenderId: "849330713582",
-      appId: "1:849330713582:web:7a11b11ebdb5cdcc8b14ff"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        document.getElementById("login-container").style.display = "none";
-        document.getElementById("welcome-container").style.display = "block";
-      } else {
-        document.getElementById("login-container").style.display = "block";
-        document.getElementById("welcome-container").style.display = "none";
-      }
-    });
-
-    document.getElementById("email-login").addEventListener("click", async () => {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-      const errorMessage = document.getElementById("email-error");
-      errorMessage.style.display = "none";
-      
-      if (!email || !password) {
-        errorMessage.innerText = "يرجى إدخال البريد الإلكتروني وكلمة المرور";
-        errorMessage.style.display = "block";
-        return;
-      }
-      
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-      } catch (error) {
-        errorMessage.innerText = "خطأ: " + error.message;
-        errorMessage.style.display = "block";
-      }
-    });
-
-    document.getElementById("logout").addEventListener("click", async () => {
-      await signOut(auth);
-    });
-
-    document.querySelector(".toggle-password").addEventListener("click", () => {
-      const passwordInput = document.getElementById("password");
-      passwordInput.type = passwordInput.type === "password" ? "text" : "password";
-    });
+ 
 </script>
 </body>
 </html>
