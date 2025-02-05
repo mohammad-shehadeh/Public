@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول باستخدام رقم الهاتف أو جوجل</title>
+    <title>تسجيل الدخول</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -41,9 +41,6 @@
         button:hover {
             background-color: #0056b3;
         }
-        #recaptcha-container {
-            margin: 10px 0;
-        }
         .error-message {
             color: red;
             font-size: 14px;
@@ -64,22 +61,23 @@
 </head>
 <body>
     <div id="login-container">
-        <h2>تسجيل الدخول باستخدام رقم الهاتف أو جوجل</h2>
-        <input type="text" id="phone-number" placeholder="أدخل رقم الهاتف (مثال: +966500000000)">
-        <div id="phone-error" class="error-message">الرجاء إدخال رقم الهاتف صحيح.</div>
-        <button id="send-code">إرسال رمز التحقق</button>
-        <div id="recaptcha-container"></div>
-        <input type="text" id="verification-code" placeholder="أدخل رمز التحقق" style="display: none;">
-        <button id="verify-code" style="display: none;">تحقق</button>
-        <div id="code-error" class="error-message">الرجاء إدخال رمز التحقق صحيح.</div>
+        <h2>تسجيل الدخول</h2>
+        <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
+        <div id="email-error" class="error-message">الرجاء إدخال بريد إلكتروني صحيح.</div>
+        
+        <input type="password" id="password" placeholder="أدخل كلمة المرور">
+        <div id="password-error" class="error-message">الرجاء إدخال كلمة المرور.</div>
 
-        <!-- زر تسجيل الدخول باستخدام جوجل -->
+        <button id="login-btn">تسجيل الدخول</button>
+        <button id="signup-btn">إنشاء حساب جديد</button>
+
+        <hr>
         <button id="google-sign-in">تسجيل الدخول باستخدام جوجل</button>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBWfV0Z1yKxJ-lGJHzi5gStMGTE3CNxmMg",
@@ -94,52 +92,63 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        let recaptchaVerifier;
-        window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-            'size': 'invisible',
-        }, auth);
+        // تسجيل الدخول بالبريد وكلمة المرور
+        document.getElementById('login-btn').addEventListener('click', () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-        // تسجيل الدخول باستخدام رقم الهاتف
-        document.getElementById('send-code').addEventListener('click', () => {
-            const phoneNumber = document.getElementById('phone-number').value;
-
-            const phoneRegex = /^\+?[0-9]{10,15}$/;
-            if (!phoneNumber || !phoneRegex.test(phoneNumber)) {
-                document.getElementById('phone-error').style.display = 'block';
+            if (!email) {
+                document.getElementById('email-error').style.display = 'block';
                 return;
+            } else {
+                document.getElementById('email-error').style.display = 'none';
             }
-            document.getElementById('phone-error').style.display = 'none';
 
-            signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
-                .then((confirmationResult) => {
-                    window.confirmationResult = confirmationResult;
-                    alert("تم إرسال رمز التحقق إلى رقم الهاتف");
-                    document.getElementById('verification-code').style.display = 'block';
-                    document.getElementById('verify-code').style.display = 'block';
+            if (!password) {
+                document.getElementById('password-error').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('password-error').style.display = 'none';
+            }
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    alert("تم تسجيل الدخول بنجاح!");
+                    console.log("تم تسجيل الدخول:", userCredential.user);
                 })
                 .catch((error) => {
-                    console.error("خطأ في إرسال رمز التحقق:", error);
-                    alert("حدث خطأ أثناء إرسال رمز التحقق: " + error.message);
+                    console.error("خطأ في تسجيل الدخول:", error);
+                    alert("خطأ في تسجيل الدخول: " + error.message);
                 });
         });
 
-        // التحقق من رمز التحقق
-        document.getElementById('verify-code').addEventListener('click', () => {
-            const code = document.getElementById('verification-code').value;
-            if (!code) {
-                document.getElementById('code-error').style.display = 'block';
-                return;
-            }
-            document.getElementById('code-error').style.display = 'none';
+        // إنشاء حساب جديد
+        document.getElementById('signup-btn').addEventListener('click', () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-            window.confirmationResult.confirm(code)
-                .then((result) => {
-                    alert("تم تسجيل الدخول بنجاح!");
-                    console.log("تم تسجيل الدخول:", result.user);
+            if (!email) {
+                document.getElementById('email-error').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('email-error').style.display = 'none';
+            }
+
+            if (!password) {
+                document.getElementById('password-error').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('password-error').style.display = 'none';
+            }
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    alert("تم إنشاء الحساب بنجاح!");
+                    console.log("تم إنشاء الحساب:", userCredential.user);
                 })
                 .catch((error) => {
-                    console.error("خطأ في التحقق من الرمز:", error);
-                    alert("رمز التحقق غير صحيح: " + error.message);
+                    console.error("خطأ في إنشاء الحساب:", error);
+                    alert("خطأ في إنشاء الحساب: " + error.message);
                 });
         });
 
@@ -148,10 +157,8 @@
             const provider = new GoogleAuthProvider();
             signInWithPopup(auth, provider)
                 .then((result) => {
-                    const user = result.user;
                     alert("تم تسجيل الدخول باستخدام جوجل بنجاح!");
-                    console.log("تم تسجيل الدخول باستخدام جوجل:", user);
-                    // يمكنك توجيه المستخدم إلى صفحة أخرى هنا
+                    console.log("تم تسجيل الدخول باستخدام جوجل:", result.user);
                 })
                 .catch((error) => {
                     console.error("خطأ في تسجيل الدخول باستخدام جوجل:", error);
