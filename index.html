@@ -31,7 +31,7 @@
             border-radius: 4px;
         }
         button {
-            padding: 10px 20px;
+            padding: 10px;
             background-color: #007bff;
             color: #fff;
             border: none;
@@ -47,41 +47,42 @@
             display: none;
         }
         #recaptcha-container {
-            margin: 10px 0;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div id="login-container">
         <h2>تسجيل الدخول</h2>
-
+        
         <!-- تسجيل الدخول بالبريد وكلمة المرور -->
         <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
         <input type="password" id="password" placeholder="أدخل كلمة المرور">
-        <button id="login-email-btn">تسجيل الدخول بالبريد</button>
+        <button id="email-login">تسجيل الدخول بالبريد</button>
         
+        <div class="error-message" id="email-error">حدث خطأ أثناء تسجيل الدخول!</div>
+
         <hr>
 
         <!-- تسجيل الدخول برقم الهاتف -->
-        <input type="text" id="phone-number" placeholder="أدخل رقم الهاتف (مثال: +966500000000)">
+        <input type="text" id="phone-number" placeholder="أدخل رقم الهاتف (مثال: +972569813333)">
         <button id="send-code">إرسال رمز التحقق</button>
-        <div id="recaptcha-container"></div>
         
+        <div id="recaptcha-container"></div>
+
         <input type="text" id="verification-code" placeholder="أدخل رمز التحقق" style="display: none;">
         <button id="verify-code" style="display: none;">تحقق</button>
-
-        <hr>
-
-        <button id="signup-btn">إنشاء حساب جديد</button>
+        
+        <div class="error-message" id="phone-error">حدث خطأ أثناء التحقق!</div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, signInWithPhoneNumber, RecaptchaVerifier, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyBWfV0Z1yKxJ-lGJHzi5gStMGTE3CNxmMg",
+            apiKey: "AIzaSyXXXXX", // ضع مفتاح API الصحيح هنا
             authDomain: "aasa-8a079.firebaseapp.com",
             projectId: "aasa-8a079",
             storageBucket: "aasa-8a079.appspot.com",
@@ -93,104 +94,55 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // إنشاء معرف الجهاز الفريد
-        function getDeviceID() {
-            return navigator.userAgent + "-" + Math.random().toString(36).substr(2, 9);
-        }
-
-        const deviceID = localStorage.getItem("deviceID") || getDeviceID();
-        localStorage.setItem("deviceID", deviceID);
-
-        // تسجيل الدخول بالبريد وكلمة المرور
-        document.getElementById('login-email-btn').addEventListener('click', async () => {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            if (!email || !password) {
-                alert("يرجى إدخال البريد الإلكتروني وكلمة المرور.");
-                return;
-            }
-
+        // تسجيل الدخول بالبريد
+        document.getElementById("email-login").addEventListener("click", async () => {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                // التحقق من الجهاز
-                const userDocRef = doc(db, "users", user.uid);
-                const userDoc = await getDoc(userDocRef);
-
-                if (userDoc.exists() && userDoc.data().deviceID !== deviceID) {
-                    await signOut(auth);
-                    alert("لا يمكنك تسجيل الدخول من جهاز آخر.");
-                    return;
-                }
-
-                await setDoc(userDocRef, { deviceID }, { merge: true });
-
-                alert("تم تسجيل الدخول بنجاح!");
-                window.location.href = "welcome.html";
+                checkUserStatus(userCredential.user);
             } catch (error) {
-                alert("خطأ في تسجيل الدخول: " + error.message);
+                document.getElementById("email-error").style.display = "block";
             }
         });
 
-        // تسجيل الدخول باستخدام رقم الهاتف
-        window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-            'size': 'invisible',
-        }, auth);
-
-        document.getElementById('send-code').addEventListener('click', async () => {
-            const phoneNumber = document.getElementById('phone-number').value;
-            if (!phoneNumber) {
-                alert("يرجى إدخال رقم الهاتف.");
-                return;
-            }
-
-            try {
-                const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier);
-                window.confirmationResult = confirmationResult;
-
-                alert("تم إرسال رمز التحقق.");
-                document.getElementById('verification-code').style.display = 'block';
-                document.getElementById('verify-code').style.display = 'block';
-            } catch (error) {
-                alert("خطأ: " + error.message);
-            }
+        // تسجيل الدخول برقم الهاتف
+        window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', { 'size': 'invisible' }, auth);
+        
+        document.getElementById("send-code").addEventListener("click", () => {
+            const phoneNumber = document.getElementById("phone-number").value;
+            signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
+                .then((confirmationResult) => {
+                    window.confirmationResult = confirmationResult;
+                    document.getElementById("verification-code").style.display = "block";
+                    document.getElementById("verify-code").style.display = "block";
+                })
+                .catch((error) => {
+                    document.getElementById("phone-error").style.display = "block";
+                });
         });
 
-        document.getElementById('verify-code').addEventListener('click', async () => {
-            const code = document.getElementById('verification-code').value;
-            if (!code) {
-                alert("يرجى إدخال رمز التحقق.");
-                return;
-            }
-
-            try {
-                const result = await window.confirmationResult.confirm(code);
-                const user = result.user;
-
-                const userDocRef = doc(db, "users", user.uid);
-                const userDoc = await getDoc(userDocRef);
-
-                if (userDoc.exists() && userDoc.data().deviceID !== deviceID) {
-                    await signOut(auth);
-                    alert("لا يمكنك تسجيل الدخول من جهاز آخر.");
-                    return;
-                }
-
-                await setDoc(userDocRef, { deviceID }, { merge: true });
-
-                alert("تم تسجيل الدخول بنجاح!");
-                window.location.href = "welcome.html";
-            } catch (error) {
-                alert("رمز التحقق غير صحيح: " + error.message);
-            }
+        document.getElementById("verify-code").addEventListener("click", () => {
+            const code = document.getElementById("verification-code").value;
+            window.confirmationResult.confirm(code)
+                .then((result) => {
+                    checkUserStatus(result.user);
+                })
+                .catch((error) => {
+                    document.getElementById("phone-error").style.display = "block";
+                });
         });
 
-        // إنشاء حساب جديد
-        document.getElementById('signup-btn').addEventListener('click', () => {
-            window.location.href = "signup.html";
-        });
+        // التحقق من حالة الحساب
+        async function checkUserStatus(user) {
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (!userDoc.exists()) {
+                await signOut(auth);
+                alert("تم حذف حسابك من Firebase!");
+            } else {
+                window.location.href = "welcome.html"; // توجيه إلى صفحة الترحيب
+            }
+        }
     </script>
 </body>
 </html>
