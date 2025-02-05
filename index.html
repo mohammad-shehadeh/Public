@@ -59,7 +59,7 @@
       <div class="error-message" id="email-error"></div>
     </div>
 
-    <!-- صفحة الترحيب (مخفية في البداية) -->
+    <!-- صفحة الترحيب -->
     <div id="welcome-container" style="display: none;">
       <h2>مرحبًا بك في موقعنا!</h2>
       <p>تم تسجيل الدخول بنجاح.</p>
@@ -70,6 +70,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
     // إعداد Firebase
     const firebaseConfig = {
@@ -83,10 +84,38 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    // التحقق مما إذا كان المستخدم مسجلاً للدخول
-    onAuthStateChanged(auth, (user) => {
+    // إنشاء معرف الجهاز العشوائي لتحديد كل جهاز
+    function getDeviceId() {
+      let deviceId = localStorage.getItem("deviceId");
+      if (!deviceId) {
+        deviceId = Math.random().toString(36).substring(2) + Date.now().toString(36);
+        localStorage.setItem("deviceId", deviceId);
+      }
+      return deviceId;
+    }
+
+    // التحقق مما إذا كان المستخدم مسجلاً للدخول مسبقًا
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+        
+        if (userDoc.exists()) {
+          const storedDeviceId = userDoc.data().deviceId;
+          const currentDeviceId = getDeviceId();
+
+          if (storedDeviceId !== currentDeviceId) {
+            alert("تم تسجيل الدخول من جهاز آخر. سيتم تسجيل خروجك الآن.");
+            await signOut(auth);
+            return;
+          }
+        }
+
+        // تحديث معرف الجهاز في قاعدة البيانات
+        await setDoc(userRef, { deviceId: getDeviceId() });
+
         // إظهار صفحة الترحيب وإخفاء تسجيل الدخول
         document.getElementById("login-container").style.display = "none";
         document.getElementById("welcome-container").style.display = "block";
@@ -102,7 +131,23 @@
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
       try {
-        await signInWithEmailAndPassword(auth, email, password);
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // التحقق مما إذا كان الحساب مسجل على جهاز آخر
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+        const currentDeviceId = getDeviceId();
+
+        if (userDoc.exists() && userDoc.data().deviceId !== currentDeviceId) {
+          alert("هذا الحساب مسجل على جهاز آخر. لا يمكنك تسجيل الدخول.");
+          await signOut(auth);
+          return;
+        }
+
+        // تحديث معرف الجهاز في قاعدة البيانات
+        await setDoc(userRef, { deviceId: currentDeviceId });
+
       } catch (error) {
         document.getElementById("email-error").innerText = "خطأ في تسجيل الدخول: " + error.message;
         document.getElementById("email-error").style.display = "block";
@@ -111,8 +156,14 @@
 
     // تسجيل الخروج
     document.getElementById("logout").addEventListener("click", async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userRef = doc(db, "users", user.uid);
+        await deleteDoc(userRef);  // حذف معرف الجهاز عند تسجيل الخروج
+      }
       await signOut(auth);
     });
+
   </script>
 </body>
 </html>
