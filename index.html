@@ -49,6 +49,14 @@
     #recaptcha-container {
       margin-top: 10px;
     }
+    #google-sign-in {
+      background-color: #db4437;
+      color: white;
+      margin-top: 10px;
+    }
+    #google-sign-in:hover {
+      background-color: #c1351d;
+    }
   </style>
 </head>
 <body>
@@ -72,6 +80,12 @@
     <input type="text" id="verification-code" placeholder="أدخل رمز التحقق" style="display: none;">
     <button id="verify-code" style="display: none;">تحقق</button>
     <div class="error-message" id="phone-error"></div>
+
+    <hr>
+
+    <!-- تسجيل الدخول باستخدام حساب جوجل -->
+    <button id="google-sign-in">تسجيل الدخول بحساب جوجل</button>
+
   </div>
 
   <script type="module">
@@ -81,11 +95,13 @@
       signInWithEmailAndPassword, 
       signInWithPhoneNumber, 
       RecaptchaVerifier, 
-      signOut 
+      signOut, 
+      GoogleAuthProvider, 
+      signInWithPopup
     } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-    // تحديث إعدادات Firebase باستخدام مفتاح API الذي وفرته
+    // إعداد Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyBP2bnt1DNNUO0dFtfiIovxMG-NM6yXPMM",
       authDomain: "aasa-8a079.firebaseapp.com",
@@ -99,7 +115,7 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // تسجيل الدخول باستخدام البريد الإلكتروني وكلمة المرور
+    // تسجيل الدخول بالبريد وكلمة المرور
     document.getElementById("email-login").addEventListener("click", async () => {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
@@ -112,10 +128,10 @@
       }
     });
 
-    // تهيئة reCAPTCHA لتسجيل الدخول برقم الهاتف
+    // إعداد reCAPTCHA للهاتف
     window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', { 'size': 'invisible' }, auth);
     
-    // إرسال رمز التحقق لرقم الهاتف
+    // إرسال رمز التحقق للهاتف
     document.getElementById("send-code").addEventListener("click", () => {
       const phoneNumber = document.getElementById("phone-number").value;
       signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
@@ -130,7 +146,7 @@
         });
     });
 
-    // التحقق من رمز التحقق المُدخل
+    // التحقق من رمز الهاتف
     document.getElementById("verify-code").addEventListener("click", () => {
       const code = document.getElementById("verification-code").value;
       window.confirmationResult.confirm(code)
@@ -143,14 +159,25 @@
         });
     });
 
-    // التحقق من حالة المستخدم في Firestore؛ إذا لم يكن المستخدم موجودًا (محذوف)
+    // تسجيل الدخول باستخدام جوجل
+    document.getElementById("google-sign-in").addEventListener("click", () => {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          checkUserStatus(result.user);
+        })
+        .catch((error) => {
+          alert("حدث خطأ أثناء تسجيل الدخول بحساب جوجل: " + error.message);
+        });
+    });
+
+    // التحقق من حالة المستخدم في Firestore
     async function checkUserStatus(user) {
       const userDoc = await getDoc(doc(db, "users", user.uid));
       if (!userDoc.exists()) {
         await signOut(auth);
         alert("تم حذف حسابك من Firebase!");
       } else {
-        // في حال تحقق المستخدم، يتم التوجيه إلى صفحة الترحيب
         window.location.href = "welcome.html";
       }
     }
