@@ -3,145 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        #login-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 100%;
-            max-width: 400px;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            padding: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .error-message {
-            color: red;
-            font-size: 14px;
-            display: none;
-        }
-        #recaptcha-container {
-            margin-top: 10px;
-        }
-    </style>
+    <title>تسجيل الدخول برقم الهاتف</title>
 </head>
 <body>
-    <div id="login-container">
-        <h2>تسجيل الدخول</h2>
-        
-        <!-- تسجيل الدخول بالبريد وكلمة المرور -->
-        <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
-        <input type="password" id="password" placeholder="أدخل كلمة المرور">
-        <button id="email-login">تسجيل الدخول بالبريد</button>
-        
-        <div class="error-message" id="email-error">حدث خطأ أثناء تسجيل الدخول!</div>
+    <h1>تسجيل الدخول برقم الهاتف</h1>
+    <input type="text" id="phoneNumber" placeholder="أدخل رقم هاتفك">
+    <button onclick="sendVerificationCode()">إرسال رمز التحقق</button>
 
-        <hr>
-
-        <!-- تسجيل الدخول برقم الهاتف -->
-        <input type="text" id="phone-number" placeholder="أدخل رقم الهاتف (مثال: +972569813333)">
-        <button id="send-code">إرسال رمز التحقق</button>
-        
-        <div id="recaptcha-container"></div>
-
-        <input type="text" id="verification-code" placeholder="أدخل رمز التحقق" style="display: none;">
-        <button id="verify-code" style="display: none;">تحقق</button>
-        
-        <div class="error-message" id="phone-error">حدث خطأ أثناء التحقق!</div>
+    <div id="verificationCodeSection" style="display:none;">
+        <input type="text" id="verificationCode" placeholder="أدخل رمز التحقق">
+        <button onclick="verifyCode()">تحقق</button>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, signInWithPhoneNumber, RecaptchaVerifier, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script>
+        // تهيئة Firebase
         const firebaseConfig = {
-            apiKey: "AIzaSyXXXXX", // ضع مفتاح API الصحيح هنا
+            apiKey: "AIzaSyBP2bnt1DNNUO0dFtfiIovxMG-NM6yXPMM",
             authDomain: "aasa-8a079.firebaseapp.com",
             projectId: "aasa-8a079",
             storageBucket: "aasa-8a079.appspot.com",
             messagingSenderId: "849330713582",
-            appId: "1:849330713582:web:7a11b11ebdb5cdcc8b14ff"
+            appId: "1:849330713582:web:your-app-id"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        firebase.initializeApp(firebaseConfig);
 
-        // تسجيل الدخول بالبريد
-        document.getElementById("email-login").addEventListener("click", async () => {
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                checkUserStatus(userCredential.user);
-            } catch (error) {
-                document.getElementById("email-error").style.display = "block";
-            }
-        });
+        function sendVerificationCode() {
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
 
-        // تسجيل الدخول برقم الهاتف
-        window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', { 'size': 'invisible' }, auth);
-        
-        document.getElementById("send-code").addEventListener("click", () => {
-            const phoneNumber = document.getElementById("phone-number").value;
-            signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier)
+            firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
                 .then((confirmationResult) => {
                     window.confirmationResult = confirmationResult;
-                    document.getElementById("verification-code").style.display = "block";
-                    document.getElementById("verify-code").style.display = "block";
+                    document.getElementById('verificationCodeSection').style.display = 'block';
                 })
                 .catch((error) => {
-                    document.getElementById("phone-error").style.display = "block";
+                    console.error("Error sending verification code:", error);
                 });
-        });
+        }
 
-        document.getElementById("verify-code").addEventListener("click", () => {
-            const code = document.getElementById("verification-code").value;
-            window.confirmationResult.confirm(code)
+        function verifyCode() {
+            const verificationCode = document.getElementById('verificationCode').value;
+            confirmationResult.confirm(verificationCode)
                 .then((result) => {
-                    checkUserStatus(result.user);
+                    const user = result.user;
+                    console.log("User signed in successfully:", user);
+                    alert("تم تسجيل الدخول بنجاح!");
                 })
                 .catch((error) => {
-                    document.getElementById("phone-error").style.display = "block";
+                    console.error("Error verifying code:", error);
+                    alert("رمز التحقق غير صحيح!");
                 });
-        });
-
-        // التحقق من حالة الحساب
-        async function checkUserStatus(user) {
-            const userDoc = await getDoc(doc(db, "users", user.uid));
-            if (!userDoc.exists()) {
-                await signOut(auth);
-                alert("تم حذف حسابك من Firebase!");
-            } else {
-                window.location.href = "welcome.html"; // توجيه إلى صفحة الترحيب
-            }
         }
     </script>
 </body>
