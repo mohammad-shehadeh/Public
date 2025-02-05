@@ -46,17 +46,6 @@
             font-size: 14px;
             display: none;
         }
-        #google-sign-in {
-            background-color: #4285F4;
-            color: white;
-            padding: 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        #google-sign-in:hover {
-            background-color: #357ae8;
-        }
     </style>
 </head>
 <body>
@@ -70,14 +59,12 @@
 
         <button id="login-btn">تسجيل الدخول</button>
         <button id="signup-btn">إنشاء حساب جديد</button>
-
-        <hr>
-        <button id="google-sign-in">تسجيل الدخول باستخدام جوجل</button>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBWfV0Z1yKxJ-lGJHzi5gStMGTE3CNxmMg",
@@ -85,85 +72,81 @@
             projectId: "aasa-8a079",
             storageBucket: "aasa-8a079.appspot.com",
             messagingSenderId: "849330713582",
-            appId: "1:849330713582:web:7a11b11ebdb5cdcc8b14ff",
-            measurementId: "G-LY2WSQ21GE"
+            appId: "1:849330713582:web:7a11b11ebdb5cdcc8b14ff"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
 
-        // تسجيل الدخول بالبريد وكلمة المرور
-        document.getElementById('login-btn').addEventListener('click', () => {
+        // دالة للحصول على معرف الجهاز الفريد
+        function getDeviceID() {
+            return navigator.userAgent + "-" + Math.random().toString(36).substr(2, 9);
+        }
+
+        const deviceID = localStorage.getItem("deviceID") || getDeviceID();
+        localStorage.setItem("deviceID", deviceID);
+
+        // تسجيل الدخول بالبريد وكلمة المرور مع التحقق من الجهاز
+        document.getElementById('login-btn').addEventListener('click', async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            if (!email) {
-                document.getElementById('email-error').style.display = 'block';
+            if (!email || !password) {
+                alert("يرجى إدخال البريد الإلكتروني وكلمة المرور.");
                 return;
-            } else {
-                document.getElementById('email-error').style.display = 'none';
             }
 
-            if (!password) {
-                document.getElementById('password-error').style.display = 'block';
-                return;
-            } else {
-                document.getElementById('password-error').style.display = 'none';
-            }
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
 
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    alert("تم تسجيل الدخول بنجاح!");
-                    console.log("تم تسجيل الدخول:", userCredential.user);
-                })
-                .catch((error) => {
-                    console.error("خطأ في تسجيل الدخول:", error);
-                    alert("خطأ في تسجيل الدخول: " + error.message);
-                });
+                // جلب معرف الجهاز المسجل في Firebase
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+
+                if (userDoc.exists()) {
+                    const savedDeviceID = userDoc.data().deviceID;
+
+                    if (savedDeviceID && savedDeviceID !== deviceID) {
+                        await signOut(auth);
+                        alert("تم تسجيل الدخول من جهاز آخر، لا يمكنك استخدام نفس الحساب على أكثر من جهاز.");
+                        return;
+                    }
+                }
+
+                // حفظ معرف الجهاز في قاعدة البيانات إذا لم يكن موجودًا
+                await setDoc(userDocRef, { deviceID }, { merge: true });
+
+                alert("تم تسجيل الدخول بنجاح!");
+                window.location.href = "welcome.html"; // توجيه المستخدم للصفحة الترحيبية
+            } catch (error) {
+                alert("خطأ في تسجيل الدخول: " + error.message);
+            }
         });
 
         // إنشاء حساب جديد
-        document.getElementById('signup-btn').addEventListener('click', () => {
+        document.getElementById('signup-btn').addEventListener('click', async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            if (!email) {
-                document.getElementById('email-error').style.display = 'block';
+            if (!email || !password) {
+                alert("يرجى إدخال البريد الإلكتروني وكلمة المرور.");
                 return;
-            } else {
-                document.getElementById('email-error').style.display = 'none';
             }
 
-            if (!password) {
-                document.getElementById('password-error').style.display = 'block';
-                return;
-            } else {
-                document.getElementById('password-error').style.display = 'none';
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // حفظ معرف الجهاز عند إنشاء الحساب
+                await setDoc(doc(db, "users", user.uid), { deviceID });
+
+                alert("تم إنشاء الحساب بنجاح!");
+                window.location.href = "welcome.html"; // توجيه المستخدم للصفحة الترحيبية
+            } catch (error) {
+                alert("خطأ في إنشاء الحساب: " + error.message);
             }
-
-            createUserWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    alert("تم إنشاء الحساب بنجاح!");
-                    console.log("تم إنشاء الحساب:", userCredential.user);
-                })
-                .catch((error) => {
-                    console.error("خطأ في إنشاء الحساب:", error);
-                    alert("خطأ في إنشاء الحساب: " + error.message);
-                });
-        });
-
-        // تسجيل الدخول باستخدام حساب جوجل
-        document.getElementById('google-sign-in').addEventListener('click', () => {
-            const provider = new GoogleAuthProvider();
-            signInWithPopup(auth, provider)
-                .then((result) => {
-                    alert("تم تسجيل الدخول باستخدام جوجل بنجاح!");
-                    console.log("تم تسجيل الدخول باستخدام جوجل:", result.user);
-                })
-                .catch((error) => {
-                    console.error("خطأ في تسجيل الدخول باستخدام جوجل:", error);
-                    alert("حدث خطأ أثناء تسجيل الدخول باستخدام جوجل: " + error.message);
-                });
         });
     </script>
 </body>
