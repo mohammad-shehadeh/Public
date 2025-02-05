@@ -14,7 +14,7 @@
       height: 100vh;
       margin: 0;
     }
-    #login-container {
+    #container {
       background-color: #fff;
       padding: 20px;
       border-radius: 8px;
@@ -49,19 +49,27 @@
   </style>
 </head>
 <body>
-  <div id="login-container">
-    <h2>تسجيل الدخول</h2>
-    
-    <!-- تسجيل الدخول بالبريد وكلمة المرور -->
-    <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
-    <input type="password" id="password" placeholder="أدخل كلمة المرور">
-    <button id="email-login">تسجيل الدخول</button>
-    <div class="error-message" id="email-error"></div>
+  <div id="container">
+    <!-- نموذج تسجيل الدخول -->
+    <div id="login-container">
+      <h2>تسجيل الدخول</h2>
+      <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
+      <input type="password" id="password" placeholder="أدخل كلمة المرور">
+      <button id="email-login">تسجيل الدخول</button>
+      <div class="error-message" id="email-error"></div>
+    </div>
+
+    <!-- صفحة الترحيب (مخفية في البداية) -->
+    <div id="welcome-container" style="display: none;">
+      <h2>مرحبًا بك في موقعنا!</h2>
+      <p>تم تسجيل الدخول بنجاح.</p>
+      <button id="logout">تسجيل الخروج</button>
+    </div>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
     // إعداد Firebase
     const firebaseConfig = {
@@ -76,17 +84,34 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
+    // التحقق مما إذا كان المستخدم مسجلاً للدخول
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // إظهار صفحة الترحيب وإخفاء تسجيل الدخول
+        document.getElementById("login-container").style.display = "none";
+        document.getElementById("welcome-container").style.display = "block";
+      } else {
+        // إظهار تسجيل الدخول وإخفاء الترحيب
+        document.getElementById("login-container").style.display = "block";
+        document.getElementById("welcome-container").style.display = "none";
+      }
+    });
+
     // تسجيل الدخول بالبريد وكلمة المرور
     document.getElementById("email-login").addEventListener("click", async () => {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
       try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        window.location.href = "welcome.html"; // الانتقال إلى صفحة الترحيب بعد نجاح تسجيل الدخول
+        await signInWithEmailAndPassword(auth, email, password);
       } catch (error) {
         document.getElementById("email-error").innerText = "خطأ في تسجيل الدخول: " + error.message;
         document.getElementById("email-error").style.display = "block";
       }
+    });
+
+    // تسجيل الخروج
+    document.getElementById("logout").addEventListener("click", async () => {
+      await signOut(auth);
     });
   </script>
 </body>
