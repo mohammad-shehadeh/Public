@@ -46,24 +46,38 @@
             font-size: 14px;
             display: none;
         }
+        #recaptcha-container {
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
     <div id="login-container">
         <h2>تسجيل الدخول</h2>
-        <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
-        <div id="email-error" class="error-message">الرجاء إدخال بريد إلكتروني صحيح.</div>
-        
-        <input type="password" id="password" placeholder="أدخل كلمة المرور">
-        <div id="password-error" class="error-message">الرجاء إدخال كلمة المرور.</div>
 
-        <button id="login-btn">تسجيل الدخول</button>
+        <!-- تسجيل الدخول بالبريد وكلمة المرور -->
+        <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
+        <input type="password" id="password" placeholder="أدخل كلمة المرور">
+        <button id="login-email-btn">تسجيل الدخول بالبريد</button>
+        
+        <hr>
+
+        <!-- تسجيل الدخول برقم الهاتف -->
+        <input type="text" id="phone-number" placeholder="أدخل رقم الهاتف (مثال: +966500000000)">
+        <button id="send-code">إرسال رمز التحقق</button>
+        <div id="recaptcha-container"></div>
+        
+        <input type="text" id="verification-code" placeholder="أدخل رمز التحقق" style="display: none;">
+        <button id="verify-code" style="display: none;">تحقق</button>
+
+        <hr>
+
         <button id="signup-btn">إنشاء حساب جديد</button>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -79,7 +93,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // دالة للحصول على معرف الجهاز الفريد
+        // إنشاء معرف الجهاز الفريد
         function getDeviceID() {
             return navigator.userAgent + "-" + Math.random().toString(36).substr(2, 9);
         }
@@ -87,8 +101,8 @@
         const deviceID = localStorage.getItem("deviceID") || getDeviceID();
         localStorage.setItem("deviceID", deviceID);
 
-        // تسجيل الدخول بالبريد وكلمة المرور مع التحقق من الجهاز
-        document.getElementById('login-btn').addEventListener('click', async () => {
+        // تسجيل الدخول بالبريد وكلمة المرور
+        document.getElementById('login-email-btn').addEventListener('click', async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
@@ -101,52 +115,81 @@
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
-                // جلب معرف الجهاز المسجل في Firebase
+                // التحقق من الجهاز
                 const userDocRef = doc(db, "users", user.uid);
                 const userDoc = await getDoc(userDocRef);
 
-                if (userDoc.exists()) {
-                    const savedDeviceID = userDoc.data().deviceID;
-
-                    if (savedDeviceID && savedDeviceID !== deviceID) {
-                        await signOut(auth);
-                        alert("تم تسجيل الدخول من جهاز آخر، لا يمكنك استخدام نفس الحساب على أكثر من جهاز.");
-                        return;
-                    }
+                if (userDoc.exists() && userDoc.data().deviceID !== deviceID) {
+                    await signOut(auth);
+                    alert("لا يمكنك تسجيل الدخول من جهاز آخر.");
+                    return;
                 }
 
-                // حفظ معرف الجهاز في قاعدة البيانات إذا لم يكن موجودًا
                 await setDoc(userDocRef, { deviceID }, { merge: true });
 
                 alert("تم تسجيل الدخول بنجاح!");
-                window.location.href = "welcome.html"; // توجيه المستخدم للصفحة الترحيبية
+                window.location.href = "welcome.html";
             } catch (error) {
                 alert("خطأ في تسجيل الدخول: " + error.message);
             }
         });
 
-        // إنشاء حساب جديد
-        document.getElementById('signup-btn').addEventListener('click', async () => {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+        // تسجيل الدخول باستخدام رقم الهاتف
+        window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+            'size': 'invisible',
+        }, auth);
 
-            if (!email || !password) {
-                alert("يرجى إدخال البريد الإلكتروني وكلمة المرور.");
+        document.getElementById('send-code').addEventListener('click', async () => {
+            const phoneNumber = document.getElementById('phone-number').value;
+            if (!phoneNumber) {
+                alert("يرجى إدخال رقم الهاتف.");
                 return;
             }
 
             try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
+                const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier);
+                window.confirmationResult = confirmationResult;
 
-                // حفظ معرف الجهاز عند إنشاء الحساب
-                await setDoc(doc(db, "users", user.uid), { deviceID });
-
-                alert("تم إنشاء الحساب بنجاح!");
-                window.location.href = "welcome.html"; // توجيه المستخدم للصفحة الترحيبية
+                alert("تم إرسال رمز التحقق.");
+                document.getElementById('verification-code').style.display = 'block';
+                document.getElementById('verify-code').style.display = 'block';
             } catch (error) {
-                alert("خطأ في إنشاء الحساب: " + error.message);
+                alert("خطأ: " + error.message);
             }
+        });
+
+        document.getElementById('verify-code').addEventListener('click', async () => {
+            const code = document.getElementById('verification-code').value;
+            if (!code) {
+                alert("يرجى إدخال رمز التحقق.");
+                return;
+            }
+
+            try {
+                const result = await window.confirmationResult.confirm(code);
+                const user = result.user;
+
+                const userDocRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userDocRef);
+
+                if (userDoc.exists() && userDoc.data().deviceID !== deviceID) {
+                    await signOut(auth);
+                    alert("لا يمكنك تسجيل الدخول من جهاز آخر.");
+                    return;
+                }
+
+                await setDoc(userDocRef, { deviceID }, { merge: true });
+
+                alert("تم تسجيل الدخول بنجاح!");
+                window.location.href = "welcome.html";
+            } catch (error) {
+                alert("رمز التحقق غير صحيح: " + error.message);
+            }
+        });
+
+        // إنشاء حساب جديد
+        document.getElementById('signup-btn').addEventListener('click', () => {
+            window.location.href = "signup.html";
         });
     </script>
 </body>
