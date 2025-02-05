@@ -1659,7 +1659,59 @@ hideCartButton.onclick = function() {
                 behavior: "smooth"
             });
         });
- 
+ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBP2bnt1DNNUO0dFtfiIovxMG-NM6yXPMM",
+      authDomain: "aasa-8a079.firebaseapp.com",
+      projectId: "aasa-8a079",
+      storageBucket: "aasa-8a079.appspot.com",
+      messagingSenderId: "849330713582",
+      appId: "1:849330713582:web:7a11b11ebdb5cdcc8b14ff"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById("login-container").style.display = "none";
+        document.getElementById("welcome-container").style.display = "block";
+      } else {
+        document.getElementById("login-container").style.display = "block";
+        document.getElementById("welcome-container").style.display = "none";
+      }
+    });
+
+    document.getElementById("email-login").addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorMessage = document.getElementById("email-error");
+      errorMessage.style.display = "none";
+      
+      if (!email || !password) {
+        errorMessage.innerText = "يرجى إدخال البريد الإلكتروني وكلمة المرور";
+        errorMessage.style.display = "block";
+        return;
+      }
+      
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (error) {
+        errorMessage.innerText = "خطأ: " + error.message;
+        errorMessage.style.display = "block";
+      }
+    });
+
+    document.getElementById("logout").addEventListener("click", async () => {
+      await signOut(auth);
+    });
+
+    document.querySelector(".toggle-password").addEventListener("click", () => {
+      const passwordInput = document.getElementById("password");
+      passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+    });
 </script>
 </body>
 </html>
