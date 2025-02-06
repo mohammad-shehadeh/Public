@@ -1726,46 +1726,48 @@ hideCartButton.onclick = function() {
             });
         });
 
-    // استيراد مكتبات Firebase
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+// استيراد مكتبات Firebase اللازمة (يرجى التأكد من دعم المتصفح للوحدات النمطية ES Modules)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
-    // إعداد Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyBP2bnt1DNNUO0dFtfiIovxMG-NM6yXPMM",
-      authDomain: "aasa-8a079.firebaseapp.com",
-      projectId: "aasa-8a079",
-      storageBucket: "aasa-8a079.appspot.com",
-      messagingSenderId: "849330713582",
-      appId: "1:849330713582:web:7a11b11ebdb5cdcc8b14ff"
-    };
+// إعدادات Firebase الخاصة بمشروعك
+const firebaseConfig = {
+  apiKey: "AIzaSyBP2bnt1DNNUO0dFtfiIovxMG-NM6yXPMM",
+  authDomain: "aasa-8a079.firebaseapp.com",
+  projectId: "aasa-8a079",
+  storageBucket: "aasa-8a079.appspot.com",
+  messagingSenderId: "849330713582",
+  appId: "1:849330713582:web:7a11b11ebdb5cdcc8b14ff"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+// تهيئة التطبيق والحصول على كائن المصادقة
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-    // التعامل مع حدث النقر على زر تسجيل الدخول
-    document.getElementById("login-button").addEventListener("click", async () => {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
-      const errorMessage = document.getElementById("login-error");
-      errorMessage.style.display = "none";
+// التعامل مع حدث النقر على زر تسجيل الدخول
+document.getElementById("login-button").addEventListener("click", async () => {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const errorMessage = document.getElementById("login-error");
+  errorMessage.style.display = "none";
 
-      if (!email || !password) {
-        errorMessage.innerText = "يرجى إدخال البريد الإلكتروني وكلمة المرور";
-        errorMessage.style.display = "block";
-        return;
-      }
+  if (!email || !password) {
+    errorMessage.innerText = "يرجى إدخال البريد الإلكتروني وكلمة المرور";
+    errorMessage.style.display = "block";
+    return;
+  }
 
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        // عند النجاح، نقوم بإخفاء نموذج تسجيل الدخول وعرض المحتوى الرئيسي
-        document.getElementById("login-container").style.display = "none";
-        document.getElementById("main-content").style.display = "block";
-      } catch (error) {
-        errorMessage.innerText = "خطأ: " + error.message;
-        errorMessage.style.display = "block";
-      }
-    });
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    // عند نجاح تسجيل الدخول، يتم إخفاء نموذج تسجيل الدخول وعرض المحتوى الرئيسي
+    document.getElementById("login-container").style.display = "none";
+    document.getElementById("main-content").style.display = "block";
+  } catch (error) {
+    errorMessage.innerText = "خطأ: " + error.message;
+    errorMessage.style.display = "block";
+  }
+});
+
 </script>
 </body>
 </html>
