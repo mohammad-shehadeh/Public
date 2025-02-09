@@ -1,10 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 // إعداد Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyBP2bnt1DNNUO0dFtfiIovxMG-NM6yXPMM",
+  apiKey: "AIzaSyBP2bnt1DN-UO0dFtfiIovxMG-NM6yXPMM",
   authDomain: "aasa-8a079.firebaseapp.com",
   projectId: "aasa-8a079",
   storageBucket: "aasa-8a079.appspot.com",
@@ -44,10 +44,14 @@ document.getElementById("login-button").addEventListener("click", async () => {
     if (await isUserLoggedIn(user.uid)) {
       errorMessage.innerText = "هذا الحساب مفتوح بالفعل على جهاز آخر.";
       errorMessage.style.display = "block";
+      
+      // تسجيل خروج تلقائي للمستخدم الجديد إذا كان الحساب مفتوحًا
+      await signOut(auth);
       return;
     }
 
-    await setDoc(doc(db, "users", user.uid), { isLoggedIn: true });
+    // تسجيل الدخول وتحديث حالة المستخدم في Firestore
+    await setDoc(doc(db, "users", user.uid), { isLoggedIn: true }, { merge: true });
 
     // عرض الموقع بعد تسجيل الدخول
     document.getElementById("login-container").style.display = "none";
@@ -59,12 +63,31 @@ document.getElementById("login-button").addEventListener("click", async () => {
 });
 
 // التحقق من حالة تسجيل الدخول عند تحميل الصفحة
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (user) {
-    document.getElementById("login-container").style.display = "none";
-    document.getElementById("main-content").style.display = "block";
+    const userRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
+
+    if (userSnap.exists() && userSnap.data().isLoggedIn) {
+      document.getElementById("login-container").style.display = "none";
+      document.getElementById("main-content").style.display = "block";
+    } else {
+      // تسجيل خروج تلقائي إذا لم يتم العثور على بيانات المستخدم أو كان تسجيل الدخول غير نشط
+      await signOut(auth);
+      document.getElementById("login-container").style.display = "block";
+      document.getElementById("main-content").style.display = "none";
+    }
   } else {
     document.getElementById("login-container").style.display = "block";
     document.getElementById("main-content").style.display = "none";
+  }
+});
+
+// تسجيل خروج المستخدم عند إغلاق الصفحة أو الخروج
+window.addEventListener("beforeunload", async () => {
+  const user = auth.currentUser;
+  if (user) {
+    await updateDoc(doc(db, "users", user.uid), { isLoggedIn: false });
+    await signOut(auth);
   }
 });
