@@ -896,128 +896,53 @@ button.disabled i, button[disabled] i {
     pointer-events: none;  /* تعطيل تفاعل المستخدم مع الأيقونة */
 }
 
-    /* نموذج تسجيل الدخول */
-    #login-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #007bff, #6610f2);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    #login-container .login-box {
-      background-color: #fff;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      text-align: center;
-      width: 100%;
-      max-width: 400px;
-      animation: fadeIn 0.5s;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    #login-container input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      transition: 0.3s;
-    }
-    #login-container input:focus {
-      border-color: #007bff;
-      outline: none;
-      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    }
-    #login-container button {
-      width: 100%;
-      padding: 12px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: 0.3s;
-    }
-    #login-container button:hover {
-      background-color: #0056b3;
-    }
-    .error-message {
-      color: red;
-      font-size: 14px;
-      display: none;
-      margin-top: 5px;
-    }
-    /* إخفاء المحتوى الرئيسي حتى تسجيل الدخول */
-    #main-content {
-      display: none;
-    }
   </style>
-</head>
 <body>
-  <!-- نموذج تسجيل الدخول -->
-  <div id="login-container">
-    <div class="login-box">
-      <h2>تسجيل الدخول</h2>
-      <input type="email" id="email" placeholder="أدخل البريد الإلكتروني" />
-      <input type="password" id="password" placeholder="أدخل كلمة المرور" />
+    <div id="login-container">
+      <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
+      <input type="password" id="password" placeholder="أدخل كلمة المرور">
       <button id="login-button">تسجيل الدخول</button>
-      <div class="error-message" id="login-error"></div>
+      <div class="error-message" id="email-error" style="display: none;"></div>
     </div>
-  </div>
-
-  <!-- المحتوى الرئيسي الذي سيظهر بعد تسجيل الدخول -->
-  <div id="main-content">
-    <header>
-      <h1>Shehadeh Center</h1>
-      <div id="file-buttons"></div> <!-- عنصر لعرض الأزرار -->
-      <button id="select-file-button">اختيار ملف</button> <!-- زر لاختيار الملف يدويًا -->
-      <br>
-      <div id="filter-buttons">
-        <!-- الأزرار سيتم إنشاؤها ديناميكيًا بواسطة JavaScript -->
+  
+    <div id="main-content" style="display: none;">
+      <header>
+        <h1>Shehadeh Center</h1>
+        <div id="file-buttons"></div>
+        <button id="select-file-button">اختيار ملف</button>
+        <br>
+        <div id="filter-buttons"></div>
+        <input type="text" id="search-box" placeholder="🔍 أبحث عن منتج" />
+        <button class="toggle-cart d-flex align-items-center gap-2" id="show-cart-button">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-text">سلة التسوق</span>
+          <span id="cart-total" class="fw-bold price-container">0.00 ₪</span>
+        </button>
+      </header>
+  
+      <main>
+        <div id="categories"></div>
+      </main>
+  
+      <div class="cart" id="cart">
+        <div id="cart-items"></div>
+        <button class="share-button" id="checkout-button">ارسال طلبية</button>
+        <button class="toggle-cart" id="hide-cart-button">إخفاء الفاتورة</button>
       </div>
-      <input type="text" id="search-box" placeholder="🔍 أبحث عن منتج" />
-      <div id="filter-buttons"></div>
-      <button class="toggle-cart d-flex align-items-center gap-2" id="show-cart-button">
-        <i class="fas fa-shopping-cart"></i>
-        <span class="cart-text">سلة التسوق</span>
-        <i class="fas fa-shopping-cart"></i><br>
-        <span id="cart-total" class="fw-bold price-container">0.00 ₪</span>
-      </button>
-    </header>
-    
-    <main>
-      <div id="categories"></div>
-    </main>
-    
-    <div class="cart" id="cart">
-      <div id="cart-items"></div>
-      <button class="share-button" id="checkout-button">ارسال طلبية</button>
-      <br>
-      <button class="toggle-cart" id="hide-cart-button">إخفاء الفاتورة</button>
+  
+      <div class="popup" id="popup">
+        <h2>نموذج إتمام الطلب</h2>
+        <input type="text" id="customer-name" placeholder="ادخل اسمك">
+        <input type="text" id="customer-phone" placeholder="ادخل رقم هاتفك">
+        <button id="confirm-button">إرسال</button>
+        <button id="cancel-button">إلغاء</button>
+      </div>
+  
+      <div class="scroll-btn">
+        <button id="scrollUp" title="الصعود للأعلى">↑</button>
+        <button id="scrollDown" title="النزول للأسفل">↓</button>
+      </div>
     </div>
-    
-    <div class="popup" id="popup">
-      <h2>نموذج إتمام الطلب</h2>
-      <input type="text" id="customer-name" placeholder="ادخل اسمك" />
-      <input type="text" id="customer-phone" placeholder="ادخل رقم هاتفك" />
-      <button id="confirm-button">إرسال</button>
-      <button id="cancel-button">ألغاء</button>
-    </div>
-    
-    <div class="scroll-btn">
-      <button id="scrollUp" title="الصعود للأعلى">↑</button>
-      <button id="scrollDown" title="النزول للأسفل">↓</button>
-    </div>
-  </div>
 
     <script>
 const categoriesContainer = document.getElementById('categories');
@@ -1725,49 +1650,8 @@ hideCartButton.onclick = function() {
                 behavior: "smooth"
             });
         });
-
-// استيراد مكتبات Firebase اللازمة (يرجى التأكد من دعم المتصفح للوحدات النمطية ES Modules)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-
-// إعدادات Firebase الخاصة بمشروعك
-const firebaseConfig = {
-  apiKey: "AIzaSyBP2bnt1DNNUO0dFtfiIovxMG-NM6yXPMM",
-  authDomain: "aasa-8a079.firebaseapp.com",
-  projectId: "aasa-8a079",
-  storageBucket: "aasa-8a079.appspot.com",
-  messagingSenderId: "849330713582",
-  appId: "1:849330713582:web:7a11b11ebdb5cdcc8b14ff"
-};
-
-// تهيئة التطبيق والحصول على كائن المصادقة
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-// التعامل مع حدث النقر على زر تسجيل الدخول
-document.getElementById("login-button").addEventListener("click", async () => {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const errorMessage = document.getElementById("login-error");
-  errorMessage.style.display = "none";
-
-  if (!email || !password) {
-    errorMessage.innerText = "يرجى إدخال البريد الإلكتروني وكلمة المرور";
-    errorMessage.style.display = "block";
-    return;
-  }
-
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    // عند نجاح تسجيل الدخول، يتم إخفاء نموذج تسجيل الدخول وعرض المحتوى الرئيسي
-    document.getElementById("login-container").style.display = "none";
-    document.getElementById("main-content").style.display = "block";
-  } catch (error) {
-    errorMessage.innerText = "خطأ: " + error.message;
-    errorMessage.style.display = "block";
-  }
-});
-
+ 
 </script>
+<script type="module" src="login.js"></script>
 </body>
 </html>
