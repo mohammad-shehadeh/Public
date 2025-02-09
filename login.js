@@ -22,6 +22,9 @@ async function isUserLoggedIn(uid) {
   return userSnap.exists() && userSnap.data().isLoggedIn;
 }
 
+// إخفاء الموقع عند التحميل
+document.getElementById("main-content").style.display = "none";
+
 document.getElementById("login-button").addEventListener("click", async () => {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
@@ -46,10 +49,9 @@ document.getElementById("login-button").addEventListener("click", async () => {
 
     await setDoc(doc(db, "users", user.uid), { isLoggedIn: true });
 
-    // بعد تسجيل الدخول، عرض المكونات المسموح بها
-    document.getElementById("file-buttons").style.display = "block";
-    document.getElementById("cart").style.display = "block";
-    document.getElementById("checkout-button").style.display = "block";
+    // عرض الموقع بعد تسجيل الدخول
+    document.getElementById("login-container").style.display = "none";
+    document.getElementById("main-content").style.display = "block";
   } catch (error) {
     errorMessage.innerText = "خطأ: " + error.message;
     errorMessage.style.display = "block";
@@ -59,12 +61,10 @@ document.getElementById("login-button").addEventListener("click", async () => {
 // التحقق من حالة تسجيل الدخول عند تحميل الصفحة
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    document.getElementById("file-buttons").style.display = "block";
-    document.getElementById("cart").style.display = "block";
-    document.getElementById("checkout-button").style.display = "block";
+    document.getElementById("login-container").style.display = "none";
+    document.getElementById("main-content").style.display = "block";
   } else {
-    document.getElementById("file-buttons").style.display = "none";
-    document.getElementById("cart").style.display = "none";
-    document.getElementById("checkout-button").style.display = "none";
+    document.getElementById("login-container").style.display = "block";
+    document.getElementById("main-content").style.display = "none";
   }
 });
