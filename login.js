@@ -1,8 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-// إعداد Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBP2bnt1DNNUO0dFtfiIovxMG-NM6yXPMM",
   authDomain: "aasa-8a079.firebaseapp.com",
@@ -16,6 +15,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// دالة للتحقق من حالة تسجيل الدخول
 async function isUserLoggedIn(uid) {
   const userRef = doc(db, "users", uid);
   const userSnap = await getDoc(userRef);
@@ -25,6 +25,7 @@ async function isUserLoggedIn(uid) {
 // إخفاء الموقع عند التحميل
 document.getElementById("main-content").style.display = "none";
 
+// معالجة تسجيل الدخول
 document.getElementById("login-button").addEventListener("click", async () => {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
@@ -41,15 +42,21 @@ document.getElementById("login-button").addEventListener("click", async () => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
 
+    // التحقق من عدم وجود جلسة نشطة
     if (await isUserLoggedIn(user.uid)) {
+      await auth.signOut();
       errorMessage.innerText = "هذا الحساب مفتوح بالفعل على جهاز آخر.";
       errorMessage.style.display = "block";
       return;
     }
 
-    await setDoc(doc(db, "users", user.uid), { isLoggedIn: true });
+    // تحديث حالة المستخدم
+    await setDoc(doc(db, "users", user.uid), { 
+      isLoggedIn: true,
+      lastLogin: new Date() 
+    }, { merge: true });
 
-    // عرض الموقع بعد تسجيل الدخول
+    // عرض المحتوى الرئيسي
     document.getElementById("login-container").style.display = "none";
     document.getElementById("main-content").style.display = "block";
   } catch (error) {
@@ -58,12 +65,44 @@ document.getElementById("login-button").addEventListener("click", async () => {
   }
 });
 
-// التحقق من حالة تسجيل الدخول عند تحميل الصفحة
-onAuthStateChanged(auth, (user) => {
+// معالجة تسجيل الخروج
+document.getElementById("logout-button").addEventListener("click", async () => {
+  try {
+    const user = auth.currentUser;
+    if (user) {
+      await setDoc(doc(db, "users", user.uid), { isLoggedIn: false }, { merge: true });
+    }
+    await auth.signOut();
+  } catch (error) {
+    console.error("Error signing out:", error);
+  }
+});
+
+// متابعة حالة المصادقة
+onAuthStateChanged(auth, async (user) => {
   if (user) {
-    document.getElementById("login-container").style.display = "none";
-    document.getElementById("main-content").style.display = "block";
+    try {
+      // التحقق من مطابقة حالة الجلسة
+      const loggedIn = await isUserLoggedIn(user.uid);
+      
+      if (!loggedIn) {
+        await auth.signOut();
+        return;
+      }
+
+      // تحديث حالة النشاط
+      await setDoc(doc(db, "users", user.uid), { 
+        lastActivity: new Date() 
+      }, { merge: true });
+
+      // عرض المحتوى الرئيسي
+      document.getElementById("login-container").style.display = "none";
+      document.getElementById("main-content").style.display = "block";
+    } catch (error) {
+      console.error("Error checking login status:", error);
+    }
   } else {
+    // إخفاء المحتوى الرئيسي عند تسجيل الخروج
     document.getElementById("login-container").style.display = "block";
     document.getElementById("main-content").style.display = "none";
   }
