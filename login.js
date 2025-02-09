@@ -40,96 +40,112 @@ let currentSessionId = null;
 async function isUserLoggedIn(uid) {
   const userRef = doc(db, "users", uid);
   const userSnap = await getDoc(userRef);
-  // يتم اعتبار الحساب مفتوحاً إذا كان isLoggedIn true و sessionId موجود
   return userSnap.exists() && userSnap.data().isLoggedIn && userSnap.data().sessionId;
 }
 
-// عند الضغط على زر تسجيل الدخول
-document.getElementById("email-login").addEventListener("click", async () => {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
+// تأكد من تحميل عناصر DOM قبل تثبيت الأحداث
+window.addEventListener('DOMContentLoaded', () => {
+  const emailLoginButton = document.getElementById("email-login");
+  const logoutButton = document.getElementById("logout");
+  const loginContainer = document.getElementById("login-container");
+  const welcomeContainer = document.getElementById("welcome-container");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
   const errorMessage = document.getElementById("email-error");
-  errorMessage.style.display = "none";
-  
-  if (!email || !password) {
-    errorMessage.innerText = "يرجى إدخال البريد الإلكتروني وكلمة المرور";
-    errorMessage.style.display = "block";
+
+  if (!emailLoginButton) {
+    console.error("زر تسجيل الدخول غير موجود في الصفحة.");
     return;
   }
-  
-  try {
-    // محاولة تسجيل الدخول باستخدام Firebase Auth
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-    const userRef = doc(db, "users", user.uid);
-    const userSnap = await getDoc(userRef);
 
-    // إذا كان الحساب مفتوحًا على جهاز آخر، يتم رفض تسجيل الدخول
-    if (userSnap.exists() && userSnap.data().isLoggedIn && userSnap.data().sessionId) {
-      errorMessage.innerText = "هذا الحساب مفتوح بالفعل على جهاز آخر.";
+  // عند الضغط على زر تسجيل الدخول
+  emailLoginButton.addEventListener("click", async () => {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+    errorMessage.style.display = "none";
+    
+    if (!email || !password) {
+      errorMessage.innerText = "يرجى إدخال البريد الإلكتروني وكلمة المرور";
       errorMessage.style.display = "block";
-      await signOut(auth);
       return;
     }
     
-    // إنشاء وتخزين Session ID جديد وتحديث حالة تسجيل الدخول في Firestore
-    currentSessionId = generateSessionId();
-    await setDoc(userRef, { isLoggedIn: true, sessionId: currentSessionId }, { merge: true });
-
-    // تعيين مراقبة (onSnapshot) على مستند المستخدم لمتابعة أي تغيير في Session ID
-    const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
-      if (docSnapshot.exists() && docSnapshot.data().sessionId !== currentSessionId) {
-        alert("تم تسجيل الدخول من جهاز آخر. سيتم تسجيل خروجك.");
-        signOut(auth);
-        unsubscribe();
+    try {
+      // محاولة تسجيل الدخول باستخدام Firebase Auth
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+  
+      // إذا كان الحساب مفتوحًا على جهاز آخر، يتم رفض تسجيل الدخول
+      if (userSnap.exists() && userSnap.data().isLoggedIn && userSnap.data().sessionId) {
+        errorMessage.innerText = "هذا الحساب مفتوح بالفعل على جهاز آخر.";
+        errorMessage.style.display = "block";
+        await signOut(auth);
+        return;
       }
-    });
-
-    // إخفاء نموذج تسجيل الدخول وعرض شاشة الترحيب
-    document.getElementById("login-container").style.display = "none";
-    document.getElementById("welcome-container").style.display = "block";
-  } catch (error) {
-    errorMessage.innerText = "خطأ: " + error.message;
-    errorMessage.style.display = "block";
-  }
-});
-
-// حدث لتسجيل الخروج (اختياري)
-document.getElementById("logout").addEventListener("click", async () => {
-  const user = auth.currentUser;
-  if (user) {
-    const userRef = doc(db, "users", user.uid);
-    await setDoc(userRef, { isLoggedIn: false, sessionId: "" }, { merge: true });
-    await signOut(auth);
-    document.getElementById("login-container").style.display = "block";
-    document.getElementById("welcome-container").style.display = "none";
-  }
-});
-
-// التحقق من حالة تسجيل الدخول عند تحميل الصفحة
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    const userRef = doc(db, "users", user.uid);
-    const userSnap = await getDoc(userRef);
-    if (userSnap.exists() && userSnap.data().isLoggedIn && userSnap.data().sessionId) {
-      currentSessionId = userSnap.data().sessionId;
-      document.getElementById("login-container").style.display = "none";
-      document.getElementById("welcome-container").style.display = "block";
       
-      // مراقبة مستند المستخدم للتأكد من استمرار صلاحية الجلسة
-      onSnapshot(userRef, (docSnapshot) => {
+      // إنشاء وتخزين Session ID جديد وتحديث حالة تسجيل الدخول في Firestore
+      currentSessionId = generateSessionId();
+      await setDoc(userRef, { isLoggedIn: true, sessionId: currentSessionId }, { merge: true });
+  
+      // تعيين مراقبة (onSnapshot) على مستند المستخدم لمتابعة أي تغيير في Session ID
+      const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
         if (docSnapshot.exists() && docSnapshot.data().sessionId !== currentSessionId) {
           alert("تم تسجيل الدخول من جهاز آخر. سيتم تسجيل خروجك.");
           signOut(auth);
+          unsubscribe();
         }
       });
-    } else {
-      await signOut(auth);
-      document.getElementById("login-container").style.display = "block";
-      document.getElementById("welcome-container").style.display = "none";
+  
+      // إخفاء نموذج تسجيل الدخول وعرض شاشة الترحيب
+      loginContainer.style.display = "none";
+      welcomeContainer.style.display = "block";
+    } catch (error) {
+      errorMessage.innerText = "خطأ: " + error.message;
+      errorMessage.style.display = "block";
     }
-  } else {
-    document.getElementById("login-container").style.display = "block";
-    document.getElementById("welcome-container").style.display = "none";
+  });
+  
+  // حدث لتسجيل الخروج (اختياري)
+  if (logoutButton) {
+    logoutButton.addEventListener("click", async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userRef = doc(db, "users", user.uid);
+        await setDoc(userRef, { isLoggedIn: false, sessionId: "" }, { merge: true });
+        await signOut(auth);
+        loginContainer.style.display = "block";
+        welcomeContainer.style.display = "none";
+      }
+    });
   }
+  
+  // التحقق من حالة تسجيل الدخول عند تحميل الصفحة
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists() && userSnap.data().isLoggedIn && userSnap.data().sessionId) {
+        currentSessionId = userSnap.data().sessionId;
+        loginContainer.style.display = "none";
+        welcomeContainer.style.display = "block";
+        
+        // مراقبة مستند المستخدم للتأكد من استمرار صلاحية الجلسة
+        onSnapshot(userRef, (docSnapshot) => {
+          if (docSnapshot.exists() && docSnapshot.data().sessionId !== currentSessionId) {
+            alert("تم تسجيل الدخول من جهاز آخر. سيتم تسجيل خروجك.");
+            signOut(auth);
+          }
+        });
+      } else {
+        await signOut(auth);
+        loginContainer.style.display = "block";
+        welcomeContainer.style.display = "none";
+      }
+    } else {
+      loginContainer.style.display = "block";
+      welcomeContainer.style.display = "none";
+    }
+  });
 });
