@@ -118,7 +118,7 @@ document.getElementById("login-button").addEventListener("click", async () => {
 
     toggleUI(true);
   } catch (error) {
-    errorMessage.innerText = "خطأ: " + error.message;
+    errorMessage.innerText = "البريد الإلكتروني الذي أدخلته غير صحيح، أو أن كلمة المرور غير مطابقة.: " + error.message;
     errorMessage.style.display = "block";
   }
 });
