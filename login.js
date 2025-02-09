@@ -1,20 +1,8 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc,
-  updateDoc,
-  onSnapshot
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-// إعداد Firebase - استبدل القيم التالية بقيم مشروعك
+// إعداد Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBP2bnt1DNNUO0dFtfiIovxMG-NM6yXPMM",
   authDomain: "aasa-8a079.firebaseapp.com",
@@ -28,109 +16,55 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// دالة لتوليد معرف جلسة فريد (Session ID)
-function generateSessionId() {
-  return Date.now().toString() + Math.random().toString(36).substr(2, 5);
-}
-
-let currentSessionId = null;
-
-// التحقق مما إذا كان المستخدم مسجلاً للدخول من جهاز آخر
 async function isUserLoggedIn(uid) {
   const userRef = doc(db, "users", uid);
   const userSnap = await getDoc(userRef);
-  return userSnap.exists() && userSnap.data().isLoggedIn && userSnap.data().sessionId;
+  return userSnap.exists() && userSnap.data().isLoggedIn;
 }
 
-// تسجيل الدخول
-async function login() {
+// إخفاء الموقع عند التحميل
+document.getElementById("main-content").style.display = "none";
+
+document.getElementById("login-button").addEventListener("click", async () => {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
   const errorMessage = document.getElementById("email-error");
   errorMessage.style.display = "none";
-  
+
   if (!email || !password) {
     errorMessage.innerText = "يرجى إدخال البريد الإلكتروني وكلمة المرور";
     errorMessage.style.display = "block";
     return;
   }
-  
+
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    const userRef = doc(db, "users", user.uid);
-    const userSnap = await getDoc(userRef);
 
-    if (userSnap.exists() && userSnap.data().isLoggedIn && userSnap.data().sessionId) {
+    if (await isUserLoggedIn(user.uid)) {
       errorMessage.innerText = "هذا الحساب مفتوح بالفعل على جهاز آخر.";
       errorMessage.style.display = "block";
-      await signOut(auth);
       return;
     }
-    
-    currentSessionId = generateSessionId();
-    await setDoc(userRef, { isLoggedIn: true, sessionId: currentSessionId }, { merge: true });
 
-    const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
-      if (docSnapshot.exists() && docSnapshot.data().sessionId !== currentSessionId) {
-        alert("تم تسجيل الدخول من جهاز آخر. سيتم تسجيل خروجك.");
-        signOut(auth);
-        unsubscribe();
-      }
-    });
+    await setDoc(doc(db, "users", user.uid), { isLoggedIn: true });
 
+    // عرض الموقع بعد تسجيل الدخول
     document.getElementById("login-container").style.display = "none";
-    document.getElementById("welcome-container").style.display = "block";
+    document.getElementById("main-content").style.display = "block";
   } catch (error) {
     errorMessage.innerText = "خطأ: " + error.message;
     errorMessage.style.display = "block";
   }
-}
-
-document.getElementById("email-login").addEventListener("click", login);
-
-document.getElementById("logout").addEventListener("click", async () => {
-  const user = auth.currentUser;
-  if (user) {
-    const userRef = doc(db, "users", user.uid);
-    await setDoc(userRef, { isLoggedIn: false, sessionId: "" }, { merge: true });
-    await signOut(auth);
-    document.getElementById("login-container").style.display = "block";
-    document.getElementById("welcome-container").style.display = "none";
-  }
 });
 
-onAuthStateChanged(auth, async (user) => {
+// التحقق من حالة تسجيل الدخول عند تحميل الصفحة
+onAuthStateChanged(auth, (user) => {
   if (user) {
-    const userRef = doc(db, "users", user.uid);
-    const userSnap = await getDoc(userRef);
-    if (userSnap.exists() && userSnap.data().isLoggedIn && userSnap.data().sessionId) {
-      currentSessionId = userSnap.data().sessionId;
-      document.getElementById("login-container").style.display = "none";
-      document.getElementById("welcome-container").style.display = "block";
-      
-      onSnapshot(userRef, (docSnapshot) => {
-        if (docSnapshot.exists() && docSnapshot.data().sessionId !== currentSessionId) {
-          alert("تم تسجيل الدخول من جهاز آخر. سيتم تسجيل خروجك.");
-          signOut(auth);
-        }
-      });
-    } else {
-      await signOut(auth);
-      document.getElementById("login-container").style.display = "block";
-      document.getElementById("welcome-container").style.display = "none";
-    }
+    document.getElementById("login-container").style.display = "none";
+    document.getElementById("main-content").style.display = "block";
   } else {
     document.getElementById("login-container").style.display = "block";
-    document.getElementById("welcome-container").style.display = "none";
-  }
-});
-
-window.addEventListener("beforeunload", async () => {
-  const user = auth.currentUser;
-  if (user) {
-    const userRef = doc(db, "users", user.uid);
-    await updateDoc(userRef, { isLoggedIn: false, sessionId: "" });
-    await signOut(auth);
+    document.getElementById("main-content").style.display = "none";
   }
 });
