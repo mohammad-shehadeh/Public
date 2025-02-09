@@ -49,42 +49,18 @@ function clearLocalSessionId() {
   localStorage.removeItem("currentSessionId");
 }
 
-// دالة لتوليد معرّف جلسة فريد (يمكنك تحسينها أو استخدام مكتبة للتوليد)
+// دالة لتوليد معرّف جلسة فريد
 function generateSessionId() {
   return Date.now().toString() + Math.random().toString(36).substring(2);
 }
 
-// متغيرات لتخزين معرّف الجلسة الحالي ووظيفة إلغاء مراقبة التغييرات (listener)
-let currentSessionId = null;
-let sessionListenerUnsubscribe = null;
-
-// --- دالة لمراقبة تغييرات الجلسة من خلال Firestore ---
-// إذا تغيّر معرّف الجلسة في قاعدة البيانات (أي تم تسجيل الدخول من جهاز آخر)
-// يتم تسجيل خروج هذا الجهاز تلقائيًا
-function startSessionListener(user) {
-  const userDocRef = doc(db, "users", user.uid);
-  // إذا كان هناك مراقب سابق، قم بإلغائه
-  if (sessionListenerUnsubscribe) {
-    sessionListenerUnsubscribe();
-  }
-  sessionListenerUnsubscribe = onSnapshot(userDocRef, (docSnap) => {
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      // إذا كان معرّف الجلسة في قاعدة البيانات لا يتطابق مع معرّف الجلسة الحالي:
-      if (data.sessionId && data.sessionId !== currentSessionId) {
-        alert("تم تسجيل الدخول من جهاز آخر، سيتم تسجيل خروجك الآن.");
-        // إلغاء المراقبة وتسجيل الخروج
-        if (sessionListenerUnsubscribe) sessionListenerUnsubscribe();
-        clearLocalSessionId();
-        signOut(auth).then(() => {
-          toggleUI(false);
-        });
-      }
-    }
-  });
+// --- التحقق من تسجيل الدخول لمنع الحساب من تسجيل الدخول على أكثر من جهاز ---
+async function isUserAlreadyLoggedIn(uid) {
+  const userDoc = await getDoc(doc(db, "users", uid));
+  return userDoc.exists() && userDoc.data().sessionId; // إذا كان هناك sessionId، فهذا يعني أن المستخدم مسجل دخول بالفعل
 }
 
-// --- دالة لتبديل واجهة المستخدم بناءً على حالة تسجيل الدخول ---
+// --- دالة لتبديل واجهة المستخدم ---
 function toggleUI(isLoggedIn) {
   if (isLoggedIn) {
     document.getElementById("login-container").style.display = "none";
@@ -98,23 +74,23 @@ function toggleUI(isLoggedIn) {
 // --- التحقق من حالة تسجيل الدخول عند تحميل الصفحة ---
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    // محاولة استعادة معرّف الجلسة من المتصفح
     let localSession = getLocalSessionId();
-    if (!localSession) {
-      // إذا لم يكن موجودًا في localStorage، نحاول قراءته من قاعدة البيانات
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-      if (userDoc.exists() && userDoc.data().sessionId) {
-        localSession = userDoc.data().sessionId;
-        setLocalSessionId(localSession);
-      } else {
-        // وإن لم يكن موجودًا، نقوم بتوليد معرّف جلسة جديد وتخزينه
-        localSession = generateSessionId();
-        setLocalSessionId(localSession);
-        await setDoc(doc(db, "users", user.uid), { isLoggedIn: true, sessionId: localSession }, { merge: true });
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+
+    if (userDoc.exists() && userDoc.data().sessionId) {
+      if (!localSession || localSession !== userDoc.data().sessionId) {
+        alert("هذا الحساب مستخدم بالفعل على جهاز آخر، لا يمكنك تسجيل الدخول.");
+        await signOut(auth);
+        toggleUI(false);
+        return;
       }
+    } else {
+      // في حالة عدم وجود sessionId في قاعدة البيانات، قم بتعيينه لهذا الجهاز
+      localSession = generateSessionId();
+      setLocalSessionId(localSession);
+      await setDoc(doc(db, "users", user.uid), { sessionId: localSession }, { merge: true });
     }
-    currentSessionId = localSession;
-    startSessionListener(user);
+
     toggleUI(true);
   } else {
     clearLocalSessionId();
@@ -122,7 +98,7 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// --- معالجة زر تسجيل الدخول ---
+// --- زر تسجيل الدخول ---
 document.getElementById("login-button").addEventListener("click", async () => {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
@@ -138,14 +114,20 @@ document.getElementById("login-button").addEventListener("click", async () => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    
-    // توليد معرّف جلسة جديد وتخزينه محليًا وفي قاعدة البيانات
-    currentSessionId = generateSessionId();
-    setLocalSessionId(currentSessionId);
-    await setDoc(doc(db, "users", user.uid), { isLoggedIn: true, sessionId: currentSessionId }, { merge: true });
-    
-    // بدء مراقبة تغييرات الجلسة
-    startSessionListener(user);
+
+    // التحقق مما إذا كان المستخدم مسجلاً دخول مسبقًا على جهاز آخر
+    if (await isUserAlreadyLoggedIn(user.uid)) {
+      errorMessage.innerText = "هذا الحساب مسجل دخول بالفعل على جهاز آخر، لا يمكنك تسجيل الدخول.";
+      errorMessage.style.display = "block";
+      await signOut(auth);
+      return;
+    }
+
+    // تسجيل الدخول على الجهاز الحالي فقط
+    const sessionId = generateSessionId();
+    setLocalSessionId(sessionId);
+    await setDoc(doc(db, "users", user.uid), { sessionId: sessionId }, { merge: true });
+
     toggleUI(true);
   } catch (error) {
     errorMessage.innerText = "خطأ: " + error.message;
@@ -153,17 +135,12 @@ document.getElementById("login-button").addEventListener("click", async () => {
   }
 });
 
-// --- معالجة زر تسجيل الخروج ---
-// تأكد من إضافة زر في HTML بمعرّف "logout-button" داخل محتوى الصفحة الرئيسي
+// --- زر تسجيل الخروج ---
 document.getElementById("logout-button")?.addEventListener("click", async () => {
   if (auth.currentUser) {
     try {
-      // تحديث حالة المستخدم في قاعدة البيانات وإفراغ معرّف الجلسة
-      await setDoc(doc(db, "users", auth.currentUser.uid), { isLoggedIn: false, sessionId: "" }, { merge: true });
-      if (sessionListenerUnsubscribe) {
-        sessionListenerUnsubscribe();
-        sessionListenerUnsubscribe = null;
-      }
+      // إزالة sessionId من قاعدة البيانات
+      await setDoc(doc(db, "users", auth.currentUser.uid), { sessionId: "" }, { merge: true });
       clearLocalSessionId();
       await signOut(auth);
       toggleUI(false);
