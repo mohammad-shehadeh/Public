@@ -12,7 +12,6 @@ const firebaseConfig = {
   appId: "1:849330713582:web:7a11b11ebdb5cdcc8b14ff"
 };
 
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -45,14 +44,10 @@ document.getElementById("login-button").addEventListener("click", async () => {
     if (await isUserLoggedIn(user.uid)) {
       errorMessage.innerText = "هذا الحساب مفتوح بالفعل على جهاز آخر.";
       errorMessage.style.display = "block";
-      
-      // تسجيل خروج تلقائي للمستخدم الجديد إذا كان الحساب مفتوحًا
-      await signOut(auth);
       return;
     }
 
-    // تسجيل الدخول وتحديث حالة المستخدم في Firestore
-    await setDoc(doc(db, "users", user.uid), { isLoggedIn: true }, { merge: true });
+    await setDoc(doc(db, "users", user.uid), { isLoggedIn: true });
 
     // عرض الموقع بعد تسجيل الدخول
     document.getElementById("login-container").style.display = "none";
@@ -64,31 +59,12 @@ document.getElementById("login-button").addEventListener("click", async () => {
 });
 
 // التحقق من حالة تسجيل الدخول عند تحميل الصفحة
-onAuthStateChanged(auth, async (user) => {
+onAuthStateChanged(auth, (user) => {
   if (user) {
-    const userRef = doc(db, "users", user.uid);
-    const userSnap = await getDoc(userRef);
-
-    if (userSnap.exists() && userSnap.data().isLoggedIn) {
-      document.getElementById("login-container").style.display = "none";
-      document.getElementById("main-content").style.display = "block";
-    } else {
-      // تسجيل خروج تلقائي إذا لم يتم العثور على بيانات المستخدم أو كان تسجيل الدخول غير نشط
-      await signOut(auth);
-      document.getElementById("login-container").style.display = "block";
-      document.getElementById("main-content").style.display = "none";
-    }
+    document.getElementById("login-container").style.display = "none";
+    document.getElementById("main-content").style.display = "block";
   } else {
     document.getElementById("login-container").style.display = "block";
     document.getElementById("main-content").style.display = "none";
-  }
-});
-
-// تسجيل خروج المستخدم عند إغلاق الصفحة أو الخروج
-window.addEventListener("beforeunload", async () => {
-  const user = auth.currentUser;
-  if (user) {
-    await updateDoc(doc(db, "users", user.uid), { isLoggedIn: false });
-    await signOut(auth);
   }
 });
