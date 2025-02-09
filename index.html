@@ -896,6 +896,87 @@ button.disabled i, button[disabled] i {
     pointer-events: none;  /* تعطيل تفاعل المستخدم مع الأيقونة */
 }
 
+/* صندوق تسجيل الدخول */
+#login-container {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  width: 380px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* عنوان تسجيل الدخول */
+#login-container h2 {
+  margin-bottom: 20px;
+  color: white;
+  font-size: 24px;
+}
+
+/* تنسيق الحقول */
+#login-container input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  outline: none;
+  transition: 0.3s;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+#login-container input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+#login-container input:focus {
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+/* زر تسجيل الدخول */
+#login-button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#login-button:hover {
+  background: linear-gradient(135deg, #e60023, #d4001f);
+  box-shadow: 0 3px 10px rgba(255, 255, 255, 0.3);
+}
+
+/* رسالة الخطأ */
+.error-message {
+  color: #ffcccb;
+  margin-top: 10px;
+  font-size: 14px;
+  display: none;
+}
+
+/* تأثير الدخول */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
   </style>
 <body>
     <div id="login-container">
