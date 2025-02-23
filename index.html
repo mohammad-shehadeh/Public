@@ -979,14 +979,36 @@ button.disabled i, button[disabled] i {
 }
   </style>
 <body>
-    <div id="login-container">
-      <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
-      <input type="password" id="password" placeholder="أدخل كلمة المرور">
-      <button id="login-button">تسجيل الدخول</button>
-      <div class="error-message" id="email-error" style="display: none;"></div>
+    <!-- شاشة التحميل المؤقتة -->
+    <div id="loading-screen" style="display: flex; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 999;">
+        <div style="font-size: 20px; color: #333;">جارٍ التحقق من حالة المستخدم...</div>
     </div>
-  
+
+    <!-- واجهة تسجيل الدخول -->
+    <div id="login-container" style="display: none; max-width: 300px; margin: 100px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">
+        <input type="email" 
+               id="email" 
+               placeholder="أدخل البريد الإلكتروني"
+               style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px;">
+        
+        <input type="password" 
+               id="password" 
+               placeholder="أدخل كلمة المرور"
+               style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px;">
+        
+        <button id="login-button" 
+                style="width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            تسجيل الدخول
+        </button>
+        
+        <div class="error-message" 
+             id="email-error" 
+             style="display: none; color: #dc3545; margin-top: 10px; font-size: 14px;"></div>
+    </div>
+
+    <!-- المحتوى الرئيسي بعد التسجيل -->
     <div id="main-content" style="display: none;">
+        <!-- محتوى التطبيق الرئيسي هنا -->
       <header>
         <h1>Shehadeh Center</h1>
         <div id="file-buttons"></div>
