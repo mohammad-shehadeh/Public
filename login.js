@@ -54,33 +54,37 @@ async function isUserAlreadyLoggedIn(uid) {
 
 // --- تبديل واجهة المستخدم بين تسجيل الدخول والمحتوى الرئيسي ---
 function toggleUI(isLoggedIn) {
+  document.getElementById("loading-screen").style.display = "none";
   document.getElementById("login-container").style.display = isLoggedIn ? "none" : "block";
   document.getElementById("main-content").style.display = isLoggedIn ? "block" : "none";
 }
 
 // --- التحقق من الجلسة عند تحميل الصفحة ---
 onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    let localSession = getLocalSessionId();
-    const userDoc = await getDoc(doc(db, "users", user.uid));
+  try {
+    if (user) {
+      let localSession = getLocalSessionId();
+      const userDoc = await getDoc(doc(db, "users", user.uid));
 
-    if (userDoc.exists() && userDoc.data().sessionId) {
-      if (!localSession || localSession !== userDoc.data().sessionId) {
-        alert("تم تسجيل الدخول بالفعل على جهاز آخر، لا يمكنك تسجيل الدخول.");
-        await signOut(auth);
-        toggleUI(false);
-        return;
+      if (userDoc.exists() && userDoc.data().sessionId) {
+        if (!localSession || localSession !== userDoc.data().sessionId) {
+          alert("تم تسجيل الدخول على جهاز آخر");
+          await signOut(auth);
+          toggleUI(false);
+          return;
+        }
+      } else {
+        const sessionId = generateSessionId();
+        setLocalSessionId(sessionId);
+        await setDoc(doc(db, "users", user.uid), { sessionId }, { merge: true });
       }
+      toggleUI(true);
     } else {
-      // إذا لم يكن هناك sessionId، يتم تعيينه لهذا الجهاز فقط
-      localSession = generateSessionId();
-      setLocalSessionId(localSession);
-      await setDoc(doc(db, "users", user.uid), { sessionId: localSession }, { merge: true });
+      clearLocalSessionId();
+      toggleUI(false);
     }
-
-    toggleUI(true);
-  } else {
-    clearLocalSessionId();
+  } catch (error) {
+    console.error("Error:", error);
     toggleUI(false);
   }
 });
