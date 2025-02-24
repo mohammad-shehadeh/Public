@@ -977,14 +977,50 @@ button.disabled i, button[disabled] i {
   margin-top: 10px;
   font-weight: bold;
 }
+   #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #ffff; /* لون خلفية غامق */
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    /* تنسيق الصورة داخل شاشة التحميل */
+    #loading-screen img {
+      width: 300px; /* يمكن تعديل الحجم حسب الحاجة */
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    /* النص داخل شاشة التحميل */
+    #loading-screen p {
+      font-size: 20px;
+      margin: 0;
+    }
+
   </style>
 <body>
-    <div id="login-container">
-      <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
-      <input type="password" id="password" placeholder="أدخل كلمة المرور">
-      <button id="login-button">تسجيل الدخول</button>
-      <div class="error-message" id="email-error" style="display: none;"></div>
-    </div>
+  <!-- شاشة التحميل -->
+  <div id="loading-screen">
+    <img src="https://i.gifer.com/YCZH.gif" alt="Loading...">
+    <p>جارٍ التحقق من المستخدم...</p>
+  </div>
+  
+  <!-- حاوية تسجيل الدخول -->
+  <div id="login-container">
+    <h2>تسجيل الدخول</h2>
+    <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
+    <input type="password" id="password" placeholder="أدخل كلمة المرور">
+    <button id="login-button">تسجيل الدخول</button>
+    <div class="error-message" id="email-error" style="display: none;"></div>
+  </div>
   
     <div id="main-content" style="display: none;">
       <header>
@@ -1732,6 +1768,11 @@ hideCartButton.onclick = function() {
             });
         });
 
+   // بعد 3 ثوانٍ يتم إخفاء شاشة التحميل وعرض محتوى تسجيل الدخول
+    setTimeout(function() {
+      document.getElementById('loading-screen').style.display = 'none';
+      document.getElementById('login-container').style.display = 'block';
+    }, 3000);
 </script>
 <script type="module" src="login.js"></script>
 </body>
