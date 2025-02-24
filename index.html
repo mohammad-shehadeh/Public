@@ -1013,8 +1013,8 @@ button.disabled i, button[disabled] i {
     <p>جارٍ التحقق من المستخدم...</p>
   </div>
   
-  <!-- حاوية تسجيل الدخول -->
-  <div id="login-container">
+  <!-- حاوية تسجيل الدخول (مخفية في البداية) -->
+  <div id="login-container" style="display: none;">
     <h2>تسجيل الدخول</h2>
     <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
     <input type="password" id="password" placeholder="أدخل كلمة المرور">
@@ -1022,7 +1022,8 @@ button.disabled i, button[disabled] i {
     <div class="error-message" id="email-error" style="display: none;"></div>
   </div>
   
-    <div id="main-content" style="display: none;">
+  <!-- المحتوى الرئيسي (مخفى في البداية) -->
+  <div id="main-content" style="display: none;">
       <header>
         <h1>Shehadeh Center</h1>
         <div id="file-buttons"></div>
