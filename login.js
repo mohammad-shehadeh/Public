@@ -1,3 +1,33 @@
+  appId: "1:849330713582:web:7a11b11ebdb5cdcc8b14ff"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// --- دوال إدارة الجلسة ---
+function setLocalSessionId(sessionId) {
+  localStorage.setItem("currentSessionId", sessionId);
+}
+
+function getLocalSessionId() {
+  return localStorage.getItem("currentSessionId");
+}
+
+function clearLocalSessionId() {
+  localStorage.removeItem("currentSessionId");
+}
+
+// دالة لإنشاء معرف جلسة فريد بناءً على توقيت الجهاز
+function generateSessionId() {
+  return Date.now().toString() + Math.random().toString(36).substring(2);
+}
+
+// --- التحقق من حالة تسجيل المستخدم على جهاز آخر ---
+async function isUserAlreadyLoggedIn(uid) {
+  const userDoc = await getDoc(doc(db, "users", uid));
+  return userDoc.exists() && userDoc.data().sessionId; 
+}
 
 // --- تبديل واجهة المستخدم بين تسجيل الدخول والمحتوى الرئيسي ---
 function toggleUI(isLoggedIn) {
