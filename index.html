@@ -977,54 +977,16 @@ button.disabled i, button[disabled] i {
   margin-top: 10px;
   font-weight: bold;
 }
-   #loading-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #ffff; /* لون خلفية غامق */
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-
-    /* تنسيق الصورة داخل شاشة التحميل */
-    #loading-screen img {
-      width: 300px; /* يمكن تعديل الحجم حسب الحاجة */
-      height: auto;
-      margin-bottom: 20px;
-    }
-
-    /* النص داخل شاشة التحميل */
-    #loading-screen p {
-      font-size: 20px;
-      margin: 0;
-    }
-
   </style>
 <body>
-  <!-- شاشة التحميل -->
-  <div id="loading-screen" style="position: fixed; width: 100%; height: 100%; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-    <img src="https://i.gifer.com/YCZH.gif" alt="Loading...">
-    <p>جارٍ التحقق من المستخدم...</p>
-  </div>
-
-  <!-- حاوية تسجيل الدخول (مخفية في البداية) -->
-  <div id="login-container" style="display: none; width: 300px; margin: 100px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); text-align: center;">
-    <h2>تسجيل الدخول</h2>
-    <input type="email" id="email" placeholder="أدخل البريد الإلكتروني" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px;">
-    <input type="password" id="password" placeholder="أدخل كلمة المرور" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px;">
-    <button id="login-button" style="width: 100%; padding: 10px; background-color: #3498db; border: none; border-radius: 4px; color: #fff; font-size: 16px; cursor: pointer;">تسجيل الدخول</button>
-    <div class="error-message" id="email-error" style="display: none; color: red; margin-top: 10px;"></div>
-  </div>
-
-  <!-- المحتوى الرئيسي (مخفى في البداية) -->
-   <div id="main-content" style="display: none;">
-
+    <div id="login-container">
+      <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
+      <input type="password" id="password" placeholder="أدخل كلمة المرور">
+      <button id="login-button">تسجيل الدخول</button>
+      <div class="error-message" id="email-error" style="display: none;"></div>
+    </div>
+  
+    <div id="main-content" style="display: none;">
       <header>
         <h1>Shehadeh Center</h1>
         <div id="file-buttons"></div>
@@ -1770,11 +1732,6 @@ hideCartButton.onclick = function() {
             });
         });
 
-   // بعد 3 ثوانٍ يتم إخفاء شاشة التحميل وعرض محتوى تسجيل الدخول
-    setTimeout(function() {
-      document.getElementById('loading-screen').style.display = 'none';
-      document.getElementById('login-container').style.display = 'block';
-    }, 3000);
 </script>
 <script type="module" src="login.js"></script>
 </body>
