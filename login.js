@@ -10,8 +10,7 @@ import {
 import { 
   getFirestore, 
   doc, 
-  setDoc, 
-  getDoc 
+  setDoc 
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 // إعداد Firebase
@@ -28,30 +27,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// --- دوال إدارة الجلسة ---
-function setLocalSessionId(sessionId) {
-  localStorage.setItem("currentSessionId", sessionId);
-}
-
-function getLocalSessionId() {
-  return localStorage.getItem("currentSessionId");
-}
-
-function clearLocalSessionId() {
-  localStorage.removeItem("currentSessionId");
-}
-
-// دالة لإنشاء معرف جلسة فريد بناءً على توقيت الجهاز
-function generateSessionId() {
-  return Date.now().toString() + Math.random().toString(36).substring(2);
-}
-
-// --- التحقق من حالة تسجيل المستخدم على جهاز آخر ---
-async function isUserAlreadyLoggedIn(uid) {
-  const userDoc = await getDoc(doc(db, "users", uid));
-  return userDoc.exists() && userDoc.data().sessionId; 
-}
-
 // --- تبديل واجهة المستخدم بين تسجيل الدخول والمحتوى الرئيسي ---
 function toggleUI(isLoggedIn) {
   document.getElementById("login-container").style.display = isLoggedIn ? "none" : "block";
@@ -61,26 +36,8 @@ function toggleUI(isLoggedIn) {
 // --- التحقق من الجلسة عند تحميل الصفحة ---
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    let localSession = getLocalSessionId();
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-
-    if (userDoc.exists() && userDoc.data().sessionId) {
-      if (!localSession || localSession !== userDoc.data().sessionId) {
-        alert("تم تسجيل الدخول بالفعل على جهاز آخر، لا يمكنك تسجيل الدخول.");
-        await signOut(auth);
-        toggleUI(false);
-        return;
-      }
-    } else {
-      // إذا لم يكن هناك sessionId، يتم تعيينه لهذا الجهاز فقط
-      localSession = generateSessionId();
-      setLocalSessionId(localSession);
-      await setDoc(doc(db, "users", user.uid), { sessionId: localSession }, { merge: true });
-    }
-
     toggleUI(true);
   } else {
-    clearLocalSessionId();
     toggleUI(false);
   }
 });
@@ -99,26 +56,10 @@ document.getElementById("login-button").addEventListener("click", async () => {
   }
 
   try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-
-    // التحقق مما إذا كان الحساب مستخدم بالفعل في جهاز آخر
-    const userDoc = await getDoc(doc(db, "users", user.uid));
-    if (userDoc.exists() && userDoc.data().sessionId) {
-      errorMessage.innerText = "هذا الحساب مستخدم بالفعل على جهاز آخر، لا يمكنك تسجيل الدخول.";
-      errorMessage.style.display = "block";
-      await signOut(auth);
-      return;
-    }
-
-    // إذا لم يكن مسجلاً دخول مسبقًا، يتم إنشاء sessionId للجهاز الحالي فقط
-    const sessionId = generateSessionId();
-    setLocalSessionId(sessionId);
-    await setDoc(doc(db, "users", user.uid), { sessionId: sessionId }, { merge: true });
-
+    await signInWithEmailAndPassword(auth, email, password);
     toggleUI(true);
   } catch (error) {
-    errorMessage.innerText = "البريد الإلكتروني الذي أدخلته غير صحيح، أو أن كلمة المرور غير مطابقة.: " + error.message;
+    errorMessage.innerText = "خطأ في تسجيل الدخول: " + error.message;
     errorMessage.style.display = "block";
   }
 });
@@ -127,8 +68,6 @@ document.getElementById("login-button").addEventListener("click", async () => {
 document.getElementById("logout-button")?.addEventListener("click", async () => {
   if (auth.currentUser) {
     try {
-      await setDoc(doc(db, "users", auth.currentUser.uid), { sessionId: "" }, { merge: true });
-      clearLocalSessionId();
       await signOut(auth);
       toggleUI(false);
     } catch (error) {
