@@ -1029,13 +1029,57 @@ button.disabled i, button[disabled] i {
   margin-top: 10px;
   font-weight: bold;
 }
+
+/* تنسيق شاشة التحميل */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* خلفية سوداء مع شفافية */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* للتأكد من ظهورها فوق كل شيء */
+}
+
+/* تنسيق دائرة التحميل */
+.loader {
+    border: 8px solid #f3f3f3; /* لون الدائرة الخارجية */
+    border-top: 8px solid #3498db; /* لون الدائرة الداخلية */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite; /* حركة الدوران */
+}
+
+/* حركة الدوران */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* تنسيق محتوى الصفحة */
+#login-container {
+    position: relative;
+    z-index: 1; /* للتأكد من ظهوره تحت شاشة التحميل */
+    text-align: center;
+    margin-top: 20%;
+}
   </style>
 <body>
+       <!-- شاشة التحميل -->
+    <div id="loading-screen">
+        <div class="loader"></div>
+    </div>
+
+    <!-- محتوى الصفحة -->
     <div id="login-container">
-      <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
-      <input type="password" id="password" placeholder="أدخل كلمة المرور">
-      <button id="login-button">تسجيل الدخول</button>
-      <div class="error-message" id="email-error" style="display: none;"></div>
+        <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
+        <input type="password" id="password" placeholder="أدخل كلمة المرور">
+        <button id="login-button">تسجيل الدخول</button>
+        <div class="error-message" id="email-error" style="display: none;"></div>
     </div>
   
     <div id="main-content" style="display: none;">
@@ -1791,6 +1835,16 @@ hideCartButton.onclick = function() {
                 behavior: "smooth"
             });
         });
+
+// عرض شاشة التحميل عند تحميل الصفحة
+document.addEventListener("DOMContentLoaded", function () {
+    const loadingScreen = document.getElementById("loading-screen");
+
+    // إخفاء شاشة التحميل بعد 3 ثوانٍ
+    setTimeout(function () {
+        loadingScreen.style.display = "none";
+    }, 3000); // 3000 مللي ثانية = 3 ثوانٍ
+});
 
 </script>
 <script type="module" src="login.js"></script>
