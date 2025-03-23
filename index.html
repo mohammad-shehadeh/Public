@@ -1030,9 +1030,9 @@ button.disabled i, button[disabled] i {
   font-weight: bold;
 }
 
-/* تنسيق شاشة التحميل */
+/* تنسيق شاشة التحميل *//* تنسيق شاشة التحميل داخل login-container */
 #loading-screen {
-    position: fixed;
+    position: absolute; /* لتكون داخل login-container */
     top: 0;
     left: 0;
     width: 100%;
@@ -1041,7 +1041,8 @@ button.disabled i, button[disabled] i {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* للتأكد من ظهورها فوق كل شيء */
+    z-index: 1000; /* تأكد من ظهورها فوق محتوى login-container */
+    display: none; /* مخفية بشكل افتراضي */
 }
 
 /* تنسيق دائرة التحميل */
@@ -1058,6 +1059,52 @@ button.disabled i, button[disabled] i {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* تنسيق محتوى الصفحة (نموذج تسجيل الدخول) */
+#login-container {
+    position: relative; /* مهم لشاشة التحميل */
+    max-width: 300px; /* عرض مناسب للنموذج */
+    margin: 20px auto; /* توسيط النموذج */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#login-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#login-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#login-container button:hover {
+    background-color: #2980b9;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* تنسيق المحتوى الآخر */
+#other-content {
+    margin: 20px;
+    text-align: center;
 }
 
 /* تنسيق محتوى الصفحة */
