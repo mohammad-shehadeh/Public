@@ -1065,17 +1065,17 @@ button.disabled i, button[disabled] i {
   </style>
 <body>
        <!-- شاشة التحميل -->
+ <div id="login-container">
+    <!-- شاشة التحميل داخل login-container -->
     <div id="loading-screen">
         <div class="loader"></div>
     </div>
 
-    <!-- محتوى الصفحة -->
-    <div id="login-container">
-        <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
-        <input type="password" id="password" placeholder="أدخل كلمة المرور">
-        <button id="login-button">تسجيل الدخول</button>
-        <div class="error-message" id="email-error" style="display: none;"></div>
-    </div>
+    <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
+    <input type="password" id="password" placeholder="أدخل كلمة المرور">
+    <button id="login-button">تسجيل الدخول</button>
+    <div class="error-message" id="email-error" style="display: none;"></div>
+</div>
   
     <div id="main-content" style="display: none;">
       <header>
@@ -1832,13 +1832,16 @@ hideCartButton.onclick = function() {
         });
 
 // عرض شاشة التحميل عند تحميل الصفحة
-document.addEventListener("DOMContentLoaded", function () {
+document.getElementById("login-button").addEventListener("click", function () {
     const loadingScreen = document.getElementById("loading-screen");
+
+    // عرض شاشة التحميل
+    loadingScreen.style.display = "flex";
 
     // إخفاء شاشة التحميل بعد 3 ثوانٍ
     setTimeout(function () {
         loadingScreen.style.display = "none";
-    }, 2000); // 2000 مللي ثانية = 3 ثوانٍ
+    }, 3000); // 3000 مللي ثانية = 3 ثوانٍ
 });
 
 </script>
