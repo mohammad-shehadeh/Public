@@ -979,15 +979,11 @@ button.disabled i, button[disabled] i {
 }
   </style>
 <body>
-   <div id="loader">
-        <img src="https://cdn.dribbble.com/userupload/19445350/file/original-d3c1a1167b18464e2eff6622d09f2dc8.gif" alt="Loading...">
-    </div>
-    
     <div id="login-container">
-        <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
-        <input type="password" id="password" placeholder="أدخل كلمة المرور">
-        <button id="login-button">تسجيل الدخول</button>
-        <div class="error-message" id="email-error" style="display: none;"></div>
+      <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
+      <input type="password" id="password" placeholder="أدخل كلمة المرور">
+      <button id="login-button">تسجيل الدخول</button>
+      <div class="error-message" id="email-error" style="display: none;"></div>
     </div>
   
     <div id="main-content" style="display: none;">
@@ -1736,10 +1732,6 @@ hideCartButton.onclick = function() {
             });
         });
 
-               setTimeout(() => {
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('login-container').style.display = 'block';
-        }, 3000);
 </script>
 <script type="module" src="login.js"></script>
 </body>
