@@ -1030,9 +1030,9 @@ button.disabled i, button[disabled] i {
   font-weight: bold;
 }
 
-/* تنسيق شاشة التحميل *//* تنسيق شاشة التحميل داخل login-container */
+/* تنسيق شاشة التحميل */
 #loading-screen {
-    position: absolute; /* لتكون داخل login-container */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -1041,8 +1041,7 @@ button.disabled i, button[disabled] i {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* تأكد من ظهورها فوق محتوى login-container */
-    display: none; /* مخفية بشكل افتراضي */
+    z-index: 1000; /* للتأكد من ظهورها فوق كل شيء */
 }
 
 /* تنسيق دائرة التحميل */
@@ -1061,68 +1060,22 @@ button.disabled i, button[disabled] i {
     100% { transform: rotate(360deg); }
 }
 
-/* تنسيق محتوى الصفحة (نموذج تسجيل الدخول) */
-#login-container {
-    position: relative; /* مهم لشاشة التحميل */
-    max-width: 300px; /* عرض مناسب للنموذج */
-    margin: 20px auto; /* توسيط النموذج */
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-#login-container input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-#login-container button {
-    width: 100%;
-    padding: 10px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#login-container button:hover {
-    background-color: #2980b9;
-}
-
-.error-message {
-    color: red;
-    font-size: 14px;
-    margin-top: 10px;
-}
-
-/* تنسيق المحتوى الآخر */
-#other-content {
-    margin: 20px;
-    text-align: center;
-}
-
 /* تنسيق محتوى الصفحة */
 
   </style>
 <body>
        <!-- شاشة التحميل -->
- <div id="login-container">
-    <!-- شاشة التحميل داخل login-container -->
     <div id="loading-screen">
         <div class="loader"></div>
     </div>
 
-    <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
-    <input type="password" id="password" placeholder="أدخل كلمة المرور">
-    <button id="login-button">تسجيل الدخول</button>
-    <div class="error-message" id="email-error" style="display: none;"></div>
-</div>
+    <!-- محتوى الصفحة -->
+    <div id="login-container">
+        <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
+        <input type="password" id="password" placeholder="أدخل كلمة المرور">
+        <button id="login-button">تسجيل الدخول</button>
+        <div class="error-message" id="email-error" style="display: none;"></div>
+    </div>
   
     <div id="main-content" style="display: none;">
       <header>
@@ -1879,16 +1832,13 @@ hideCartButton.onclick = function() {
         });
 
 // عرض شاشة التحميل عند تحميل الصفحة
-document.getElementById("login-button").addEventListener("click", function () {
+document.addEventListener("DOMContentLoaded", function () {
     const loadingScreen = document.getElementById("loading-screen");
-
-    // عرض شاشة التحميل
-    loadingScreen.style.display = "flex";
 
     // إخفاء شاشة التحميل بعد 3 ثوانٍ
     setTimeout(function () {
         loadingScreen.style.display = "none";
-    }, 3000); // 3000 مللي ثانية = 3 ثوانٍ
+    }, 2000); // 2000 مللي ثانية = 3 ثوانٍ
 });
 
 </script>
