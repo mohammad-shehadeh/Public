@@ -1841,25 +1841,24 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 2000); // 2000 مللي ثانية = 3 ثوانٍ
 });
 
-document.getElementById("login-button").addEventListener("click", function () {
-    let email = document.getElementById("email").value;
-    let password = document.getElementById("password").value;
+document.addEventListener("DOMContentLoaded", function () {
+    let loginContainer = document.getElementById("login-container");
     let loadingScreen = document.getElementById("loading-screen");
-    
-    if (email.trim() === "" || password.trim() === "") {
-        alert("يرجى إدخال البريد الإلكتروني وكلمة المرور");
-        return;
-    }
 
-    // عرض شاشة التحميل
-    loadingScreen.style.display = "block";
+    // مراقبة تغييرات عرض شاشة تسجيل الدخول
+    let observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            if (mutation.attributeName === "style") {
+                let isHidden = window.getComputedStyle(loginContainer).display === "none";
+                if (isHidden) {
+                    loadingScreen.style.display = "none"; // إخفاء شاشة التحميل
+                }
+            }
+        });
+    });
 
-    // محاكاة تسجيل الدخول بعد 2 ثانية
-    setTimeout(() => {
-        loadingScreen.style.display = "none"; // إخفاء شاشة التحميل
-        document.getElementById("login-container").style.display = "none"; // إخفاء شاشة تسجيل الدخول
-        document.getElementById("main-content").style.display = "block"; // عرض المحتوى الرئيسي
-    }, 2000);
+    // بدء المراقبة على تغييرات الـ style في loginContainer
+    observer.observe(loginContainer, { attributes: true });
 });
 </script>
 <script type="module" src="login.js"></script>
