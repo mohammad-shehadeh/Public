@@ -131,7 +131,7 @@ yesido/YH52/aaa/https://i.postimg.cc/wvf0BN7q/IMG-6742.png
 yesido/YH51/aaa/https://i.postimg.cc/wM1FRBmh/IMG-6770.png
 yesido/YH50/aaa/https://i.postimg.cc/bwcLdpNt/IMG-6661.png
 yesido/YH49/aaa/https://i.postimg.cc/YSt3fRF2/IMG-6611.png
-yesido/YH48/aaa/
+yesido/YH48/aaa/https://i.postimg.cc/63Z6zrnq/IMG-6856.jpg
 yesido/YH47/aaa/https://i.postimg.cc/RZ7dHyNb/IMG-6646.png
 yesido/YH46/aaa/https://i.postimg.cc/d095zpFT/IMG-6789.png
 yesido/YH45/aaa/https://i.postimg.cc/BZFm3jJ0/IMG-6851.jpg
@@ -142,11 +142,11 @@ yesido/YH30/aaa/https://i.postimg.cc/PJ1yQRSx/IMG-6853.jpg
 yesido/YH25/aaa/https://i.postimg.cc/RVzXZv0n/IMG-6854.png
 yesido/YH23/aaa/https://i.postimg.cc/RFVg9dCp/IMG-6697.jpg
 yesido/YH09/aaa/https://i.postimg.cc/nzyT7JYg/IMG-6855.jpg
-yesido/CA184/aaa/
+yesido/CA184/aaa/https://i.postimg.cc/nrtFWXGk/IMG-6857.png
 yesido/CA183/aaa/https://i.postimg.cc/JzYFnSvV/IMG-6614.png
-yesido/CA182/aaa/https://i.postimg.cc/bJSfpqwB/IMG-6695.png
-yesido/CA181/aaa/
-yesido/CA174/aaa/
+yesido/CA182/aaa/https://i.postimg.cc/0QzPjpcZ/IMG-6777.png
+yesido/CA181/aaa/https://i.postimg.cc/43qNzLKj/IMG-6858.webp
+yesido/CA174/aaa/https://i.postimg.cc/cCZWmVdk/IMG-6861.jpg
 yesido/CA172C/aaa/https://i.postimg.cc/SRb3485n/IMG-6633.png
 yesido/CA172L/aaa/https://i.postimg.cc/nr8bLNsc/IMG-6668.png
 yesido/CA171/aaa/https://i.postimg.cc/x8KrNgHG/IMG-6696.png
@@ -172,6 +172,6 @@ yesido/CA121-ip/aaa/https://i.postimg.cc/cJ9ddDMr/IMG-6772.png
 yesido/CA121-TC/aaa/https://i.postimg.cc/ry57Jn0x/IMG-6639.png
 yesido/CA121-mc/aaa/https://i.postimg.cc/cJHNkRyZ/IMG-6748.png
 yesido/CA115/aaa/https://i.postimg.cc/wTpYY88w/IMG-6721.jpg
-yesido/CA66/aaa/
-yesido/CA65/aaa/
+yesido/CA66/aaa/https://i.postimg.cc/j2QxYR8r/IMG-6859.jpg
+yesido/CA65/aaa/https://i.postimg.cc/25VSLR54/IMG-6860.jpg
 
