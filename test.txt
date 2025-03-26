@@ -174,4 +174,37 @@ yesido/CA121-mc/aaa/https://i.postimg.cc/cJHNkRyZ/IMG-6748.png
 yesido/CA115/aaa/https://i.postimg.cc/wTpYY88w/IMG-6721.jpg
 yesido/CA66/aaa/https://i.postimg.cc/j2QxYR8r/IMG-6859.jpg
 yesido/CA65/aaa/https://i.postimg.cc/25VSLR54/IMG-6860.jpg
+yesido/YAU81/aaa/https://i.postimg.cc/zBRNspqR/IMG-6740.png
+yesido/YAU42/aaa/https://i.postimg.cc/TYT80T5b/IMG-6871.jpg
+yesido/YAU41/aaa/https://i.postimg.cc/Jz11sb59/IMG-6658.jpg
+yesido/YAU40/aaa/https://i.postimg.cc/Cxmwkzvd/IMG-6699.jpg
+yesido/YAU36/aaa/https://i.postimg.cc/prbvR8dc/IMG-6704.png
+yesido/YAU34/aaa/https://i.postimg.cc/vmKM2Cws/IMG-6719.png
+yesido/YAU32/aaa/https://i.postimg.cc/CKTsCxzT/IMG-6872.webp
+yesido/HB21/aaa/https://i.postimg.cc/YS0M3MVR/IMG-6706.png
+yesido/HB09/aaa/https://i.postimg.cc/RZnTnHCL/IMG-6873.jpg
+yesido/FL19 16GB/aaa/https://i.postimg.cc/bNSn6jXz/IMG-6747.png
+yesido/FL19 32GB/aaa/https://i.postimg.cc/bNSn6jXz/IMG-6747.png
+yesido/FL19 64GB/aaa/https://i.postimg.cc/bNSn6jXz/IMG-6747.png
+yesido/FL18 16GB/aaa/https://i.postimg.cc/y8qZtrB0/IMG-6787.png
+yesido/FL18 32GB/aaa/https://i.postimg.cc/y8qZtrB0/IMG-6787.png
+yesido/FL18 64GB/aaa/https://i.postimg.cc/y8qZtrB0/IMG-6787.png
+yesido/FL18 128GB/aaa/https://i.postimg.cc/y8qZtrB0/IMG-6787.png
+yesido/FL18 256GB/aaa/https://i.postimg.cc/y8qZtrB0/IMG-6787.png
+yesido/FL17 64GB/aaa/https://i.postimg.cc/VsVMBkVG/IMG-6665.jpg
+yesido/FL17 128GB/aaa/https://i.postimg.cc/VsVMBkVG/IMG-6665.jpg
+yesido/FL13 32GB/aaa/https://i.postimg.cc/8c961ZvQ/IMG-6875.png
+yesido/FL13 64GB/aaa/https://i.postimg.cc/8c961ZvQ/IMG-6875.png
+yesido/FL13 128GB/aaa/https://i.postimg.cc/8c961ZvQ/IMG-6875.png
+yesido/FL13 256GB/aaa/https://i.postimg.cc/8c961ZvQ/IMG-6875.png
+yesido/FL12 64GB/aaa/https://i.postimg.cc/DfH56Tjg/IMG-6876.jpg
+yesido/FL12 128GB/aaa/https://i.postimg.cc/DfH56Tjg/IMG-6876.jpg
+yesido/KB29/aaa/
+yesido/KB20/aaa/
+yesido/KB16/aaa/
+yesido/KB15/aaa/
+yesido/ST16/aaa/
+yesido/ST15/aaa/
+yesido/ST14/aaa/
+yesido/ST10/aaa/
 
