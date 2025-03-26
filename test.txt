@@ -199,12 +199,37 @@ yesido/FL13 128GB/aaa/https://i.postimg.cc/8c961ZvQ/IMG-6875.png
 yesido/FL13 256GB/aaa/https://i.postimg.cc/8c961ZvQ/IMG-6875.png
 yesido/FL12 64GB/aaa/https://i.postimg.cc/DfH56Tjg/IMG-6876.jpg
 yesido/FL12 128GB/aaa/https://i.postimg.cc/DfH56Tjg/IMG-6876.jpg
-yesido/KB29/aaa/
-yesido/KB20/aaa/
-yesido/KB16/aaa/
-yesido/KB15/aaa/
-yesido/ST16/aaa/
-yesido/ST15/aaa/
-yesido/ST14/aaa/
-yesido/ST10/aaa/
-
+yesido/KB29/aaa/https://i.postimg.cc/BvmBK9P2/IMG-6726.png
+yesido/KB20/aaa/https://i.postimg.cc/CKh45L5F/IMG-6692.png
+yesido/KB16/aaa/https://i.postimg.cc/VsrWdhfb/IMG-6773.png
+yesido/KB15/aaa/https://i.postimg.cc/4y96qYL1/IMG-6664.png
+yesido/ST16/aaa/https://i.postimg.cc/C1dHCPbX/IMG-6630.png
+yesido/ST15/aaa/https://i.postimg.cc/Bbhh9Vmw/IMG-6877.jpg
+yesido/ST14/aaa/https://i.postimg.cc/4xb5XhJL/IMG-6774.jpg
+yesido/ST10/aaa/https://i.postimg.cc/FzFP64VL/IMG-6878.jpg
+yesido/MG11/aaa/https://i.postimg.cc/5t7qtCB6/IMG-6672.png
+yesido/MG06/aaa/https://i.postimg.cc/cHPRRG5W/IMG-6637.png
+yesido/MG05/aaa/https://i.postimg.cc/GtYkzgZy/IMG-6644.png
+yesido/KM20/aaa/https://i.postimg.cc/0QzGKynZ/IMG-6720.png
+yesido/MG16/aaa/https://i.postimg.cc/Y248hbyk/IMG-6781.png
+yesido/IO29/aaa/https://i.postimg.cc/1RLB6wLF/IMG-6686.png
+yesido/IO28/aaa/https://i.postimg.cc/P5MQBcNb/IMG-6761.png
+yesido/IO27/aaa/https://i.postimg.cc/6pKhbw65/IMG-6679.png
+yesido/IO26/aaa/https://i.postimg.cc/Qx1bqV3y/IMG-6754.png
+yesido/IO25/aaa/https://i.postimg.cc/CKLsYNf3/IMG-6645.png
+yesido/YP66/aaa/
+yesido/YP61/aaa/
+yesido/YP60/aaa/
+yesido/YP58/aaa/
+yesido/YP57/aaa/
+yesido/YP56/aaa/
+yesido/YP55/aaa/
+yesido/YP52/aaa/
+yesido/YP51/aaa/
+yesido/YP36/aaa/
+yesido/YP33/aaa/
+yesido/YP29/aaa/
+yesido/KM23/aaa/
+yesido/IO33/aaa/
+yesido/IO32/aaa/
+yesido/MG10/aaa/
