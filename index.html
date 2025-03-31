@@ -1063,66 +1063,223 @@ button.disabled i, button[disabled] i {
 /* تنسيق محتوى الصفحة */
 
   </style>
-<body>
-       <!-- شاشة التحميل -->
-    <div id="loading-screen">
-        <div class="loader"></div>
-    </div>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shehadeh Center - متجر إلكتروني</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* أنماط أبل الحديثة */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
 
-    <!-- محتوى الصفحة -->
-    <div id="login-container">
-        <input type="email" id="email" placeholder="أدخل البريد الإلكتروني">
-        <input type="password" id="password" placeholder="أدخل كلمة المرور">
-        <button id="login-button">تسجيل الدخول</button>
-        <div class="error-message" id="email-error" style="display: none;"></div>
-    </div>
-  
-    <div id="main-content" style="display: none;">
-      <header>
-        <h1>Shehadeh Center</h1>
-        <div id="file-buttons"></div>
-        <button id="select-file-button">اختيار ملف</button>
-        <br>
-        <div id="filter-buttons"></div>
-<button id="select-file-button">اختيار ملف</button> <!-- زر لاختيار الملف يدويًا -->
-<br>
-            <div id="filter-buttons">
-                <!-- الأزرار سيتم إنشاؤها ديناميكيًا بواسطة JavaScript -->
-            </div>
-            <input type="text" id="search-box" placeholder="🔍 أبحث عن منتج" />
-            <div id="filter-buttons"></div>
-            <button class="toggle-cart d-flex align-items-center gap-2" id="show-cart-button">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="cart-text">سلة التسوق</span>
-                <i class="fas fa-shopping-cart"></i><br>
-                <span id="cart-total" class="fw-bold price-container">0.00 ₪</span>
-            </button>
+        body {
+            background: #f5f5f7;
+            color: #1d1d1f;
+            line-height: 1.6;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #000;
+            margin-right: auto;
+        }
+
+        #search-box {
+            padding: 0.8rem 1.5rem;
+            border: 1px solid #d2d2d7;
+            border-radius: 20px;
+            width: 300px;
+            font-size: 1rem;
+            background: rgba(245, 245, 247, 0.8);
+            transition: all 0.3s;
+        }
+
+        #search-box:focus {
+            outline: none;
+            border-color: #0071e3;
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
+        }
+
+        .apple-btn {
+            background: #0071e3;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .apple-btn:hover {
+            background: #0077ed;
+            transform: scale(1.05);
+        }
+
+        #cart-total {
+            color: #0071e3;
+            font-size: 1.1rem;
+        }
+
+        main {
+            margin-top: 100px;
+            padding: 2rem;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 18px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .cart {
+            position: fixed;
+            right: -400px;
+            top: 80px;
+            width: 380px;
+            background: white;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            border-radius: 18px 0 0 18px;
+            transition: right 0.3s;
+            height: calc(100vh - 100px);
+        }
+
+        .cart.active {
+            right: 0;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .scroll-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .scroll-btn button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid #d2d2d7;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        /* تأثيرات تفاعلية إضافية */
+        @media (max-width: 768px) {
+            header {
+                flex-wrap: wrap;
+                padding: 1rem;
+            }
             
-                    </header>
+            #search-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Shehadeh Center</h1>
         
-        <main>
-            <div id="categories"></div>
-        </main>
-        <div class="cart" id="cart">
-            <div id="cart-items"></div>
-            <button class="share-button" id="checkout-button">ارسال طلبية</button>
-            <br>
-<!-- زر إخفاء الفاتورة مع نفس تصميم زر ارسال طلبية -->
-<button class="share-button" id="hide-cart-button">إخفاء الفاتورة</button>
-        </div>
-        <div class="popup" id="popup">
-            <h2>نموذج إتمام الطلب</h2>
-            <input type="text" id="customer-name" placeholder="ادخل اسمك">
-            <input type="text" id="customer-phone" placeholder="ادخل رقم هاتفك">
-            <button id="confirm-button">إرسال</button>
-            <button id="cancel-button">ألغاء</button>
+        <div id="filter-buttons">
+            <button class="apple-btn"><i class="fas fa-filter"></i> الفلاتر</button>
         </div>
 
-        <div class="scroll-btn">
-            <button id="scrollUp" title="الصعود للأعلى">↑</button>
-            <button id="scrollDown" title="النزول للأسفل">↓</button>
+        <input type="text" id="search-box" placeholder="🔍 ابحث عن منتج">
+        
+        <button class="apple-btn" id="show-cart-button">
+            <i class="fas fa-shopping-cart"></i>
+            <span id="cart-total">0.00 ₪</span>
+        </button>
+    </header>
+
+    <main>
+        <div class="product-grid" id="categories">
+            <!-- سيتم إضافة المنتجات هنا -->
+        </div>
+    </main>
+
+    <div class="cart" id="cart">
+        <div id="cart-items"></div>
+        <button class="apple-btn" id="checkout-button">ارسال طلبية</button>
+        <button class="apple-btn" id="hide-cart-button" style="margin-top: 1rem; background: #86868b">إخفاء الفاتورة</button>
+    </div>
+
+    <div class="popup" id="popup">
+        <h2>نموذج إتمام الطلب</h2>
+        <input type="text" id="customer-name" placeholder="ادخل اسمك" class="apple-input">
+        <input type="text" id="customer-phone" placeholder="ادخل رقم هاتفك" class="apple-input">
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+            <button class="apple-btn" id="confirm-button">إرسال</button>
+            <button class="apple-btn" id="cancel-button" style="background: #86868b">إلغاء</button>
         </div>
     </div>
+
+    <div class="scroll-btn">
+        <button id="scrollUp" title="الصعود للأعلى">↑</button>
+        <button id="scrollDown" title="النزول للأسفل">↓</button>
+    </div>
+
+    <script>
+        // JavaScript سيتم إضافة الكود هنا
+    </script>
+</body>
+</html>
 
     <script>
 const categoriesContainer = document.getElementById('categories');
