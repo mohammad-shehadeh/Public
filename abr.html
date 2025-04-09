@@ -333,34 +333,42 @@
         };
 
         function renderCategories() {
-            categoriesContainer.innerHTML = '';
-            const categories = [...new Set(products.map(p => p.category))];
+    categoriesContainer.innerHTML = '';
+    const categories = [...new Set(products.map(p => p.category))];
 
-            categories.forEach(category => {
-                const categoryProducts = products.filter(p => p.category === category);
+    categories.forEach(category => {
+        const categoryProducts = products.filter(p => p.category === category);
 
-                const table = document.createElement('table');
+        // عنصر يحتوي على عنوان الفئة والجدول
+        const section = document.createElement('div');
+        section.className = 'category-section';
 
-                const caption = document.createElement('caption');
-                caption.className = 'category-title';
-                caption.textContent = category;
-                table.appendChild(caption);
+        // عنوان الفئة خارج الجدول
+        const title = document.createElement('div');
+        title.className = 'category-title';
+        title.textContent = category;
+        section.appendChild(title);
 
-                const thead = document.createElement('thead');
-                thead.innerHTML = `<tr><th>الصنف</th><th>السعر</th></tr>`;
-                table.appendChild(thead);
+        // إنشاء الجدول
+        const table = document.createElement('table');
 
-                const tbody = document.createElement('tbody');
-                categoryProducts.forEach(product => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `<td>${product.name}</td><td>${product.price.toFixed(2)}</td>`;
-                    tbody.appendChild(row);
-                });
+        const thead = document.createElement('thead');
+        thead.innerHTML = `<tr><th>الصنف</th><th>السعر</th></tr>`;
+        table.appendChild(thead);
 
-                table.appendChild(tbody);
-                categoriesContainer.appendChild(table);
-            });
-        }
+        const tbody = document.createElement('tbody');
+        categoryProducts.forEach(product => {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${product.name}</td><td>${product.price.toFixed(2)}</td>`;
+            tbody.appendChild(row);
+        });
+
+        table.appendChild(tbody);
+        section.appendChild(table); // إضافة الجدول بعد العنوان
+        categoriesContainer.appendChild(section);
+    });
+}
+
     </script>
 
 </body>
