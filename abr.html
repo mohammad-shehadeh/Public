@@ -333,41 +333,34 @@
         };
 
         function renderCategories() {
-    categoriesContainer.innerHTML = '';
-    const categories = [...new Set(products.map(p => p.category))];
+            categoriesContainer.innerHTML = '';
+            const categories = [...new Set(products.map(p => p.category))];
 
-    categories.forEach(category => {
-        const categoryWrapper = document.createElement('div');
-        categoryWrapper.className = 'category-wrapper';
+            categories.forEach(category => {
+                const categoryProducts = products.filter(p => p.category === category);
 
-        // عنوان الفئة داخل div
-        const categoryDiv = document.createElement('div');
-        categoryDiv.className = 'category-title';
-        categoryDiv.textContent = category;
-        categoryWrapper.appendChild(categoryDiv);
+                const table = document.createElement('table');
 
-        // إنشاء الجدول
-        const table = document.createElement('table');
+                const caption = document.createElement('caption');
+                caption.className = 'category-title';
+                caption.textContent = category;
+                table.appendChild(caption);
 
-        const thead = document.createElement('thead');
-        thead.innerHTML = `<tr><th>الصنف</th><th>السعر</th></tr>`;
-        table.appendChild(thead);
+                const thead = document.createElement('thead');
+                thead.innerHTML = `<tr><th>الصنف</th><th>السعر</th></tr>`;
+                table.appendChild(thead);
 
-        const tbody = document.createElement('tbody');
-        const categoryProducts = products.filter(p => p.category === category);
-        categoryProducts.forEach(product => {
-            const row = document.createElement('tr');
-            row.innerHTML = `<td>${product.name}</td><td>${product.price.toFixed(2)}</td>`;
-            tbody.appendChild(row);
-        });
+                const tbody = document.createElement('tbody');
+                categoryProducts.forEach(product => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td>${product.name}</td><td>${product.price.toFixed(2)}</td>`;
+                    tbody.appendChild(row);
+                });
 
-        table.appendChild(tbody);
-        categoryWrapper.appendChild(table);
-
-        categoriesContainer.appendChild(categoryWrapper);
-    });
-}
-
+                table.appendChild(tbody);
+                categoriesContainer.appendChild(table);
+            });
+        }
     </script>
 
 </body>
