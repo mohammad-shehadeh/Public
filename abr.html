@@ -337,17 +337,14 @@
     const categories = [...new Set(products.map(p => p.category))];
 
     categories.forEach(category => {
-        const categoryProducts = products.filter(p => p.category === category);
+        const categoryWrapper = document.createElement('div');
+        categoryWrapper.className = 'category-wrapper';
 
-        // عنصر يحتوي على عنوان الفئة والجدول
-        const section = document.createElement('div');
-        section.className = 'category-section';
-
-        // عنوان الفئة خارج الجدول
-        const title = document.createElement('div');
-        title.className = 'category-title';
-        title.textContent = category;
-        section.appendChild(title);
+        // عنوان الفئة داخل div
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'category-title';
+        categoryDiv.textContent = category;
+        categoryWrapper.appendChild(categoryDiv);
 
         // إنشاء الجدول
         const table = document.createElement('table');
@@ -357,6 +354,7 @@
         table.appendChild(thead);
 
         const tbody = document.createElement('tbody');
+        const categoryProducts = products.filter(p => p.category === category);
         categoryProducts.forEach(product => {
             const row = document.createElement('tr');
             row.innerHTML = `<td>${product.name}</td><td>${product.price.toFixed(2)}</td>`;
@@ -364,8 +362,9 @@
         });
 
         table.appendChild(tbody);
-        section.appendChild(table); // إضافة الجدول بعد العنوان
-        categoriesContainer.appendChild(section);
+        categoryWrapper.appendChild(table);
+
+        categoriesContainer.appendChild(categoryWrapper);
     });
 }
 
