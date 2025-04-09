@@ -357,7 +357,7 @@ function renderCategories() {
         const categoryProducts = products.filter(p => p.category === category);
         categoryProducts.forEach(product => {
             const row = document.createElement('tr');
-            row.innerHTML = `<td>${product.name}</td><td>${product.price.toFixed(2)}</td>`;
+            row.innerHTML = `<td>${product.name}</td><td>${isNaN(product.price) ? 'غير متوفر' : product.price.toFixed(2)}</td>`;
             tbody.appendChild(row);
         });
 
