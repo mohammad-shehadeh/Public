@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>عرض الأصناف حسب الفئة</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: center;
+            padding: 20px;
+        }
+        table {
+            width: 60%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            border: 2px solid #333;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #999;
+        }
+        th {
+            background-color: #444;
+            color: white;
+        }
+        .category-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 40px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 15px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="file-buttons"></div>
+    <button id="select-file-button">اختيار ملف</button>
+
+    <div id="categories"></div>
+
+    <script>
+        const categoriesContainer = document.getElementById('categories');
+        const selectFileButton = document.getElementById('select-file-button');
+        const fileButtonsContainer = document.getElementById('file-buttons');
+
+        let products = [];
+
+        const fileButtons = [
+            { label: 'أسعار الأجهزة', fileName: 'test.txt' },
+            { label: 'أسعار الشاشات', fileName: 'lcd.txt' },
+            { label: 'الإكسسوارات', fileName: 'abc.txt' }
+        ];
+
+        fileButtons.forEach(buttonInfo => {
+            const button = document.createElement('button');
+            button.textContent = buttonInfo.label;
+            button.onclick = () => loadProductsFromFile(buttonInfo.fileName);
+            fileButtonsContainer.appendChild(button);
+        });
+
+        window.addEventListener('load', () => {
+            loadProductsFromFile('test.txt');
+        });
+
+        function loadProductsFromFile(fileName) {
+            products = [];
+
+            fetch(fileName)
+                .then(response => response.text())
+                .then(data => {
+                    const lines = data.split('\n');
+                    lines.forEach(line => {
+                        const parts = line.split('/');
+                        if (parts.length >= 3) {
+                            products.push({
+                                category: parts[0].trim(),
+                                name: parts[1].trim(),
+                                price: parseFloat(parts[2].trim())
+                            });
+                        }
+                    });
+
+                    renderCategories();
+                })
+                .catch(error => console.error('Error loading products:', error));
+        }
+
+        selectFileButton.onclick = () => {
+            const selectedFile = prompt('أدخل اسم الملف (test.txt أو lcd.txt أو abc.txt):');
+            if (selectedFile) {
+                loadProductsFromFile(selectedFile);
+            }
+        };
+
+        function renderCategories() {
+            categoriesContainer.innerHTML = '';
+            const categories = [...new Set(products.map(p => p.category))];
+
+            categories.forEach(category => {
+                const categoryProducts = products.filter(p => p.category === category);
+
+                const table = document.createElement('table');
+
+                const caption = document.createElement('caption');
+                caption.className = 'category-title';
+                caption.textContent = category;
+                table.appendChild(caption);
+
+                const thead = document.createElement('thead');
+                thead.innerHTML = `<tr><th>الصنف</th><th>السعر</th></tr>`;
+                table.appendChild(thead);
+
+                const tbody = document.createElement('tbody');
+                categoryProducts.forEach(product => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `<td>${product.name}</td><td>${product.price.toFixed(2)}</td>`;
+                    tbody.appendChild(row);
+                });
+
+                table.appendChild(tbody);
+                categoriesContainer.appendChild(table);
+            });
+        }
+    </script>
+
+</body>
+</html>
