@@ -1,46 +1,1890 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>404 - الصفحة غير موجودة</title>
-  <style>
-    body {
-      background-color: #f8f8f8;
-      font-family: 'Arial', sans-serif;
-      text-align: center;
-      padding: 100px;
-      direction: rtl;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>أسعار الأجهزة أونلاين</title>
+    <meta name="description" content="أسعار الأجهزة">
+    
+    <!-- Open Graph Metadata (لتحسين المشاركة على وسائل التواصل) -->
+    <meta property="og:title" content="Shehadeh Center">
+    <meta property="og:description" content="اسعار الاجهزة اونلاين">
+    <meta property="og:image" content="https://img.freepik.com/premium-vector/vector-price-text-logo-design_867743-461.jpg">
+    <meta property="og:type" content="website">
+
+    <!-- أيقونة الموقع (Favicon) -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://i.postimg.cc/VNssYbVS/IMG-1002.jpg">
+    
+    <!-- Apple Touch Icon (لأجهزة iPhone) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://i.postimg.cc/VNssYbVS/IMG-1002.jpg">
+
+    <!-- Web App Manifest (لتحويل الموقع إلى تطبيق) -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="manifest" href="/price/manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <link rel="manifest" href="/manifest.json">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+    background: linear-gradient(135deg, #333 25%, #444 50%, #222 75%);
+    color: white;
+    padding: 1.5em;
+    text-align: center;
+    font-size: 1em; /* تم تصغير الحجم إلى النصف */
+    position: relative;
+}
+
+header h1 {
+    font-size: 150%;
+    animation: glow 1.5s ease-in-out infinite alternate;
+    text-shadow: 0 0 2.5px #fff, 0 0 5px #fff, 0 0 7.5px #ff0000, 0 0 10px #ff0000, 0 0 12.5px #ff0000;
+}
+
+
+@keyframes glow {
+    0% {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff0000, 0 0 20px #ff0000, 0 0 25px #ff0000;
     }
-    h1 {
-      font-size: 100px;
-      color: #e74c3c;
-      margin: 0;
+    50% {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #ff0000, 0 0 40px #ff0000, 0 0 50px #ff0000;
     }
-    h2 {
-      font-size: 24px;
-      color: #555;
+    100% {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ff0000, 0 0 20px #ff0000, 0 0 25px #ff0000;
     }
-    p {
-      font-size: 18px;
-      color: #777;
-      margin-top: 20px;
+}
+
+
+        h2 {
+    font-size: 2em;  /* زيادة حجم الخط لجعل النص أكثر وضوحًا */
+    margin-bottom: 1.5em;  /* زيادة المسافة أسفل النص */
+    color: #1f201f;  /* اختيار لون مميز للنص (أخضر) */
+    text-transform: uppercase;  /* تحويل النص إلى حروف كبيرة */
+    letter-spacing: 2px;  /* زيادة المسافة بين الحروف */
+    font-weight: bold;  /* جعل النص سميكًا */
+    text-align: center;  /* توسيط النص */
+    background-color: #f0f0f0;  /* خلفية خفيفة للنص */
+    padding: 0.5em 0;  /* إضافة مسافة داخلية من الأعلى والأسفل */
+    border-radius: 5px;  /* إضافة حواف دائرية للخلفية */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* إضافة ظل خفيف حول النص */
+    max-width: 90%;  /* تحديد أقصى عرض للنص */
+    margin-left: auto;  /* توسيط النص أفقيًا */
+    margin-right: auto;  /* توسيط النص أفقيًا */
+}
+
+        .products-container {
+            display: flex;
+            flex-wrap: wrap; /* السماح بتغيير الصف عند انتهاء العرض */
+            justify-content: center; /* محاذاة العناصر في المنتصف */
+            padding: 2em;
+            gap: 1em; /* إضافة مسافة بين العناصر */
+        }
+
+.product {
+    background-color: white;
+    width: 300px;
+    margin: 0.7em;
+    padding: 0.7em;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+/* تصميم مخصص للأجهزة المحمولة */
+@media (max-width: 768px) { /* العرض الأقصى 768px */
+    .product {
+        width: 90%; /* العرض يكون 100% من حجم الشاشة */
+        box-sizing: border-box; /* لضمان عدم تجاوز الحواف */
     }
-    .contact-info {
-      font-size: 16px;
-      color: #555;
-      margin-top: 30px;
+}
+
+        .product:hover {
+            transform: translateY(-10px);
+        }
+
+      .product img {
+          max-width: 100%;
+          border-radius: 8px;
+          margin-bottom: 1em;
+      }
+
+      .product-name {
+          font-size: 1.2em;
+          color: #333;
+          margin-bottom: 0.5em;
+          font-weight: bold;
+      }
+
+      .product-price {
+          font-size: 1.1em;
+          color: #e74c3c;
+          margin-bottom: 1em;
+      }
+
+      .add-to-cart {
+          background-color: #3498db;
+          color: white;
+          border: none;
+          padding: 0.7em 0.7em;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+      }
+
+      .add-to-cart:hover {
+          background-color: #2980b9;
+      }
+
+
+
+      .cart {
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 1em;
+    width: 80%;  /* عرض السلة بنسبة 90% من عرض الصفحة */
+    height: 90%;
+    overflow-y: auto;
+    box-shadow: -2px 0px 10px rgba(0, 0, 0, 0.1);
+    transition: top 0.3s ease-in-out;  /* إضافة انتقال لتحريك السلة */
+}
+
+.cart.hidden {
+    top: -80%;  /* إخفاء السلة عن طريق رفعها فوق الشاشة */
+}
+
+.toggle-cart {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.5em;
+    cursor: pointer;
+    margin-top: 1em;
+}  
+.cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.cart-item-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.cart-item-details {
+    flex-grow: 1;
+    font-size: 14px;
+}
+
+.cart-remove {
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+
+/* تصميم زر المشاركة بنفس حجم زر إخفاء السلة */
+.share-button {
+    padding: 10px 20px;  /* نفس المسافة الداخلية مثل زر إخفاء السلة */
+    font-size: 16px;  /* نفس حجم الخط */
+    font-weight: bold;  /* نفس الخط السميك */
+    border: none;  /* إزالة الحدود */
+    border-radius: 8px;  /* نفس الحواف الدائرية */
+    color: white;  /* لون النص أبيض */
+    cursor: pointer;  /* تغيير المؤشر عند المرور على الزر */
+    transition: transform 0.2s;  /* تأثير الانتقال (رفع الزر عند النقر) */
+    width: 200px;  /* نفس العرض مثل زر إخفاء السلة */
+    margin-bottom: 10px;  /* نفس المسافة بين الأزرار */
+    animation: colorChange 5s infinite;  /* تطبيق نفس تأثير تغيير الألوان */
+}
+
+/* تأثير تغيير الألوان بشكل مستمر */
+@keyframes colorChange {
+    0% {
+        background-color: #1e7e34;  /* اللون الأول (أخضر داكن) */
     }
+    25% {
+        background-color: #ff5722;  /* اللون الثاني (برتقالي) */
+    }
+    50% {
+        background-color: #2196F3;  /* اللون الثالث (أزرق) */
+    }
+    75% {
+        background-color: #f44336;  /* اللون الرابع (أحمر) */
+    }
+    100% {
+        background-color: #1e7e34;  /* العودة إلى اللون الأول (أخضر داكن) */
+    }
+}
+
+/* يمكن إضافة تأثيرات عند التفاعل مع زر المشاركة إذا لزم الأمر */
+.share-button:hover {
+    transform: translateY(-3px);  /* رفع الزر عند التحويم */
+}
+
+.share-button:active {
+    transform: translateY(0);  /* العودة إلى الوضع الطبيعي عند النقر */
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: none; /* إزالة الحدود */
+    padding: 1.5em;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* تحسين الظل */
+    border-radius: 16px; /* زيادة الانحناء */
+    width: 400px; /* العرض الافتراضي */
+    max-width: 90%; /* للتأكد من عدم تخطي العرض على الهواتف */
+    font-family: 'Arial', sans-serif; /* خط أنيق */
+    animation: fadeIn 0.3s ease-in-out; /* تأثير الظهور */
+}
+
+.popup h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5em;
+    color: #333;
+    letter-spacing: normal; /* إلغاء أي تباعد إضافي بين الحروف */
+}
+
+
+.popup p {
+    font-size: 1rem; /* حجم النص العادي */
+    color: #555; /* لون هادئ للنص */
+    line-height: 1.5; /* تحسين التباعد بين السطور */
+}
+
+.popup .buttons {
+    margin-top: 1em;
+    display: flex;
+    justify-content: space-around; /* توزيع الأزرار بالتساوي */
+}
+
+.popup button {
+    background-color: #007bff; /* الأزرق */
+    color: #fff; /* النص الأبيض */
+    border: none; /* إزالة الحدود */
+    border-radius: 8px; /* انحناء الأزرار */
+    padding: 0.75em 1.5em; /* حجم أكبر قليلاً */
+    font-size: 1rem; /* حجم النص */
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* ظل للأزرار */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* تحسين الحركة */
+}
+
+.popup button:hover {
+    background-color: #0056b3; /* لون أغمق عند التمرير */
+    transform: scale(1.05); /* تكبير طفيف عند التمرير */
+}
+
+.popup button:active {
+    transform: scale(0.98); /* تصغير طفيف عند النقر */
+}
+
+@media (max-width: 768px) {
+    .popup {
+        width: 90%; /* عرض 90% للهواتف */
+        padding: 1em; /* تقليل الحواف */
+    }
+
+    .popup button {
+        font-size: 0.9rem; /* تصغير النص للأزرار قليلاً على الشاشات الصغيرة */
+        padding: 0.5em 1em; /* تقليل الحواف للأزرار */
+    }
+}
+
+
+/* إضافة زر إغلاق */
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #f44336; /* لون أحمر خفيف */
+    border: none;
+    color: #fff;
+    font-size: 1em;
+    padding: 0.5em;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease;
+}
+
+.popup-close:hover {
+    background: #d32f2f; /* لون أغمق عند التحويم */
+}
+
+/* تأثير الظهور */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -55%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+
+      .popup input {
+          margin-bottom: 1em;
+          width: 100%;
+          padding: 0.5em;
+      }
+
+      .popup button {
+          margin-right: 0.5em;
+      }
+      /* إعداد عام لعناصر الأزرار والمحتوى */
+.product {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 20px;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* تصميم صورة المنتج */
+.product img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+/* تصميم تفاصيل المنتج */
+.product .product-details {
+    margin-bottom: 15px;
+}
+
+/* إعداد الأزرار الخاصة بالكمية */
+.quantity-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+}
+/* تنسيق الأزرار + و - */
+.quantity-controls button {
+    padding: 12px;
+    font-size: 20px;
+    background-color: #e0f3ff; /* لون أزرق فاتح */
+    border: 2px solid #aad8ff;
+    border-radius: 5px; /* مربعات بحواف خفيفة */
+    margin: 0 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* تأثير ديناميكي على الأزرار عند التمرير */
+.quantity-controls button:hover {
+    background-color: #cbe8ff; /* درجة أفتح عند التمرير */
+    border-color: #8ccfff;
+}
+
+/* تأثير عند الضغط على الأزرار */
+.quantity-controls button:active {
+    transform: scale(1.1); /* تكبير الزر قليلاً */
+    background-color: #007bff; /* أزرق غامق عند الضغط */
+    color: #fff;
+    border-color: #0056b3;
+}
+
+/* تنسيق حقل إدخال الكمية */
+.quantity-controls input {
+    width: 70px;
+    height: 40px;
+    font-size: 18px;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin: 0 10px;
+    padding: 5px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* تغيير الحدود عند التركيز على حقل إدخال الكمية */
+.quantity-controls input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+
+/* تصميم زر إضافة إلى السلة */
+.add-to-cart-btn {
+    background: linear-gradient(90deg, #007bff, #00aaff, #007bff);
+    color: white;
+    padding: 11px 24px;
+    border: none;
+    border-radius: 25px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    margin-top: 20px;
+    width: 100%;
+    text-transform: uppercase;
+}
+
+/* تغيير اللون عند مرور الماوس على زر إضافة إلى السلة */
+.add-to-cart-btn:hover {
+    background: linear-gradient(90deg, #0066cc, #0099cc, #0066cc);
+    transform: scale(1.1);
+}
+
+/* إخفاء الزر "Add to Cart" عندما تظهر أدوات الكمية */
+.quantity-controls.show {
+    display: block !important;
+}
+
+/* إخفاء أدوات الكمية عند بدء عرض المنتج */
+.quantity-controls {
+    display: none;
+}
+
+/* تنسيق السلة في صفحة الكارت */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.cart-item .cart-quantity {
+    width: 60px;
+    text-align: center;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.cart-item button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cart-item button:hover {
+    background-color: #e53935;
+}
+
+.cart-total {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: right;
+    margin-top: 20px;
+}
+
+/* تصميم الحافة الجمالية لمربع النص */
+.product .product-details strong {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+#toggle-cart-button {
+  float: left;
+}
+/* تصميم الأزرار */
+/* تحسين تصميم زر التبديل بنفس تصميم زر file-buttons ثلاثي الأبعاد */
+.toggle-cart {
+    padding: 10px 20px;  /* المسافة الداخلية داخل الزر */
+    font-size: 16px;  /* حجم الخط */
+    font-weight: bold;  /* جعل الخط سميكًا */
+    border: none;  /* إزالة الحدود */
+    border-radius: 15px;  /* حواف دائرية للزر */
+    color: #ffffff;  /* لون النص الأبيض */
+    cursor: pointer;  /* تغيير المؤشر عند المرور على الزر */
+    transition: transform 0.2s, box-shadow 0.3s;  /* تأثير الانتقال */
+    width: 200px;  /* عرض الزر */
+    margin-bottom: 10px;  /* مسافة بين الأزرار */
+    background: #3a3a3a;  /* لون الزر الداكن */
+    box-shadow: 8px 8px 16px #2e2e2e, -8px -8px 16px #444444; /* تأثير ثلاثي الأبعاد */
+    position: relative;
+    text-transform: uppercase;
+}
+
+/* تأثير تغيير الألوان بشكل مستمر */
+@keyframes colorChange {
+    0% {
+        background-color: #ff0000e7;  /* اللون الأول (أحمر) */
+    }
+    25% {
+        background-color: #ff9800;  /* اللون الثاني (برتقالي) */
+    }
+    50% {
+        background-color: #ff0000;  /* اللون الثالث (أحمر) */
+    }
+    75% {
+        background-color: #ffa600;  /* اللون الرابع (أصفر) */
+    }
+    100% {
+        background-color: #ff0000;  /* العودة إلى اللون الأول (أحمر) */
+    }
+}
+
+/* تأثير التوهج الأحمر المتحرك حول الزر */
+.toggle-cart::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 15px;
+    background: none;
+    border: 2px solid #ff0000;  /* الخط الأحمر */
+    animation: glowing 1.5s infinite alternate; /* التوهج المتحرك */
+    z-index: -1;  /* جعل الخط خلف الزر */
+}
+
+/* تأثير التوهج المتحرك */
+@keyframes glowing {
+    0% {
+        box-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000;
+    }
+    100% {
+        box-shadow: 0 0 20px #ff0000, 0 0 30px #ff0000, 0 0 40px #ff0000;
+    }
+}
+
+/* تأثير عند التمرير */
+.toggle-cart:hover {
+    box-shadow: 12px 12px 24px #2e2e2e, -12px -12px 24px #444444; /* زيادة تأثير الظل عند التمرير */
+    transform: translateY(-4px);  /* رفع الزر عند التمرير */
+}
+
+/* تأثير عند الضغط */
+.toggle-cart:active {
+    transform: translateY(2px);  /* تأثير الضغط ليبدو كأنه يتم الضغط عليه */
+    box-shadow: inset 8px 8px 16px #2e2e2e, inset -8px -8px 16px #444444; /* تأثير الظل الداخلي */
+}
+
+
+input[type="number"] {
+    pointer-events: none; /* يمنع التفاعل مع العنصر */
+    background-color: #f0f0f0; /* لون خلفية اختياري لإظهار أنه غير نشط */
+    color: #000000; /* لون النص اختياري لإظهار أنه غير قابل للتعديل */
+}
+div {
+    font-size: 24px; /* تكبير حجم الخط */
+    font-weight: bold; /* جعل النص عريضًا */
+}
+
+/* تصميم زر الصعود والنزول */
+.scroll-btn {
+    position: fixed;
+    top: 50%; /* وضع الأزرار في منتصف الصفحة عموديًا */
+    left: 10px; /* وضع الأزرار في أقصى يسار الصفحة */
+    transform: translateY(-50%); /* لضمان توسيط الأزرار */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    z-index: 1000;
+}
+
+.scroll-btn button {
+    background-color: #007BFF; /* اللون الأزرق */
+    color: white;
+    border: none;
+    border-radius: 25px; /* تعديل الحدود لجعلها مستطيلة مع أطراف مستديرة */
+    width: 25px; /* العرض أقل */
+    height: 70px; /* الطول أكبر */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    font-size: 30px; /* تكبير حجم الأسهم */
+}
+
+.scroll-btn button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.scroll-btn button:active {
+    transform: scale(1);
+}
+
+/* استعلام الوسائط للهواتف المحمولة */
+@media screen and (max-width: 768px) {
+    .scroll-btn {
+        left: 5px; /* تقليل المسافة من الحافة اليسرى */
+        gap: 10px; /* تقليل المسافة بين الأزرار */
+    }
+
+    .scroll-btn button {
+        width: 5px; /* تقليل عرض الأزرار */
+        height: 60px; /* تقليل طول الأزرار */
+        font-size: 10px; /* تقليل حجم الأسهم */
+    }
+}
+/* تصميم عام لأزرار filter-buttons */
+#filter-buttons {
+    display: flex;
+    flex-wrap: wrap; /* لجعل الأزرار تلتف إذا كانت كثيرة */
+    gap: 10px; /* مسافة صغيرة بين الأزرار */
+    margin-bottom: 15px;
+    justify-content: center; /* لمحاذاة الأزرار في المنتصف */
+}
+
+/* تصميم كل زر */
+#filter-buttons .filter-btn {
+    padding: 6px 12px; /* حجم صغير ومضغوط */
+    font-size: 14px; /* حجم نص مناسب */
+    border: 1px solid #ddd; /* إطار خفيف */
+    border-radius: 20px; /* زوايا مستديرة */
+    background-color: #f9f9f9; /* خلفية فاتحة */
+    color: #333; /* لون النص */
+    cursor: pointer;
+    transition: all 0.3s ease; /* تأثير عند التمرير فوق الزر */
+}
+
+#filter-buttons .filter-btn:hover {
+    background-color: #007bff; /* لون خلفية عند التمرير */
+    color: white; /* لون النص عند التمرير */
+}
+
+#filter-buttons .filter-btn.active {
+    background-color: #007bff; /* لون مميز للزر النشط */
+    color: white; /* نص أبيض للزر النشط */
+    border-color: #0056b3; /* إطار أغمق للزر النشط */
+}
+
+/* تصميم مربع البحث */
+#search-box {
+    width: 100%; /* ليكون بعرض الحاوية */
+    max-width: 350px; /* أقصى عرض */
+    margin: 10px auto; /* محاذاة وسط الصفحة */
+    padding: 8px 12px; /* حشوة داخلية */
+    font-size: 16px; /* حجم النص */
+    border: 1px solid #ddd; /* إطار خفيف */
+    border-radius: 20px; /* زوايا مستديرة */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* ظل خفيف */
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+#search-box:focus {
+    border-color: #007bff; /* لون الإطار عند التركيز */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* ظل عند التركيز */
+}
+
+/* جعل الأزرار ومربع البحث ضمن حاوية واحدة */
+.search-filter-container {
+    display: flex;
+    flex-direction: column; /* ترتيب عمودي */
+    align-items: center; /* محاذاة الوسط */
+    gap: 10px; /* مسافة بين العناصر */
+}
+
+/* الحاوية الرئيسية */
+#login-section {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* العنوان */
+#login-section h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* حقول الإدخال */
+input[type="text"], input[type="tel"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+input[type="text"]:focus, input[type="tel"]:focus {
+    border-color: #5c99e6;
+    outline: none;
+}
+
+/* تضمين كافة الأكواد ضمن محدد فريد */
+#otp-section.custom-otp-style {
+    font-family: "Arial", sans-serif;
+    background: linear-gradient(135deg, #f7f7f7, #e3e3e3);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 400px;
+    margin: 50px auto;
+    border: 2px solid #ddd;
+}
+
+#otp-section.custom-otp-style h5 {
+    font-size: 14px;
+    color: #ff0000;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#otp-section.custom-otp-style h2 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 15px;
+    text-align: center;
+    letter-spacing: normal; /* إزالة أي تباعد بين الحروف */
+}
+
+
+#otp-section.custom-otp-style input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+#otp-section.custom-otp-style button {
+    display: block;
+    width: 100%;
+    background: linear-gradient(135deg, #0066cc, #003399);
+    color: #fff;
+    padding: 10px 0;
+    margin-top: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+#otp-section.custom-otp-style button:hover {
+    background: linear-gradient(135deg, #005bb5, #002f66);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+#otp-section.custom-otp-style button:active {
+    background: linear-gradient(135deg, #004080, #001f40);
+    transform: translateY(0);
+}
+
+.red-glow {
+    font-size: 150%; /* زيادة حجم الخط 50% */
+    font-weight: bold;
+    color: #ff0000;
+    text-shadow: 0 0 0px transparent;
+    animation: smooth-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes smooth-glow {
+    0% {
+        text-shadow: 0 0 0px transparent;
+    }
+    100% {
+        text-shadow: 0 0 8px #ff3333, 0 0 16px #ff4d4d, 0 0 20px #cc2900, 0 0 26px #aa2200;
+    }
+}
+
+/* تنسيق أزرار الفلترة */
+.filter-btn {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+/* توهج عند النشط */
+.filter-btn.active {
+    background: #4CAF50;
+    box-shadow: 0 0 15px #4CAF50;
+    animation: filter-glow 1s ease-in-out infinite alternate;
+}
+
+@keyframes filter-glow {
+    from {
+        box-shadow: 0 0 5px #4CAF50;
+    }
+    to {
+        box-shadow: 0 0 20px #4CAF50;
+    }
+}
+.price {
+    color: #007a33; /* أخضر غامق */
+    font-weight: bold;
+    font-size: 1.1em;
+    text-shadow: 0 0 3px rgba(0, 122, 51, 0.3); /* توهج خفيف أكثر هدوءًا */
+}
+.price-container {
+    direction: ltr;
+    unicode-bidi: embed;
+    display: inline-block;
+}
+.unavailable {
+    color: red;
+}
+
+/* إخفاء زر اختيار الملف */
+#select-file-button {
+    display: none; /* إخفاء الزر */
+}
+
+/* تحسين تصميم الأزرار بنمط النمورفيزم ثلاثي الأبعاد لواجهة داكنة */
+#file-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    width: 320px;
+    margin: 30px auto;
+}
+
+#file-buttons button {
+    background: #3a3a3a; /* لون خلفية الزر الداكن */
+    color: #00ffff;    /* لون النص الليزري (أزرق فاتح) */
+    font-weight: bold;
+    border: none;
+    border-radius: 15px;
+    padding: 12px 30px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 8px 8px 16px #2e2e2e, -8px -8px 16px #444444; /* تأثير ثلاثي الأبعاد من كل الجهات */
+    text-transform: uppercase;
+    margin: 10px;
+}
+
+#file-buttons button:hover {
+    box-shadow: inset 8px 8px 16px #2e2e2e, inset -8px -8px 16px #444444;
+}
+
+#file-buttons button:active {
+    transform: translateY(3px);
+}
+
+
+/* تنسيق الزر العادي */
+.add-to-cart-btn {
+    background: linear-gradient(90deg, #007bff, #00aaff, #007bff);
+    color: white;
+    padding: 11px 24px;
+    border: none;
+    border-radius: 25px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    margin-top: 20px;
+    width: 100%;
+    text-transform: uppercase;
+}
+
+/* تنسيق الزر عند تعطيله *//* تنسيق الزر عند تعطيله */
+button.disabled, button[disabled] {
+    background: linear-gradient(90deg, #d3d3d3, #d3d3d3, #d3d3d3);  /* اللون السكني */
+    color: #8e8e8e;  /* لون النص عند التعطيل */
+    cursor: not-allowed;  /* تغيير شكل المؤشر إلى غير قابل للنقر */
+    border: none;  /* إزالة الحدود عند تعطيل الزر */
+    opacity: 0.6;  /* تقليل شفافية الزر لإظهاره كمعطل */
+    pointer-events: none;  /* تعطيل جميع أحداث المؤشر مثل النقر والتحويم */
+    user-select: none;  /* منع تحديد النص داخل الزر */
+}
+
+/* تعطيل الأيقونة داخل الزر عند التعطيل */
+button.disabled i, button[disabled] i {
+    color: #8e8e8e;  /* تغيير لون الأيقونة عند تعطيل الزر */
+    pointer-events: none;  /* تعطيل تفاعل المستخدم مع الأيقونة */
+}
+#login-container {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 35px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 100%;
+  max-width: 380px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: fadeIn 0.5s;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -55%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+#login-container h2 {
+  margin-bottom: 20px;
+  color: white;
+  font-size: 22px;
+}
+
+#login-container input {
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  color: black; /* النص داخل الحقول باللون الأسود */
+  background: rgba(255, 255, 255, 0.9);
+  transition: 0.3s ease-in-out;
+  font-size: 16px;
+}
+
+#login-container input::placeholder {
+  color: #777;
+  transition: 0.3s;
+}
+
+#login-container input:focus {
+  border-color: #2575fc;
+  outline: none;
+  box-shadow: 0 0 10px rgba(37, 117, 252, 0.3);
+}
+
+#login-container input:focus::placeholder {
+  color: transparent;
+}
+
+#login-container button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(45deg, #ff416c, #ff4b2b);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: 0.3s;
+  margin-top: 10px;
+}
+
+#login-container button:hover {
+  background: linear-gradient(45deg, #ff4b2b, #ff416c);
+  box-shadow: 0 0 10px rgba(255, 75, 43, 0.5);
+}
+
+.error-message {
+  color: #ff4b2b;
+  font-size: 15px;
+  display: none;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* تنسيق شاشة التحميل */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0, 0, 0); /* خلفية سوداء بدون شفافية */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* للتأكد من ظهورها فوق كل شيء */
+}
+
+/* تنسيق دائرة التحميل */
+.loader {
+    border: 8px solid #f3f3f3; /* لون الدائرة الخارجية */
+    border-top: 8px solid #3498db; /* لون الدائرة الداخلية */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite; /* حركة الدوران */
+}
+
+/* حركة الدوران */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* تنسيق محتوى الصفحة */
+
+.floating-button {
+            position: fixed; /* يثبّت الزر في مكانه حتى مع التمرير */
+            top: 20px;      /* المسافة من الأعلى */
+            right: 20px;    /* المسافة من اليمين */
+            width: 50px;     /* عرض الزر */
+            height: 50px;    /* ارتفاع الزر */
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #0bb5b0;
+            color: white;
+            border: none;
+            border-radius: 50%; /* يجعل الزر دائريًا */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* إضافة ظل لطيف */
+            z-index: 1000; /* يجعل الزر فوق كل العناصر */
+        }
+        .floating-button:hover {
+            background-color: #0056b3; /* تغيير اللون عند التحويم */
+        }
   </style>
-</head>
 <body>
-  <h1>404</h1>
-  <h2>الصفحة غير موجودة</h2>
-  <p>عذراً، الصفحة التي تبحث عنها غير متوفرة أو تم نقلها.</p>
-  <h2>Shehadeh Center</h2>
-  <p class="contact-info">
-    هذا الرابط معطل. للتواصل مع محمد شحادة:<br>
-    <strong>+972569813333</strong><br>
-    لإرسال رابط جديد أو للحصول على مساعدة.
-  </p>
+  
+      <header>
+        <h1>Shehadeh Center</h1>
+        <button class="floating-button" onclick="window.location.href='abr.html'">
+            <i class="fas fa-list"></i>
+        </button>
+        <div id="file-buttons"></div>
+        <button id="select-file-button">اختيار ملف</button>
+        <br>
+        <div id="filter-buttons"></div>
+<button id="select-file-button">اختيار ملف</button> <!-- زر لاختيار الملف يدويًا -->
+<br>
+            <div id="filter-buttons">
+                <!-- الأزرار سيتم إنشاؤها ديناميكيًا بواسطة JavaScript -->
+            </div>
+            <input type="text" id="search-box" placeholder="🔍 أبحث عن منتج" />
+            <div id="filter-buttons"></div>
+            <button class="toggle-cart d-flex align-items-center gap-2" id="show-cart-button">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-text">سلة التسوق</span>
+                <i class="fas fa-shopping-cart"></i><br>
+                <span id="cart-total" class="fw-bold price-container">0.00 ₪</span>
+            </button>
+            
+                    </header>
+        
+        <main>
+            <div id="categories"></div>
+        </main>
+        <div class="cart" id="cart">
+            <div id="cart-items"></div>
+            <button class="share-button" id="checkout-button">ارسال طلبية</button>
+            <br>
+<!-- زر إخفاء الفاتورة مع نفس تصميم زر ارسال طلبية -->
+<button class="share-button" id="hide-cart-button">إخفاء الفاتورة</button>
+        </div>
+        <div class="popup" id="popup">
+            <h2>نموذج إتمام الطلب</h2>
+            <input type="text" id="customer-name" placeholder="ادخل اسمك">
+            <input type="text" id="customer-phone" placeholder="ادخل رقم هاتفك">
+            <button id="confirm-button">إرسال</button>
+            <button id="cancel-button">ألغاء</button>
+        </div>
+
+        <div class="scroll-btn">
+            <button id="scrollUp" title="الصعود للأعلى">↑</button>
+            <button id="scrollDown" title="النزول للأسفل">↓</button>
+        </div>
+    </div>
+
+    <script>
+const categoriesContainer = document.getElementById('categories');
+const cartItemsContainer = document.getElementById('cart-items');
+const checkoutButton = document.getElementById('checkout-button');
+const popup = document.getElementById('popup');
+const confirmButton = document.getElementById('confirm-button');
+const cancelButton = document.getElementById('cancel-button');
+const customerNameInput = document.getElementById('customer-name');
+const customerPhoneInput = document.getElementById('customer-phone');
+const selectFileButton = document.getElementById('select-file-button'); // زر لاختيار الملف
+
+let products = [];
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+// إضافة أزرار لاختيار الكتالوج
+const fileButtonsContainer = document.getElementById('file-buttons'); // تأكد من وجود عنصر في HTML لعرض الأزرار
+const fileButtons = [
+    { label: 'أسعار الأجهزة', fileName: 'test.md' },
+    { label: 'أسعار الشاشات', fileName: 'lcd.md' },
+    { label: 'أسعار اكسسوارات', fileName: 'abc.md' }
+];
+
+// إضافة الأزرار
+fileButtons.forEach(buttonInfo => {
+    const button = document.createElement('button');
+    button.textContent = buttonInfo.label;
+    button.onclick = () => loadProductsFromFile(buttonInfo.fileName); // تحميل البيانات من الملف المحدد
+    fileButtonsContainer.appendChild(button);
+});
+
+// تحميل البيانات من الملف الافتراضي عند تحميل الصفحة
+window.addEventListener('load', () => {
+    loadProductsFromFile('test.md'); // يمكنك تغيير 'test.txt' إلى أي ملف تود تحميله كافتراضي
+});
+
+// دالة لتحميل المنتجات من الملف
+function loadProductsFromFile(fileName) {
+    products = []; // إعادة تعيين المنتجات القديمة
+
+    fetch(fileName)
+        .then(response => response.text())
+        .then(data => {
+            const lines = data.split('\n');
+            lines.forEach(line => {
+                const parts = line.split('/');
+                if (parts.length >= 4) {
+                    const imageUrl = parts.slice(3).join('/').trim();
+                    products.push({
+                        category: parts[0].trim(),
+                        name: parts[1].trim(),
+                        price: parseFloat(parts[2].trim()),
+                        image: imageUrl
+                    });
+                }
+            });
+
+            renderCategories(); // عرض الفئات والمنتجات
+            createFilterButtons(); // إنشاء أزرار الفلترة
+            renderCart(); // عرض السلة
+        })
+        .catch(error => console.error('Error loading products:', error));
+}
+
+
+// عند الضغط على زر "اختيار ملف"
+selectFileButton.onclick = () => {
+    const selectedFile = prompt('أدخل اسم الملف (test.txt أو lcd.txt أو abc.txt):');
+    if (selectedFile) {
+        loadProductsFromFile(selectedFile);
+    }
+};
+
+// دالة لعرض الفئات (مثال)
+function renderCategories() {
+    categoriesContainer.innerHTML = ''; // Clear previous categories
+    const categories = [...new Set(products.map(p => p.category))];
+    categories.forEach(category => {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'category';
+
+        const categoryTitle = document.createElement('h2');
+        categoryTitle.textContent = category;
+        categoryDiv.appendChild(categoryTitle);
+
+        const categoryProducts = products.filter(p => p.category === category);
+        categoryProducts.forEach(product => {
+            const productDiv = document.createElement('div');
+            productDiv.className = 'product';
+
+            // إنشاء وإضافة عنصر الصورة مع التعامل مع الأخطاء
+            const productImage = document.createElement('img');
+            productImage.src = product.image;
+            productImage.alt = product.name;
+
+            productImage.onerror = () => {
+                productImage.src = 'default-image.jpg';
+            };
+
+            productDiv.appendChild(productImage);
+
+            // إنشاء عنصر لعرض الفئة
+            const categoryElement = document.createElement('div');
+            categoryElement.className = "product-category";
+            categoryElement.textContent = product.category; // إضافة اسم الفئة
+
+            productDiv.appendChild(categoryElement); // إضافة الفئة أسفل الصورة
+
+            const productDetails = document.createElement('div');
+
+            // تقسيم اسم المنتج عند <br> وتنسيقه
+            const nameParts = product.name.split('<br>');
+            let nameHtml;
+            if (nameParts.length > 1) {
+                // تطبيق تأثير الإضاءة الحمراء فقط على النص بعد أول <br>
+                nameHtml = `
+                    <strong>${nameParts[0]}<br>
+                    <span class="red-glow">${nameParts.slice(1).join('<br>')}</span></strong>
+                `;
+            } else {
+                nameHtml = `<strong>${product.name}</strong>`;
+            }
+
+            const price = isNaN(product.price) ? "غير متوفر" : product.price.toFixed(2) + " ₪";
+            const priceClass = isNaN(product.price) ? "unavailable" : "";
+
+            productDetails.innerHTML = `
+                ${nameHtml}<br><br>
+                <span class="price ${priceClass}">${price}</span>
+            `;
+
+            productDiv.appendChild(productDetails);
+
+            // Quantity input and control buttons
+            const quantityDiv = document.createElement('div');
+            quantityDiv.classList.add('quantity-controls');
+            quantityDiv.style.display = 'none';
+
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'number';
+            quantityInput.value = 1;
+            quantityInput.min = 1;
+            quantityInput.style.width = '50px';
+            quantityInput.addEventListener('focus', () => quantityInput.select());
+
+            const increaseButton = document.createElement('button');
+            increaseButton.textContent = '+';
+            increaseButton.onclick = () => updateQuantity(quantityInput, 1);
+
+            const decreaseButton = document.createElement('button');
+            decreaseButton.textContent = '−';
+            decreaseButton.onclick = () => updateQuantity(quantityInput, -1);
+
+            quantityDiv.appendChild(decreaseButton);
+            quantityDiv.appendChild(quantityInput);
+            quantityDiv.appendChild(increaseButton);
+
+// Add To Cart Button
+const addToCartButton = document.createElement('button');
+addToCartButton.innerHTML = '<i class="fas fa-shopping-cart me-2"></i> إضافة للسلة';
+addToCartButton.classList.add('add-to-cart-btn');
+
+// تحقق من السعر، وإذا كان غير متوفر، تعطيل الزر وتغيير لونه
+if (isNaN(product.price)) {
+    addToCartButton.disabled = true;  // تعطيل الزر
+    addToCartButton.classList.add('disabled');  // إضافة فئة CSS لتعطيل الزر
+} else {
+    addToCartButton.onclick = () => {
+        addToCart(product, quantityInput.value);  // إضافة المنتج إلى السلة
+        quantityDiv.style.display = 'block';
+        addToCartButton.style.display = 'none';
+    };
+}
+
+// إضافة الزر إلى المنتج
+productDiv.appendChild(addToCartButton);
+
+// تحقق إذا كان المنتج موجودًا في السلة
+const existingProduct = cart.find(item => item.name === product.name);
+if (existingProduct) {
+    quantityDiv.style.display = 'block';
+    addToCartButton.style.display = 'none';
+    quantityInput.value = existingProduct.quantity;
+}
+
+productDiv.appendChild(quantityDiv);
+categoryDiv.appendChild(productDiv);
+
+        });
+
+        categoriesContainer.appendChild(categoryDiv);
+    });
+}
+function createFilterButtons() {
+    const filterButtonsContainer = document.getElementById('filter-buttons');
+    filterButtonsContainer.innerHTML = '';
+
+    // زر ALL الافتراضي
+    const allButton = document.createElement('button');
+    allButton.textContent = 'ALL';
+    allButton.className = 'filter-btn active'; // كلاس active عند التحميل
+    allButton.onclick = () => {
+        filterProducts('All');
+        setActiveButton(allButton); // تحديث النشط
+    };
+    filterButtonsContainer.appendChild(allButton);
+
+    // أزرار الفئات
+    const categories = [...new Set(products.map(p => p.category))];
+    categories.forEach(category => {
+        const button = document.createElement('button');
+        button.textContent = category;
+        button.className = 'filter-btn';
+        button.onclick = () => {
+            filterProducts(category);
+            setActiveButton(button); // تحديث النشط
+        };
+        filterButtonsContainer.appendChild(button);
+    });
+}
+
+// دالة لتحديث الزر النشط
+function setActiveButton(activeButton) {
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    activeButton.classList.add('active');
+}
+
+// دالة الفلترة المعدلة
+function filterProducts(category) {
+    const filteredProducts = category === 'All' 
+        ? products 
+        : products.filter(p => p.category === category);
+    
+    categoriesContainer.innerHTML = '';
+    renderFilteredProducts(filteredProducts);
+}
+
+// إعادة عرض المنتجات بناءً على الفلترة
+function renderFilteredProducts(filteredProducts) {
+    categoriesContainer.innerHTML = ''; // مسح المنتجات الحالية
+
+    const categories = [...new Set(filteredProducts.map(p => p.category))];
+    categories.forEach(category => {
+        const categoryDiv = document.createElement('div');
+        categoryDiv.className = 'category';
+
+        const categoryTitle = document.createElement('h2');
+        categoryTitle.textContent = category;
+        categoryDiv.appendChild(categoryTitle);
+
+        const categoryProducts = filteredProducts.filter(p => p.category === category);
+        categoryProducts.forEach(product => {
+            const productDiv = document.createElement('div');
+            productDiv.className = 'product';
+
+            // إضافة الصورة
+            const productImage = document.createElement('img');
+            productImage.src = product.image;
+            productImage.alt = product.name;
+
+            // إضافة اسم الفئة بين الصورة واسم المنتج
+            const categoryElement = document.createElement('div');
+            categoryElement.className = "product-category";
+            categoryElement.textContent = product.category; // إضافة اسم الفئة
+            productDiv.appendChild(productImage);
+            productDiv.appendChild(categoryElement); // إضافة الفئة بعد الصورة
+
+            // حساب السعر وعرضه
+            const price = isNaN(product.price) ? "غير متوفر" : product.price.toFixed(2) + " ₪";
+            const priceClass = isNaN(product.price) ? "unavailable" : "";
+
+            // إضافة التفاصيل (اسم المنتج والسعر)
+            const productDetails = document.createElement('div');
+            productDetails.innerHTML = `<strong>${product.name}</strong><br><br> <span class="${priceClass}">${price}</span>`;
+            productDiv.appendChild(productDetails);
+
+            // إضافة زر + و - وحقل الكمية
+            const quantityDiv = document.createElement('div');
+            quantityDiv.classList.add('quantity-controls');
+
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'number';
+            quantityInput.value = 1;
+            quantityInput.min = 1; // تعيين الحد الأدنى للعدد
+            quantityInput.style.width = '50px';
+            quantityInput.addEventListener('focus', () => quantityInput.select()); // لتحديد النص عند الضغط
+
+            const increaseButton = document.createElement('button');
+            increaseButton.textContent = '+';
+            increaseButton.onclick = () => updateQuantity(quantityInput, 1);
+
+            const decreaseButton = document.createElement('button');
+            decreaseButton.textContent = '−';
+            decreaseButton.onclick = () => updateQuantity(quantityInput, -1);
+
+            quantityDiv.appendChild(decreaseButton);
+            quantityDiv.appendChild(quantityInput);
+            quantityDiv.appendChild(increaseButton);
+
+            // إخفاء/إظهار عناصر الكمية بناءً على حالة المنتج في السلة
+            const existingProduct = cart.find(item => item.name === product.name);
+            if (existingProduct) {
+                // إذا كان المنتج موجودًا في السلة، إظهار الكمية
+                quantityDiv.style.display = 'block';
+                quantityInput.value = existingProduct.quantity; // تعيين الكمية من السلة
+            } else {
+                quantityDiv.style.display = 'none';
+            }
+
+            // إضافة زر "إضافة للسلة"           // إضافة زر "إضافة للسلة"
+            const addToCartButton = document.createElement('button');
+             addToCartButton.innerHTML = '<i class="fas fa-shopping-cart me-2"></i> إضافة للسلة';
+            addToCartButton.classList.add('add-to-cart-btn');
+
+            if (isNaN(product.price)) {
+    addToCartButton.disabled = true;  // تعطيل الزر
+} else {
+    addToCartButton.onclick = () => {
+        addToCart(product, 1);  // إضافة المنتج إلى السلة
+        quantityDiv.style.display = 'block';  // إظهار الكمية بعد إضافته
+        addToCartButton.style.display = 'none';  // إخفاء زر "إضافة للسلة"
+    };
+}
+
+
+            productDiv.appendChild(addToCartButton);
+            productDiv.appendChild(quantityDiv);
+            categoryDiv.appendChild(productDiv);
+        });
+
+        categoriesContainer.appendChild(categoryDiv);
+    });
+}
+
+
+document.getElementById('search-box').addEventListener('input', (event) => {
+    const searchTerm = event.target.value.toLowerCase().trim(); // النص المدخل بعد تحويله إلى حروف صغيرة وإزالة الفراغات الزائدة
+    const cleanedSearchTerm = searchTerm.replace(/\s+/g, ''); // النص المدخل بدون فراغات
+
+    // تصفية المنتجات بناءً على وجود النص المدخل في الاسم أو الفئة
+    const filteredProducts = products.filter(product => {
+        const productName = product.name.toLowerCase().replace(/\s+/g, '');  // إزالة الفراغات من الاسم
+        const productCategory = product.category.toLowerCase().replace(/\s+/g, '');  // إزالة الفراغات من الفئة
+
+        // التحقق من أن النص المدخل موجود في الاسم أو الفئة
+        return productName.includes(cleanedSearchTerm) || 
+               productCategory.includes(cleanedSearchTerm);
+    });
+
+    // ترتيب النتائج بحيث تكون الأقرب في الأعلى
+    const sortedProducts = filteredProducts.sort((a, b) => {
+        const productNameA = a.name.toLowerCase().replace(/\s+/g, '');
+        const productNameB = b.name.toLowerCase().replace(/\s+/g, '');
+
+        // إذا كان المنتج يحتوي على النص بشكل كامل، نعطيه الأولوية
+        const aExactMatch = productNameA === cleanedSearchTerm ? 1 : 0;
+        const bExactMatch = productNameB === cleanedSearchTerm ? 1 : 0;
+
+        if (aExactMatch !== bExactMatch) {
+            return bExactMatch - aExactMatch; // الأولوية للتطابق الكامل
+        }
+
+        // إذا لم يكن هناك تطابق كامل، نرتب حسب قرب التطابق
+        const aIncludes = productNameA.includes(cleanedSearchTerm) ? 1 : 0;
+        const bIncludes = productNameB.includes(cleanedSearchTerm) ? 1 : 0;
+
+        if (aIncludes !== bIncludes) {
+            return bIncludes - aIncludes; // الأولوية للتطابق الجزئي
+        }
+
+        // إذا كان كلاهما يحتوي على النص، نرتب حسب الطول (الأقصر أقرب)
+        return productNameA.length - productNameB.length;
+    });
+
+    renderFilteredProducts(sortedProducts); // عرض المنتجات المصفاة مرتبة
+});
+
+// إعادة تهيئة حقل البحث عند فقدان التركيز
+document.getElementById('search-box').addEventListener('blur', () => {
+    document.getElementById('search-box').value = ''; // مسح النص في الحقل
+});
+
+
+
+
+// Add product to cart
+function addToCart(product, quantity) {
+    quantity = parseInt(quantity);
+    const existingProduct = cart.find(item => item.name === product.name);
+    if (existingProduct) {
+        existingProduct.quantity += quantity; // Update quantity if product already exists
+    } else {
+        cart.push({ ...product, quantity });
+    }
+    saveCart();
+    renderCart();
+}
+
+// Update product quantity in cart (interactive)
+function updateQuantity(input, change) {
+    let newQuantity = parseInt(input.value) + change;
+    if (newQuantity >= 1) { // Ensure quantity doesn't go below 1
+        input.value = newQuantity;
+    }
+    const productName = input.closest('.product').querySelector('strong').textContent;
+    const product = cart.find(item => item.name === productName);
+    if (product) {
+        product.quantity = newQuantity;
+        if (newQuantity === 0) {
+            removeFromCart(productName); // Remove product if quantity is zero
+            input.closest('.quantity-controls').style.display = 'none'; // Hide quantity controls
+            input.closest('.product').querySelector('button').style.display = 'block'; // Show "Add to Cart" button again
+        } else {
+            saveCart();
+            renderCart();
+        }
+    }
+}
+
+// Handle changes to the quantity input directly (when the user modifies it)
+function handleQuantityChange(event) {
+    const quantityInput = event.target;
+    let newQuantity = parseInt(quantityInput.value);
+
+    // إذا كانت القيمة المدخلة صحيحة
+    if (newQuantity >= 1) {
+        const productName = quantityInput.dataset.product; // استخدام dataset لتحديد المنتج
+        const product = cart.find(item => item.name === productName);
+        if (product) {
+            product.quantity = newQuantity;
+            saveCart();
+            renderCart();
+        }
+    } else {
+        // إذا كانت القيمة المدخلة أقل من 1، إعادة ضبطها إلى 1
+        quantityInput.value = 1;
+    }
+}
+
+
+// Remove product from cart
+function removeFromCart(productName) {
+    cart = cart.filter(item => item.name !== productName);
+    saveCart();
+    renderCart();
+}
+
+// Save the cart to localStorage
+function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+// Render the cart
+function renderCart() {
+    cartItemsContainer.innerHTML = ''; // مسح المحتوى السابق للسلة
+    let total = 0;
+
+    cart.forEach(item => {
+    const cartItemDiv = document.createElement('div');
+    cartItemDiv.className = 'cart-item d-flex align-items-center justify-content-between p-2 border-bottom';
+
+    // 🖼️ عنصر لصورة المنتج
+    const itemImage = document.createElement('img');
+    itemImage.src = item.image; // تأكد من أن كائن المنتج يحتوي على `image`
+    itemImage.alt = item.name;
+    itemImage.className = 'cart-item-img';
+
+    // 📄 تفاصيل المنتج (اسم الفئة + اسم المنتج، سعر، كمية)
+    const itemDetails = document.createElement('div');
+    itemDetails.className = 'cart-item-details flex-grow-1 ms-2';
+    itemDetails.innerHTML = `
+        <strong>${item.category} - ${item.name}</strong><br>
+        السعر: ₪ ${item.price.toFixed(2)} <br>
+        الكمية: <input 
+            type="number" 
+            value="${item.quantity}" 
+            min="1" 
+            class="cart-quantity" 
+            data-product="${item.name}">
+    `;
+        // ❌ زر الحذف
+        const removeButton = document.createElement('button');
+        removeButton.className = 'cart-remove btn btn-danger btn-sm ms-2';
+        removeButton.innerHTML = '&times;';
+        removeButton.onclick = () => {
+            removeFromCart(item.name);
+            updateCartTotal(); // تحديث المجموع بعد الحذف
+        };
+
+        // 📌 تجميع العناصر داخل العنصر الرئيسي
+        cartItemDiv.appendChild(itemImage);
+        cartItemDiv.appendChild(itemDetails);
+        cartItemDiv.appendChild(removeButton);
+
+        // حساب الإجمالي
+        total += item.price * item.quantity;
+        cartItemsContainer.appendChild(cartItemDiv);
+    });
+
+    // 🛒 عرض إجمالي السعر في السلة
+    const totalDiv = document.createElement('div');
+    totalDiv.className = 'cart-total text-end mt-3 fw-bold';
+    totalDiv.innerHTML = `الإجمالي: ₪ ${total.toFixed(2)}`;
+    cartItemsContainer.appendChild(totalDiv);
+
+    // 🔄 تحديث إجمالي السعر بجانب أيقونة السلة
+    updateCartTotal();
+
+    // 🔄 تحديث الكمية عند التغيير
+    document.querySelectorAll('.cart-quantity').forEach(input => {
+        input.addEventListener('change', (event) => {
+            handleQuantityChange(event);
+            updateCartTotal(); // تحديث المجموع عند تغيير الكمية
+        });
+
+        input.addEventListener('blur', (event) => {
+            handleQuantityChange(event);
+            updateCartTotal(); // تحديث المجموع عند فقدان التركيز
+        });
+
+        input.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                handleQuantityChange(event);
+                updateCartTotal(); // تحديث المجموع عند الضغط على Enter
+            }
+        });
+    });
+}
+
+// ✅ وظيفة تحديث إجمالي السعر بجانب السلة
+function updateCartTotal() {
+    let total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    document.getElementById('cart-total').innerHTML = `${total.toFixed(2)} ₪`;
+}
+
+
+// Event handler for checkout button
+checkoutButton.onclick = () => {
+    popup.style.display = 'block';
+};
+
+// Event handler for confirm button
+confirmButton.onclick = () => {
+    const customerName = customerNameInput.value;
+    const customerPhone = customerPhoneInput.value;
+
+    if (!customerName || !customerPhone) {
+        alert('الرجاء ادخال الأسم و رقم الهاتف.');
+        return;
+    }
+
+    // الحصول على التاريخ والوقت الحالي بتنسيق "يوم/شهر/سنة ساعة:دقيقةم اليوم"
+    function formatDateTime() {
+        const now = new Date();
+        const day = now.getDate().toString().padStart(2, '0');
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const year = now.getFullYear();
+        let hours = now.getHours();
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const ampm = hours >= 12 ? 'م' : 'ص';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // الساعة 0 تصبح 12
+        const dayOfWeek = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"][now.getDay()];
+        return `${day}/${month}/${year} ${hours}:${minutes}${ampm} ${dayOfWeek}`;
+    }
+
+    // رقم الفاتورة (ثابت دائمًا ####)
+    const invoiceNumber = "####";
+
+    // إنشاء نص الفاتورة
+    let text = `⭐️ Shehadeh Centre ⭐️\n`;
+    text += `━━━━━━━━━━━━━━━\n`;
+    text += `📅 التاريخ: ${formatDateTime()}\n`;
+    text += `📄 رقم الفاتورة: ${invoiceNumber}\n`;
+    text += `━━━━━━━━━━━━━━━\n\n`;
+    text += `👤 اسم العميل: ${customerName}\n`;
+    text += `☎️ رقم الهاتف: ${customerPhone}\n`;
+    text += `━━━━━━━━━━━━━━━\n\n`;
+    text += `🛒 تفاصيل المنتجات:\n`;
+
+    let total = 0;
+cart.forEach(item => {
+    // إزالة <br> من اسم المنتج
+    let cleanName = item.name.replace(/<br>/g, ' ');
+
+    // إزالة كلمة "بار" إذا وُجدت
+    cleanName = cleanName.replace(/بار/g, '').trim();
+
+    // حساب إجمالي سعر هذا الصنف
+    let itemTotal = item.price * item.quantity;
+
+    // كتابة الفئة واسم المنتج في سطر منفصل
+    text += `\t${item.category} - ${cleanName}\n`;
+
+    // كتابة العدد، السعر، والإجمالي في سطر آخر
+    text += `\t${item.quantity} x ${item.price.toFixed(2)} = ${itemTotal.toFixed(2)} ₪\n`;
+
+    // خط فاصل
+    text += `─ ─ ─ ─ ─ ─ ─ ─ ─ ─\n`;
+
+    total += itemTotal;
+});
+
+    text += `💰 الإجمالي: ${total.toFixed(2)}\n`;
+    text += `━━━━━━━━━━━━━━━\n`;
+    text += `شكرًا لاختياركم خدماتنا! 🙏`;
+
+    // رابط الواتساب مع الرقم المحدد
+    const whatsappURL = `https://wa.me/972566888825?text=${encodeURIComponent(text)}`;
+    window.open(whatsappURL, '_blank');
+
+    // لتحديث السلة وحفظها
+    cart = [];
+    saveCart();
+    renderCart();
+
+    // إعادة ضبط حالة المنتجات
+    resetProductStates();
+
+    // إغلاق النافذة المنبثقة
+    popup.style.display = 'none';
+};
+
+// دالة لإعادة ضبط حالة المنتجات
+function resetProductStates() {
+    const productsElements = document.querySelectorAll('.product'); // الحصول على جميع العناصر التي تمثل المنتجات
+    productsElements.forEach(productElement => {
+        // إعادة ضبط زر "إضافة للسلة"
+        const addToCartButton = productElement.querySelector('.add-to-cart-btn');
+        if (addToCartButton) {
+            addToCartButton.style.display = 'block'; // إظهار زر "إضافة للسلة"
+        }
+
+        // إعادة ضبط عناصر التحكم في الكمية
+        const quantityDiv = productElement.querySelector('.quantity-controls');
+        if (quantityDiv) {
+            quantityDiv.style.display = 'none'; // إخفاء عناصر التحكم في الكمية
+        }
+
+        // إعادة ضبط حقل الكمية إلى القيمة الافتراضية
+        const quantityInput = productElement.querySelector('input[type="number"]');
+        if (quantityInput) {
+            quantityInput.value = 1; // إعادة تعيين الكمية إلى 1
+        }
+    });
+}
+
+// Event handler for cancel button
+cancelButton.onclick = () => {
+    popup.style.display = 'none';
+};
+
+// الحصول على الأزرار الخاصة بإظهار وإخفاء السلة
+const showCartButton = document.getElementById('show-cart-button');
+const hideCartButton = document.getElementById('hide-cart-button');
+const cartElement = document.getElementById('cart');
+
+// إخفاء السلة عند تحميل الصفحة
+cartElement.style.display = 'none';
+
+// عند النقر على زر إظهار السلة
+showCartButton.onclick = function() {
+    cartElement.style.display = 'block';  // إظهار السلة
+    showCartButton.style.display = 'none';  // إخفاء زر الإظهار
+    hideCartButton.style.display = 'inline-block';  // إظهار زر الإخفاء
+};
+
+// عند النقر على زر إخفاء السلة
+hideCartButton.onclick = function() {
+    cartElement.style.display = 'none';  // إخفاء السلة
+    showCartButton.style.display = 'inline-block';  // إظهار زر الإظهار
+    hideCartButton.style.display = 'none';  // إخفاء زر الإخفاء
+};
+        // منع التكبير عبر اللمس على الهاتف
+        document.addEventListener('touchstart', function (event) {
+            if (event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        // منع التكبير بالنقر مرتين
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            let now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 100) { // 300ms هو الفاصل الزمني للنقر المزدوج
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, { passive: false });
+
+            // وظيفة الصعود للأعلى
+            document.getElementById("scrollUp").addEventListener("click", () => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+
+        // وظيفة النزول للأسفل
+        document.getElementById("scrollDown").addEventListener("click", () => {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: "smooth"
+            });
+        });
+
+// عرض شاشة التحميل عند تحميل الصفحة
+document.addEventListener("DOMContentLoaded", function () {
+    const loadingScreen = document.getElementById("loading-screen");
+
+    // إخفاء شاشة التحميل بعد 3 ثوانٍ
+    setTimeout(function () {
+        loadingScreen.style.display = "none";
+    }, 2500); // 2000 مللي ثانية = 3 ثوانٍ
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    let loginContainer = document.getElementById("login-container");
+    let loadingScreen = document.getElementById("loading-screen");
+
+    // مراقبة تغييرات عرض شاشة تسجيل الدخول
+    let observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            if (mutation.attributeName === "style") {
+                let isHidden = window.getComputedStyle(loginContainer).display === "none";
+                if (isHidden) {
+                    loadingScreen.style.display = "none"; // إخفاء شاشة التحميل
+                }
+            }
+        });
+    });
+
+    // بدء المراقبة على تغييرات الـ style في loginContainer
+    observer.observe(loginContainer, { attributes: true });
+});
+
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+      .then(function(reg) {
+        console.log('Service Worker registered with scope:', reg.scope);
+      })
+      .catch(function(error) {
+        console.error('Service Worker registration failed:', error);
+      });
+  }
+</script>
+<script type="module" src="login.js"></script>
 </body>
 </html>
