@@ -26,790 +26,1289 @@
     <link rel="manifest" href="/price/manifest.json">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <link rel="manifest" href="/manifest.json">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-    :root {
-        --primary-color: #2c3e50;
-        --secondary-color: #3498db;
-        --accent-color: #e74c3c;
-        --light-color: #ecf0f1;
-        --dark-color: #2c3e50;
-        --success-color: #27ae60;
-        --warning-color: #f39c12;
-        --text-color: #333;
-        --text-light: #fff;
-        --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        --transition: all 0.3s ease;
-    }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
 
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+        header {
+    background: linear-gradient(135deg, #333 25%, #444 50%, #222 75%);
+    color: white;
+    padding: 1.5em;
+    text-align: center;
+    font-size: 1em; /* تم تصغير الحجم إلى النصف */
+    position: relative;
+}
 
-    body {
-        background-color: #f5f7fa;
-        color: var(--text-color);
-        line-height: 1.6;
-        overflow-x: hidden;
-    }
+header h1 {
+    font-size: 180%;
+    font-weight: 600;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    letter-spacing: 1px;
+    color: #f5f5f5;
+    margin: 0;
+    padding: 15px 0;
+    text-align: center;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
 
-    /* Header Styles */
-    header {
-        background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
-        color: var(--text-light);
-        padding: 1.5rem 2rem;
-        text-align: center;
-        position: relative;
-        box-shadow: var(--shadow);
-        z-index: 100;
-    }
+/* تأثير الكتابة بالضوء */@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300&display=swap');
 
-    .header-content {
-        max-width: 1200px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-    }
+header h1 {
+    font-size: 160%; /* أصغر قليلاً من 180% */
+    font-weight: 700;
+    font-family: 'Playfair Display', serif; /* خط فني أنيق */
+    letter-spacing: 1.5px;
+    color: #f0f0f0;
+    margin: 0;
+    padding: 12px 0;
+    text-align: center;
+    position: relative;
+    transition: all 0.4s ease;
+    text-transform: uppercase; /* أحرف كبيرة */
+}
 
-    header h1 {
-        font-size: 2.2rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        position: relative;
-        display: inline-block;
-    }
+/* تأثير الظل الفني */
+header h1 {
+    text-shadow: 
+        1px 1px 0px rgba(0,0,0,0.2),
+        3px 3px 0px rgba(100, 217, 255, 0.1),
+        5px 5px 0px rgba(100, 217, 255, 0.05);
+}
 
-    header h1::after {
-        content: '';
-        position: absolute;
-        bottom: -8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80px;
-        height: 3px;
-        background: var(--accent-color);
-        border-radius: 3px;
-    }
+/* تأثير التدرج اللوني الدقيق */
+header h1::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 12px;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(90deg, #64d9ff, #a18aff, #64d9ff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient 6s linear infinite;
+    opacity: 0.7;
+    z-index: -1;
+}
 
-    /* Navigation and Controls */
-    .controls-container {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-    }
+@keyframes gradient {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
 
-    /* Search Box */
-    #search-box {
-        width: 100%;
-        max-width: 500px;
-        padding: 0.8rem 1.2rem;
-        border: none;
-        border-radius: 30px;
-        font-size: 1rem;
-        background: rgba(255, 255, 255, 0.2);
-        color: var(--text-light);
-        backdrop-filter: blur(5px);
-        transition: var(--transition);
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
+/* تأثير الإضاءة عند التحويم */
+header h1:hover {
+    transform: translateY(-2px);
+    text-shadow: 
+        1px 1px 0px rgba(0,0,0,0.2),
+        3px 3px 0px rgba(100, 217, 255, 0.2),
+        5px 5px 0px rgba(100, 217, 255, 0.1),
+        0 0 15px rgba(100, 217, 255, 0.3);
+}
 
-    #search-box::placeholder {
-        color: rgba(255, 255, 255, 0.7);
-    }
+/* زخرفة أسفل النص */
+header h1::after {
+    content: '';
+    display: block;
+    width: 200px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #64d9ff, #a18aff, transparent);
+    margin: 7px auto 0;
+    opacity: 0.6;
+    transition: all 0.5s ease;
+}
 
-    #search-box:focus {
-        outline: none;
-        background: rgba(255, 255, 255, 0.3);
-        box-shadow: 0 0 0 2px var(--accent-color);
-    }
+header h1:hover::after {
+    width: 150px;
+    opacity: 0.9;
+}
 
-    /* Filter Buttons */
-    #filter-buttons {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.5rem;
-        margin-top: 0.5rem;
-    }
 
-    .filter-btn {
-        padding: 0.5rem 1rem;
-        background: rgba(255, 255, 255, 0.1);
-        color: var(--text-light);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 20px;
-        cursor: pointer;
-        transition: var(--transition);
-        font-size: 0.9rem;
-    }
+        h2 {
+    font-size: 2em;  /* زيادة حجم الخط لجعل النص أكثر وضوحًا */
+    margin-bottom: 1.5em;  /* زيادة المسافة أسفل النص */
+    color: #1f201f;  /* اختيار لون مميز للنص (أخضر) */
+    text-transform: uppercase;  /* تحويل النص إلى حروف كبيرة */
+    letter-spacing: 2px;  /* زيادة المسافة بين الحروف */
+    font-weight: bold;  /* جعل النص سميكًا */
+    text-align: center;  /* توسيط النص */
+    background-color: #f0f0f0;  /* خلفية خفيفة للنص */
+    padding: 0.5em 0;  /* إضافة مسافة داخلية من الأعلى والأسفل */
+    border-radius: 5px;  /* إضافة حواف دائرية للخلفية */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* إضافة ظل خفيف حول النص */
+    max-width: 90%;  /* تحديد أقصى عرض للنص */
+    margin-left: auto;  /* توسيط النص أفقيًا */
+    margin-right: auto;  /* توسيط النص أفقيًا */
+}
 
-    .filter-btn:hover {
-        background: rgba(255, 255, 255, 0.2);
-    }
+        .products-container {
+            display: flex;
+            flex-wrap: wrap; /* السماح بتغيير الصف عند انتهاء العرض */
+            justify-content: center; /* محاذاة العناصر في المنتصف */
+            padding: 2em;
+            gap: 1em; /* إضافة مسافة بين العناصر */
+        }
 
-    .filter-btn.active {
-        background: var(--accent-color);
-        border-color: var(--accent-color);
-        font-weight: 600;
-    }
+.product {
+    background-color: white;
+    width: 300px;
+    margin: 0.7em;
+    padding: 0.7em;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
 
-    /* Cart Button */
-    .toggle-cart {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        padding: 0.8rem 1.5rem;
-        background: var(--accent-color);
-        color: var(--text-light);
-        border: none;
-        border-radius: 30px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: var(--transition);
-        margin-top: 1rem;
-        box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
-    }
-
-    .toggle-cart:hover {
-        background: #c0392b;
-        transform: translateY(-2px);
-    }
-
-    .toggle-cart:active {
-        transform: translateY(0);
-    }
-
-    .cart-text {
-        font-size: 1rem;
-    }
-
-    #cart-total {
-        font-weight: 700;
-        margin-left: 0.3rem;
-    }
-
-    /* Floating Button */
-    .floating-button {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        width: 50px;
-        height: 50px;
-        background: var(--secondary-color);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        z-index: 1000;
-        transition: var(--transition);
-    }
-
-    .floating-button:hover {
-        background: #2980b9;
-        transform: scale(1.1);
-    }
-
-    /* Main Content */
-    main {
-        padding: 2rem;
-        max-width: 1400px;
-        margin: 0 auto;
-    }
-
-    /* Products Grid */
-    .products-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 1.5rem;
-        padding: 1rem 0;
-    }
-
-    /* Product Card */
+/* تصميم مخصص للأجهزة المحمولة */
+@media (max-width: 768px) { /* العرض الأقصى 768px */
     .product {
-        background: white;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: var(--shadow);
-        transition: var(--transition);
-        position: relative;
+        width: 90%; /* العرض يكون 100% من حجم الشاشة */
+        box-sizing: border-box; /* لضمان عدم تجاوز الحواف */
     }
+}
 
-    .product:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        .product:hover {
+            transform: translateY(-10px);
+        }
+
+      .product img {
+          max-width: 100%;
+          border-radius: 8px;
+          margin-bottom: 1em;
+      }
+
+      .product-name {
+          font-size: 1.2em;
+          color: #333;
+          margin-bottom: 0.5em;
+          font-weight: bold;
+      }
+
+      .product-price {
+          font-size: 1.1em;
+          color: #e74c3c;
+          margin-bottom: 1em;
+      }
+
+      .add-to-cart {
+          background-color: #3498db;
+          color: white;
+          border: none;
+          padding: 0.7em 0.7em;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+      }
+
+      .add-to-cart:hover {
+          background-color: #2980b9;
+      }
+
+
+
+      .cart {
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 1em;
+    width: 80%;  /* عرض السلة بنسبة 90% من عرض الصفحة */
+    height: 90%;
+    overflow-y: auto;
+    box-shadow: -2px 0px 10px rgba(0, 0, 0, 0.1);
+    transition: top 0.3s ease-in-out;  /* إضافة انتقال لتحريك السلة */
+}
+
+.cart.hidden {
+    top: -80%;  /* إخفاء السلة عن طريق رفعها فوق الشاشة */
+}
+
+.toggle-cart {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.5em;
+    cursor: pointer;
+    margin-top: 1em;
+}  
+.cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.cart-item-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.cart-item-details {
+    flex-grow: 1;
+    font-size: 14px;
+}
+
+.cart-remove {
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+
+/* تصميم زر المشاركة بنفس حجم زر إخفاء السلة */
+.share-button {
+    padding: 10px 20px;  /* نفس المسافة الداخلية مثل زر إخفاء السلة */
+    font-size: 16px;  /* نفس حجم الخط */
+    font-weight: bold;  /* نفس الخط السميك */
+    border: none;  /* إزالة الحدود */
+    border-radius: 8px;  /* نفس الحواف الدائرية */
+    color: white;  /* لون النص أبيض */
+    cursor: pointer;  /* تغيير المؤشر عند المرور على الزر */
+    transition: transform 0.2s;  /* تأثير الانتقال (رفع الزر عند النقر) */
+    width: 200px;  /* نفس العرض مثل زر إخفاء السلة */
+    margin-bottom: 10px;  /* نفس المسافة بين الأزرار */
+    animation: colorChange 5s infinite;  /* تطبيق نفس تأثير تغيير الألوان */
+}
+
+/* تأثير تغيير الألوان بشكل مستمر */
+@keyframes colorChange {
+    0% {
+        background-color: #1e7e34;  /* اللون الأول (أخضر داكن) */
     }
-
-    .product-image-container {
-        height: 200px;
-        overflow: hidden;
-        position: relative;
+    25% {
+        background-color: #ff5722;  /* اللون الثاني (برتقالي) */
     }
-
-    .product img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: var(--transition);
+    50% {
+        background-color: #2196F3;  /* اللون الثالث (أزرق) */
     }
-
-    .product:hover img {
-        transform: scale(1.05);
+    75% {
+        background-color: #f44336;  /* اللون الرابع (أحمر) */
     }
-
-    .product-details {
-        padding: 1.2rem;
+    100% {
+        background-color: #1e7e34;  /* العودة إلى اللون الأول (أخضر داكن) */
     }
+}
 
-    .product-name {
-        font-size: 1.1rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        color: var(--dark-color);
-    }
+/* يمكن إضافة تأثيرات عند التفاعل مع زر المشاركة إذا لزم الأمر */
+.share-button:hover {
+    transform: translateY(-3px);  /* رفع الزر عند التحويم */
+}
 
-    .product-price {
-        font-size: 1.2rem;
-        font-weight: 700;
-        color: var(--accent-color);
-        margin-bottom: 1rem;
-    }
+.share-button:active {
+    transform: translateY(0);  /* العودة إلى الوضع الطبيعي عند النقر */
+}
 
-    .price-container {
-        direction: ltr;
-        display: inline-block;
-    }
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: none; /* إزالة الحدود */
+    padding: 1.5em;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* تحسين الظل */
+    border-radius: 16px; /* زيادة الانحناء */
+    width: 400px; /* العرض الافتراضي */
+    max-width: 90%; /* للتأكد من عدم تخطي العرض على الهواتف */
+    font-family: 'Arial', sans-serif; /* خط أنيق */
+    animation: fadeIn 0.3s ease-in-out; /* تأثير الظهور */
+}
 
-    .unavailable {
-        color: var(--accent-color);
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
+.popup h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5em;
+    color: #333;
+    letter-spacing: normal; /* إلغاء أي تباعد إضافي بين الحروف */
+}
 
-    /* Quantity Controls */
-    .quantity-controls {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-top: 1rem;
-    }
 
-    .quantity-btn {
-        width: 35px;
-        height: 35px;
-        background: var(--secondary-color);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: var(--transition);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+.popup p {
+    font-size: 1rem; /* حجم النص العادي */
+    color: #555; /* لون هادئ للنص */
+    line-height: 1.5; /* تحسين التباعد بين السطور */
+}
 
-    .quantity-btn:hover {
-        background: #2980b9;
-    }
+.popup .buttons {
+    margin-top: 1em;
+    display: flex;
+    justify-content: space-around; /* توزيع الأزرار بالتساوي */
+}
 
-    .quantity-input {
-        width: 50px;
-        text-align: center;
-        padding: 0.3rem;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 1rem;
-    }
+.popup button {
+    background-color: #007bff; /* الأزرق */
+    color: #fff; /* النص الأبيض */
+    border: none; /* إزالة الحدود */
+    border-radius: 8px; /* انحناء الأزرار */
+    padding: 0.75em 1.5em; /* حجم أكبر قليلاً */
+    font-size: 1rem; /* حجم النص */
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* ظل للأزرار */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* تحسين الحركة */
+}
 
-    .add-to-cart-btn {
-        flex-grow: 1;
-        padding: 0.6rem;
-        background: var(--success-color);
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: var(--transition);
-    }
+.popup button:hover {
+    background-color: #0056b3; /* لون أغمق عند التمرير */
+    transform: scale(1.05); /* تكبير طفيف عند التمرير */
+}
 
-    .add-to-cart-btn:hover {
-        background: #219653;
-    }
+.popup button:active {
+    transform: scale(0.98); /* تصغير طفيف عند النقر */
+}
 
-    .add-to-cart-btn.disabled {
-        background: #95a5a6;
-        cursor: not-allowed;
-    }
-
-    /* Cart Styles */
-    .cart {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 100%;
-        max-width: 400px;
-        height: 100vh;
-        background: white;
-        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-        transform: translateX(100%);
-        transition: transform 0.3s ease-in-out;
-        z-index: 1000;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .cart.visible {
-        transform: translateX(0);
-    }
-
-    .cart-header {
-        padding: 1.5rem;
-        background: var(--primary-color);
-        color: white;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .cart-title {
-        font-size: 1.3rem;
-        font-weight: 600;
-    }
-
-    .close-cart {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 1.5rem;
-        cursor: pointer;
-    }
-
-    .cart-items-container {
-        flex-grow: 1;
-        overflow-y: auto;
-        padding: 1rem;
-    }
-
-    .cart-item {
-        display: flex;
-        gap: 1rem;
-        padding: 1rem 0;
-        border-bottom: 1px solid #eee;
-    }
-
-    .cart-item-img {
-        width: 70px;
-        height: 70px;
-        object-fit: cover;
-        border-radius: 8px;
-    }
-
-    .cart-item-details {
-        flex-grow: 1;
-    }
-
-    .cart-item-name {
-        font-weight: 600;
-        margin-bottom: 0.3rem;
-    }
-
-    .cart-item-price {
-        color: var(--accent-color);
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-    }
-
-    .cart-item-controls {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .cart-item-quantity {
-        width: 40px;
-        text-align: center;
-    }
-
-    .remove-item {
-        background: none;
-        border: none;
-        color: var(--accent-color);
-        cursor: pointer;
-        font-size: 1.2rem;
-    }
-
-    .cart-footer {
-        padding: 1.5rem;
-        background: #f8f9fa;
-        border-top: 1px solid #eee;
-    }
-
-    .cart-total {
-        display: flex;
-        justify-content: space-between;
-        font-size: 1.2rem;
-        font-weight: 600;
-        margin-bottom: 1.5rem;
-    }
-
-    .cart-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 0.8rem;
-    }
-
-    .checkout-btn, .hide-cart-btn {
-        padding: 0.8rem;
-        border: none;
-        border-radius: 5px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-    }
-
-    .checkout-btn {
-        background: var(--success-color);
-        color: white;
-    }
-
-    .checkout-btn:hover {
-        background: #219653;
-    }
-
-    .hide-cart-btn {
-        background: var(--accent-color);
-        color: white;
-    }
-
-    .hide-cart-btn:hover {
-        background: #c0392b;
-    }
-
-    /* Popup Styles */
-    .popup-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 2000;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-    }
-
-    .popup-overlay.visible {
-        opacity: 1;
-        visibility: visible;
-    }
-
+@media (max-width: 768px) {
     .popup {
-        background: white;
-        border-radius: 12px;
-        width: 90%;
-        max-width: 400px;
-        padding: 2rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        transform: translateY(20px);
-        transition: all 0.3s ease;
+        width: 90%; /* عرض 90% للهواتف */
+        padding: 1em; /* تقليل الحواف */
     }
 
-    .popup-overlay.visible .popup {
-        transform: translateY(0);
+    .popup button {
+        font-size: 0.9rem; /* تصغير النص للأزرار قليلاً على الشاشات الصغيرة */
+        padding: 0.5em 1em; /* تقليل الحواف للأزرار */
     }
+}
 
-    .popup h2 {
-        font-size: 1.4rem;
-        margin-bottom: 1.5rem;
-        color: var(--dark-color);
-        text-align: center;
+
+/* إضافة زر إغلاق */
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #f44336; /* لون أحمر خفيف */
+    border: none;
+    color: #fff;
+    font-size: 1em;
+    padding: 0.5em;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease;
+}
+
+.popup-close:hover {
+    background: #d32f2f; /* لون أغمق عند التحويم */
+}
+
+/* تأثير الظهور */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -55%);
     }
-
-    .popup-input {
-        width: 100%;
-        padding: 0.8rem 1rem;
-        margin-bottom: 1rem;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 1rem;
-        transition: var(--transition);
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
     }
+}
 
-    .popup-input:focus {
-        border-color: var(--secondary-color);
-        outline: none;
-        box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+
+      .popup input {
+          margin-bottom: 1em;
+          width: 100%;
+          padding: 0.5em;
+      }
+
+      .popup button {
+          margin-right: 0.5em;
+      }
+      /* إعداد عام لعناصر الأزرار والمحتوى */
+.product {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 20px;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* تصميم صورة المنتج */
+.product img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+/* تصميم تفاصيل المنتج */
+.product .product-details {
+    margin-bottom: 15px;
+}
+
+/* إعداد الأزرار الخاصة بالكمية */
+.quantity-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+}
+/* تنسيق الأزرار + و - */
+.quantity-controls button {
+    padding: 12px;
+    font-size: 20px;
+    background-color: #e0f3ff; /* لون أزرق فاتح */
+    border: 2px solid #aad8ff;
+    border-radius: 5px; /* مربعات بحواف خفيفة */
+    margin: 0 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* تأثير ديناميكي على الأزرار عند التمرير */
+.quantity-controls button:hover {
+    background-color: #cbe8ff; /* درجة أفتح عند التمرير */
+    border-color: #8ccfff;
+}
+
+/* تأثير عند الضغط على الأزرار */
+.quantity-controls button:active {
+    transform: scale(1.1); /* تكبير الزر قليلاً */
+    background-color: #007bff; /* أزرق غامق عند الضغط */
+    color: #fff;
+    border-color: #0056b3;
+}
+
+/* تنسيق حقل إدخال الكمية */
+.quantity-controls input {
+    width: 70px;
+    height: 40px;
+    font-size: 18px;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin: 0 10px;
+    padding: 5px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* تغيير الحدود عند التركيز على حقل إدخال الكمية */
+.quantity-controls input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+
+/* تصميم زر إضافة إلى السلة */
+#show-cart-button {
+    background: linear-gradient(90deg, #00d3c6, #00ffea, #00d3c6);
+    color: #333;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    margin-top: 20px;
+    width: 55%;
+    text-transform: uppercase;
+    box-shadow: 0 4px 15px rgba(0, 211, 198, 0.3);
+}
+
+/* تغيير اللون عند مرور الماوس على زر السلة */
+#show-cart-button:hover {
+    background: linear-gradient(90deg, #00b3a7, #00e6d1, #00b3a7);
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 211, 198, 0.4);
+}
+
+/* إخفاء الزر عندما تظهر أدوات الكمية */
+.quantity-controls.show {
+    display: block !important;
+}
+
+/* إخفاء أدوات الكمية عند بدء العرض */
+.quantity-controls {
+    display: none;
+}
+
+/* تنسيق السلة في صفحة الكارت */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.cart-item .cart-quantity {
+    width: 60px;
+    text-align: center;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.cart-item button {
+    background-color: #ff5722;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cart-item button:hover {
+    background-color: #f4511e;
+}
+
+.cart-total {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: right;
+    margin-top: 20px;
+    color: #00d3c6;
+}
+
+/* تصميم الحافة الجمالية لمربع النص */
+.product .product-details strong {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+#toggle-cart-button {
+  float: left;
+}
+/* تصميم الأزرار */
+/* تحسين تصميم زر التبديل بنفس تصميم زر file-buttons ثلاثي الأبعاد */
+.toggle-cart {
+    padding: 10px 20px;  /* المسافة الداخلية داخل الزر */
+    font-size: 16px;  /* حجم الخط */
+    font-weight: bold;  /* جعل الخط سميكًا */
+    border: none;  /* إزالة الحدود */
+    border-radius: 15px;  /* حواف دائرية للزر */
+    color: #ffffff;  /* لون النص الأبيض */
+    cursor: pointer;  /* تغيير المؤشر عند المرور على الزر */
+    transition: transform 0.2s, box-shadow 0.3s;  /* تأثير الانتقال */
+    width: 200px;  /* عرض الزر */
+    margin-bottom: 10px;  /* مسافة بين الأزرار */
+    background: #3a3a3a;  /* لون الزر الداكن */
+    box-shadow: 8px 8px 16px #2e2e2e, -8px -8px 16px #444444; /* تأثير ثلاثي الأبعاد */
+    position: relative;
+    text-transform: uppercase;
+}
+
+/* تأثير تغيير الألوان بشكل مستمر */
+@keyframes colorChange {
+    0% {
+        background-color: #ff0000e7;  /* اللون الأول (أحمر) */
     }
-
-    .popup-buttons {
-        display: flex;
-        gap: 1rem;
-        margin-top: 1.5rem;
+    25% {
+        background-color: #ff9800;  /* اللون الثاني (برتقالي) */
     }
-
-    .popup-btn {
-        flex: 1;
-        padding: 0.8rem;
-        border: none;
-        border-radius: 5px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
+    50% {
+        background-color: #ff0000;  /* اللون الثالث (أحمر) */
     }
-
-    .confirm-btn {
-        background: var(--success-color);
-        color: white;
+    75% {
+        background-color: #ffa600;  /* اللون الرابع (أصفر) */
     }
-
-    .confirm-btn:hover {
-        background: #219653;
+    100% {
+        background-color: #ff0000;  /* العودة إلى اللون الأول (أحمر) */
     }
+}
 
-    .cancel-btn {
-        background: #f8f9fa;
-        color: var(--text-color);
-        border: 1px solid #ddd;
+/* تأثير التوهج الأحمر المتحرك حول الزر */
+.toggle-cart::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 15px;
+    background: none;
+    border: 2px solid #00b3a7;  /* الخط الأحمر */
+    animation: glowing 1.5s infinite alternate; /* التوهج المتحرك */
+    z-index: -1;  /* جعل الخط خلف الزر */
+}
+
+/* تأثير التوهج المتحرك */
+@keyframes glowing {
+    0% {
+        box-shadow: 0 0 5px #00b3a7, 0 0 10px #00b3a7, 0 0 15px #00b3a7;
     }
-
-    .cancel-btn:hover {
-        background: #e9ecef;
+    100% {
+        box-shadow: 0 0 20px #00b3a7, 0 0 30px #00b3a7, 0 0 40px #00b3a7;
     }
+}
 
-    /* Scroll Buttons */
+/* تأثير عند التمرير */
+.toggle-cart:hover {
+    box-shadow: 12px 12px 24px #2e2e2e, -12px -12px 24px #444444; /* زيادة تأثير الظل عند التمرير */
+    transform: translateY(-4px);  /* رفع الزر عند التمرير */
+}
+
+/* تأثير عند الضغط */
+.toggle-cart:active {
+    transform: translateY(2px);  /* تأثير الضغط ليبدو كأنه يتم الضغط عليه */
+    box-shadow: inset 8px 8px 16px #2e2e2e, inset -8px -8px 16px #444444; /* تأثير الظل الداخلي */
+}
+
+
+input[type="number"] {
+    pointer-events: none; /* يمنع التفاعل مع العنصر */
+    background-color: #f0f0f0; /* لون خلفية اختياري لإظهار أنه غير نشط */
+    color: #000000; /* لون النص اختياري لإظهار أنه غير قابل للتعديل */
+}
+div {
+    font-size: 24px; /* تكبير حجم الخط */
+    font-weight: bold; /* جعل النص عريضًا */
+}
+
+/* تصميم زر الصعود والنزول */.scroll-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+}
+
+.scroll-btn button {
+    background-color: #00d3c3;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0, 211, 195, 0.5);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-size: 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+.scroll-btn button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 211, 195, 0.7);
+    animation: pulse 1.5s infinite;
+}
+
+.scroll-btn button:active {
+    transform: translateY(0);
+}
+
+@keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(0, 211, 195, 0.7); }
+    70%  { box-shadow: 0 0 0 15px rgba(0, 211, 195, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 211, 195, 0); }
+}
+
+/* للهواتف المحمولة */
+@media (max-width: 768px) {
     .scroll-btn {
-        position: fixed;
-        left: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        z-index: 500;
+        right: 15px;
+        bottom: 15px;
     }
 
     .scroll-btn button {
-        width: 40px;
-        height: 40px;
-        background: var(--secondary-color);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        font-size: 1.2rem;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: var(--shadow);
-        transition: var(--transition);
-    }
-
-    .scroll-btn button:hover {
-        background: #2980b9;
-        transform: scale(1.1);
-    }
-
-    /* Loading Screen */
-    #loading-screen {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: var(--primary-color);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 3000;
-    }
-
-    .loader {
         width: 50px;
         height: 50px;
-        border: 5px solid rgba(255, 255, 255, 0.3);
-        border-radius: 50%;
-        border-top-color: white;
-        animation: spin 1s ease-in-out infinite;
+        font-size: 20px;
     }
+}
+/* حاوية الأزرار */
+#filter-buttons {
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+    margin: 0 auto 5px;
+    background: #2a2a2a;
+    border: 1px solid #404040;
+    border-radius: 30px;
+    width: fit-content;
+    max-width: 100%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow-x: auto; /* للسحب الأفقي عند الحاجة */
+    scrollbar-width: none; /* إخفاء الشريط في Firefox */
+}
 
-    @keyframes spin {
-        to { transform: rotate(360deg); }
+/* إخفاء شريط التمرير في Chrome/Safari */
+#filter-buttons::-webkit-scrollbar {
+    display: none;
+}
+
+/* الأزرار */
+#filter-buttons .filter-btn {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 24px;
+    font-size: 20px;
+    font-weight: 500;
+    border: none;
+    border-right: 1px solid #404040;
+    background: transparent;
+    color: #00d3c3;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    white-space: nowrap;
+    text-align: center;
+    position: relative;
+}
+
+/* إزالة الحد من آخر زر */
+#filter-buttons .filter-btn:last-child {
+    border-right: none;
+}
+
+/* التأثير عند التحويم */
+#filter-buttons .filter-btn:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* الزر النشط */
+#filter-buttons .filter-btn.active {
+    color: #ffffff;
+    background: linear-gradient(135deg, #6e45e2, #88d3ce);
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* النشط مع التحويم */
+#filter-buttons .filter-btn.active:hover {
+    background: linear-gradient(135deg, #7d55f0, #98e3de);
+}
+
+/* تأثير الضغط */
+#filter-buttons .filter-btn:active {
+    transform: scale(0.98);
+}
+
+/* مؤشر زخرفي أسفل الأزرار */
+#filter-buttons::before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background: linear-gradient(90deg, #6e45e2, #88d3ce);
+    opacity: 0.3;
+}
+
+
+#search-box {
+    width: 99%;
+    max-width: 300px;
+    margin: 10px auto;
+    padding: 8px 12px;
+    font-size: 16px;
+    background-color: #444; /* خلفية داكنة */
+    color: #00d3c6; /* لون النص */
+    border: 1px solid #00d3c6;
+    border-radius: 20px;
+    box-shadow:
+        inset 2px 2px 5px rgba(0, 0, 0, 0.5),
+        inset -2px -2px 5px rgba(255, 255, 255, 0.1); /* تأثير الحفرة */
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+#search-box::placeholder {
+    color: #00d3c6;
+}
+
+#search-box:focus {
+    box-shadow:
+        inset 2px 2px 6px rgba(0, 0, 0, 0.6),
+        inset -2px -2px 6px rgba(255, 255, 255, 0.15),
+        0 0 6px rgba(0, 211, 198, 0.5); /* توهج خفيف عند التركيز */
+}
+
+
+/* الحاوية الرئيسية */
+#login-section {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* العنوان */
+#login-section h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* حقول الإدخال */
+input[type="text"], input[type="tel"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+input[type="text"]:focus, input[type="tel"]:focus {
+    border-color: #5c99e6;
+    outline: none;
+}
+
+/* تضمين كافة الأكواد ضمن محدد فريد */
+#otp-section.custom-otp-style {
+    font-family: "Arial", sans-serif;
+    background: linear-gradient(135deg, #f7f7f7, #e3e3e3);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 400px;
+    margin: 50px auto;
+    border: 2px solid #ddd;
+}
+
+#otp-section.custom-otp-style h5 {
+    font-size: 14px;
+    color: #ff0000;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#otp-section.custom-otp-style h2 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 15px;
+    text-align: center;
+    letter-spacing: normal; /* إزالة أي تباعد بين الحروف */
+}
+
+
+#otp-section.custom-otp-style input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+#otp-section.custom-otp-style button {
+    display: block;
+    width: 100%;
+    background: linear-gradient(135deg, #0066cc, #003399);
+    color: #fff;
+    padding: 10px 0;
+    margin-top: 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+#otp-section.custom-otp-style button:hover {
+    background: linear-gradient(135deg, #005bb5, #002f66);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+#otp-section.custom-otp-style button:active {
+    background: linear-gradient(135deg, #004080, #001f40);
+    transform: translateY(0);
+}
+
+.red-glow {
+    font-size: 150%; /* زيادة حجم الخط 50% */
+    font-weight: bold;
+    color: #ff0000;
+    text-shadow: 0 0 0px transparent;
+    animation: smooth-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes smooth-glow {
+    0% {
+        text-shadow: 0 0 0px transparent;
     }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        header h1 {
-            font-size: 1.8rem;
-        }
-
-        .products-container {
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        }
-
-        .scroll-btn {
-            left: 10px;
-        }
-
-        .scroll-btn button {
-            width: 35px;
-            height: 35px;
-            font-size: 1rem;
-        }
-
-        .cart {
-            width: 90%;
-        }
+    100% {
+        text-shadow: 0 0 8px #ff3333, 0 0 16px #ff4d4d, 0 0 20px #cc2900, 0 0 26px #aa2200;
     }
+}
 
-    @media (max-width: 480px) {
-        header {
-            padding: 1rem;
-        }
+/* تنسيق أزرار الفلترة */
+.filter-btn {
+    background: #333;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
 
-        header h1 {
-            font-size: 1.5rem;
-        }
+/* توهج عند النشط */
+.filter-btn.active {
+    background: #4CAF50;
+    box-shadow: 0 0 15px #4CAF50;
+    animation: filter-glow 1s ease-in-out infinite alternate;
+}
 
-        .products-container {
-            grid-template-columns: 1fr;
-        }
-
-        .popup-buttons {
-            flex-direction: column;
-        }
-
-        .scroll-btn {
-            display: none;
-        }
+@keyframes filter-glow {
+    from {
+        box-shadow: 0 0 5px #4CAF50;
     }
-
-    /* Animation Classes */
-    .red-glow {
-        animation: smooth-glow 2s ease-in-out infinite alternate;
+    to {
+        box-shadow: 0 0 20px #4CAF50;
     }
+}
+.price {
+    color: #007a33; /* أخضر غامق */
+    font-weight: bold;
+    font-size: 1.1em;
+    text-shadow: 0 0 3px rgba(0, 122, 51, 0.3); /* توهج خفيف أكثر هدوءًا */
+}
+.price-container {
+    direction: ltr;
+    unicode-bidi: embed;
+    display: inline-block;
+}
+.unavailable {
+    color: red;
+}
 
-    @keyframes smooth-glow {
-        0% { text-shadow: 0 0 0px transparent; }
-        100% { text-shadow: 0 0 8px #ff3333, 0 0 16px #ff4d4d, 0 0 20px #cc2900, 0 0 26px #aa2200; }
-    }
+/* إخفاء زر اختيار الملف */
+#select-file-button {
+    display: none; /* إخفاء الزر */
+}
 
-    /* File Buttons */
-    #file-buttons {
-        display: none; /* Hidden as per original design */
-    }
+/* تحسين تصميم الأزرار بنمط النمورفيزم ثلاثي الأبعاد لواجهة داكنة */
+#file-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px; /* تقليل المسافة بين الأزرار */
+    padding: 15px;
+    width: fit-content;
+    margin: 30px auto;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
 
-    #select-file-button {
-        display: none; /* Hidden as per original design */
-    }
-</style>
+#file-buttons button {
+    background: linear-gradient(145deg, #2b2b2b, #3d3d3d);
+    color: #00f7ff;
+    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 25px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    text-transform: uppercase;
+    margin: 0 4px; /* تقليل الهوامش الجانبية */
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
 
+#file-buttons button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(145deg, #3d3d3d, #2b2b2b);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#file-buttons button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4),
+                inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    color: #7df9ff;
+}
+
+#file-buttons button:hover::before {
+    opacity: 1;
+}
+
+#file-buttons button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3),
+                inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+/* تأثير إضافي عند التركيز */
+#file-buttons button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 247, 255, 0.3);
+}
+
+
+/* تنسيق الزر العادي */
+.add-to-cart-btn {
+    background: linear-gradient(90deg, #00d3c3, #019c8f, #00d3c3);
+    color: white;
+    padding: 11px 24px;
+    border: none;
+    border-radius: 25px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    margin-top: 20px;
+    width: 100%;
+    text-transform: uppercase;
+}
+
+/* تنسيق الزر عند تعطيله *//* تنسيق الزر عند تعطيله */
+button.disabled, button[disabled] {
+    background: linear-gradient(90deg, #d3d3d3, #d3d3d3, #d3d3d3);  /* اللون السكني */
+    color: #8e8e8e;  /* لون النص عند التعطيل */
+    cursor: not-allowed;  /* تغيير شكل المؤشر إلى غير قابل للنقر */
+    border: none;  /* إزالة الحدود عند تعطيل الزر */
+    opacity: 0.6;  /* تقليل شفافية الزر لإظهاره كمعطل */
+    pointer-events: none;  /* تعطيل جميع أحداث المؤشر مثل النقر والتحويم */
+    user-select: none;  /* منع تحديد النص داخل الزر */
+}
+
+/* تعطيل الأيقونة داخل الزر عند التعطيل */
+button.disabled i, button[disabled] i {
+    color: #8e8e8e;  /* تغيير لون الأيقونة عند تعطيل الزر */
+    pointer-events: none;  /* تعطيل تفاعل المستخدم مع الأيقونة */
+}
+#login-container {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 35px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 100%;
+  max-width: 380px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: fadeIn 0.5s;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -55%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+#login-container h2 {
+  margin-bottom: 20px;
+  color: white;
+  font-size: 22px;
+}
+
+#login-container input {
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  color: black; /* النص داخل الحقول باللون الأسود */
+  background: rgba(255, 255, 255, 0.9);
+  transition: 0.3s ease-in-out;
+  font-size: 16px;
+}
+
+#login-container input::placeholder {
+  color: #777;
+  transition: 0.3s;
+}
+
+#login-container input:focus {
+  border-color: #2575fc;
+  outline: none;
+  box-shadow: 0 0 10px rgba(37, 117, 252, 0.3);
+}
+
+#login-container input:focus::placeholder {
+  color: transparent;
+}
+
+#login-container button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(45deg, #ff416c, #ff4b2b);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: 0.3s;
+  margin-top: 10px;
+}
+
+#login-container button:hover {
+  background: linear-gradient(45deg, #ff4b2b, #ff416c);
+  box-shadow: 0 0 10px rgba(255, 75, 43, 0.5);
+}
+
+.error-message {
+  color: #ff4b2b;
+  font-size: 15px;
+  display: none;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* تنسيق شاشة التحميل */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0, 0, 0); /* خلفية سوداء بدون شفافية */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* للتأكد من ظهورها فوق كل شيء */
+}
+
+/* تنسيق دائرة التحميل */
+.loader {
+    border: 8px solid #f3f3f3; /* لون الدائرة الخارجية */
+    border-top: 8px solid #3498db; /* لون الدائرة الداخلية */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite; /* حركة الدوران */
+}
+
+/* حركة الدوران */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* تنسيق محتوى الصفحة */
+
+.floating-button {
+            position: fixed; /* يثبّت الزر في مكانه حتى مع التمرير */
+            top: 20px;      /* المسافة من الأعلى */
+            right: 20px;    /* المسافة من اليمين */
+            width: 50px;     /* عرض الزر */
+            height: 50px;    /* ارتفاع الزر */
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #0bb5b0;
+            color: white;
+            border: none;
+            border-radius: 50%; /* يجعل الزر دائريًا */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* إضافة ظل لطيف */
+            z-index: 1000; /* يجعل الزر فوق كل العناصر */
+        }
+        .floating-button:hover {
+            background-color: #0056b3; /* تغيير اللون عند التحويم */
+        }
+  </style>
 <body>
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-        <div class="loader"></div>
-    </div>
-
-    <!-- Header Section -->
-    <header>
-        <div class="header-content">
-            <h1>Shehadeh Center</h1>
-            
-            <!-- Floating Menu Button -->
-            <button class="floating-button" onclick="window.location.href='abr.html'">
-                <i class="fas fa-list"></i>
-            </button>
-            
-            <!-- Hidden File Buttons -->
-            <div id="file-buttons"></div>
-            <button id="select-file-button">اختيار ملف</button>
-            
-            <!-- Search Box -->
-            <input type="text" id="search-box" placeholder="🔍 ابحث عن منتج" />
-            
-            <!-- Filter Buttons -->
+  
+      <header>
+        <h1>Shehadeh Center</h1>
+        <button class="floating-button" onclick="window.location.href='abr.html'">
+            <i class="fas fa-list"></i>
+        </button>
+        <div id="file-buttons"></div>
+        <button id="select-file-button">اختيار ملف</button>
+        <br>
+        <div id="filter-buttons"></div>
+<button id="select-file-button">اختيار ملف</button> <!-- زر لاختيار الملف يدويًا -->
+<br>
+            <div id="filter-buttons">
+                <!-- الأزرار سيتم إنشاؤها ديناميكيًا بواسطة JavaScript -->
+            </div>
+            <input type="text" id="search-box" placeholder="🔍 أبحث عن منتج" />
             <div id="filter-buttons"></div>
-            
-            <!-- Cart Toggle Button -->
-            <button class="toggle-cart" id="show-cart-button">
+            <button class="toggle-cart d-flex align-items-center gap-2" id="show-cart-button">
                 <i class="fas fa-shopping-cart"></i>
                 <span class="cart-text">سلة التسوق</span>
-                <span id="cart-total" class="price-container">0.00 ₪</span>
+                <i class="fas fa-shopping-cart"></i><br>
+                <span id="cart-total" class="fw-bold price-container">0.00 ₪</span>
             </button>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main>
-        <div class="products-container" id="products-container">
-            <!-- Products will be dynamically inserted here -->
-        </div>
-    </main>
-
-    <!-- Shopping Cart -->
-    <div class="cart" id="cart">
-        <div class="cart-header">
-            <h2 class="cart-title">سلة التسوق</h2>
-            <button class="close-cart" id="hide-cart-button">&times;</button>
-        </div>
-        
-        <div class="cart-items-container" id="cart-items">
-            <!-- Cart items will be dynamically inserted here -->
-        </div>
-        
-        <div class="cart-footer">
-            <div class="cart-total">
-                <span>المجموع:</span>
-                <span class="price-container" id="cart-summary-total">0.00 ₪</span>
-            </div>
             
-            <div class="cart-actions">
-                <button class="checkout-btn" id="checkout-button">إرسال الطلبية</button>
-                <button class="hide-cart-btn" id="hide-cart-button-2">إخفاء الفاتورة</button>
-            </div>
+                    </header>
+        
+        <main>
+            <div id="categories"></div>
+        </main>
+        <div class="cart" id="cart">
+            <div id="cart-items"></div>
+            <button class="share-button" id="checkout-button">ارسال طلبية</button>
+            <br>
+<!-- زر إخفاء الفاتورة مع نفس تصميم زر ارسال طلبية -->
+<button class="share-button" id="hide-cart-button">إخفاء الفاتورة</button>
         </div>
-    </div>
-
-    <!-- Order Confirmation Popup -->
-    <div class="popup-overlay" id="popup-overlay">
-        <div class="popup">
+        <div class="popup" id="popup">
             <h2>نموذج إتمام الطلب</h2>
-            <input type="text" id="customer-name" class="popup-input" placeholder="ادخل اسمك">
-            <input type="text" id="customer-phone" class="popup-input" placeholder="ادخل رقم هاتفك">
-            
-            <div class="popup-buttons">
-                <button class="popup-btn confirm-btn" id="confirm-button">إرسال</button>
-                <button class="popup-btn cancel-btn" id="cancel-button">إلغاء</button>
-            </div>
+            <input type="text" id="customer-name" placeholder="ادخل اسمك">
+            <input type="text" id="customer-phone" placeholder="ادخل رقم هاتفك">
+            <button id="confirm-button">إرسال</button>
+            <button id="cancel-button">ألغاء</button>
         </div>
+
+       <div class="scroll-btn">
+    <button id="scrollUp" title="الصعود للأعلى">
+        <i class="fas fa-arrow-up"></i>
+        <!-- يمكنك استبدال الأيقونة بأخرى من الخيارات التالية:
+        <i class="fas fa-angle-double-up"></i>
+        <i class="fas fa-chevron-up"></i>
+        <i class="fas fa-long-arrow-alt-up"></i>
+        <i class="fas fa-rocket"></i>
+        <i class="fas fa-angle-up"></i>
+        -->
+    </button>
+</div>
     </div>
-
-    <!-- Scroll Buttons -->
-    <div class="scroll-btn">
-        <button id="scrollUp" title="الصعود للأعلى">↑</button>
-        <button id="scrollDown" title="النزول للأسفل">↓</button>
-    </div>
-
-    <!-- Categories Container -->
-    <div id="categories" style="display: none;"></div>
-</body>
-
 <script>
 const categoriesContainer = document.getElementById('categories');
 const cartItemsContainer = document.getElementById('cart-items');
