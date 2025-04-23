@@ -1327,7 +1327,7 @@ let cart = JSON.parse(localStorage.getItem('cart')) || [];
 // إضافة أزرار لاختيار الكتالوج
 const fileButtonsContainer = document.getElementById('file-buttons'); // تأكد من وجود عنصر في HTML لعرض الأزرار
 const fileButtons = [
-    { label: 'أسعار الأجهزة', fileName: 'test.md' },
+    { label: 'أسعار الأجهزة', fileName: 'test.txt' },
     { label: 'أسعار الشاشات', fileName: 'lcd.md' },
     { label: 'أسعار اكسسوارات', fileName: 'abc.md' }
 ];
@@ -1342,7 +1342,7 @@ fileButtons.forEach(buttonInfo => {
 
 // تحميل البيانات من الملف الافتراضي عند تحميل الصفحة
 window.addEventListener('load', () => {
-    loadProductsFromFile('test.md'); // يمكنك تغيير 'test.txt' إلى أي ملف تود تحميله كافتراضي
+    loadProductsFromFile('test.txt'); // يمكنك تغيير 'test.txt' إلى أي ملف تود تحميله كافتراضي
 });
 
 // دالة لتحميل المنتجات من الملف
