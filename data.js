@@ -2,13 +2,11 @@
   "categories": [
     {
       "name": "yesido",
-      "image": "https://example.com/image1.jpg"
-    },
-    {
-      "name": "المسار المغناطيسي",
-      "image": "https://example.com/image2.jpg"
+      "image": "https://cdn.salla.sa/NAnWr/grEDotHMmhdMYqDzmXjaXeAPUXfpdQS5tfC02Lym.png"
     }
-  [,
+      
+     ],
+   "products": [
   {
     "category": "yesido",
     "name": "tws25",
