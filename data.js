@@ -1,11 +1,11 @@
 {
   "categories": [
     {
-      "name": "مرستال",
-      "image": "https://example.com/image1.jpg"
+      "name": "yesido",
+      "image": "https://cdn.salla.sa/NAnWr/grEDotHMmhdMYqDzmXjaXeAPUXfpdQS5tfC02Lym.png"
     },
     {
-      "name": "المسار المغناطيسي",
+      "name": " Godes",
       "image": "https://example.com/image2.jpg"
     }
   ],
@@ -479,7 +479,7 @@
     "image": "https://i.postimg.cc/t4j7YM0T/IMG-6839.jpg"
   },
   {
-    "category": "yeaido",
+    "category": "yesido",
     "name": "Y68",
     "price": "AAA",
     "image": "https://i.postimg.cc/KzR86XT9/IMG-6783.png"
