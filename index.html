@@ -1309,7 +1309,8 @@ button.disabled i, button[disabled] i {
     </button>
 </div>
     </div>
-<script>
+
+    <script>
 const categoriesContainer = document.getElementById('categories');
 const cartItemsContainer = document.getElementById('cart-items');
 const checkoutButton = document.getElementById('checkout-button');
@@ -1318,145 +1319,189 @@ const confirmButton = document.getElementById('confirm-button');
 const cancelButton = document.getElementById('cancel-button');
 const customerNameInput = document.getElementById('customer-name');
 const customerPhoneInput = document.getElementById('customer-phone');
-const selectFileButton = document.getElementById('select-file-button');
+const selectFileButton = document.getElementById('select-file-button'); // زر لاختيار الملف
 
-let categories = [];
 let products = [];
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-// دالة لتحميل البيانات من ملف JSON
+// إضافة أزرار لاختيار الكتالوج
+const fileButtonsContainer = document.getElementById('file-buttons'); // تأكد من وجود عنصر في HTML لعرض الأزرار
+const fileButtons = [
+    { label: 'أسعار الأجهزة', fileName: 'test.md' },
+    { label: 'أسعار الشاشات', fileName: 'lcd.md' },
+    { label: 'أسعار اكسسوارات', fileName: 'abc.md' }
+];
+
+// إضافة الأزرار
+fileButtons.forEach(buttonInfo => {
+    const button = document.createElement('button');
+    button.textContent = buttonInfo.label;
+    button.onclick = () => loadProductsFromFile(buttonInfo.fileName); // تحميل البيانات من الملف المحدد
+    fileButtonsContainer.appendChild(button);
+});
+
+// تحميل البيانات من الملف الافتراضي عند تحميل الصفحة
+window.addEventListener('load', () => {
+    loadProductsFromFile('test.md'); // يمكنك تغيير 'test.txt' إلى أي ملف تود تحميله كافتراضي
+});
+
+// دالة لتحميل المنتجات من الملف
 function loadProductsFromFile(fileName) {
+    products = []; // إعادة تعيين المنتجات القديمة
+
     fetch(fileName)
-        .then(response => response.json())
+        .then(response => response.text())
         .then(data => {
-            categories = data.categories || [];
-            products = data.products || [];
-            
-            renderCategories();
-            createFilterButtons();
-            renderCart();
+            const lines = data.split('\n');
+            lines.forEach(line => {
+                const parts = line.split('/');
+                if (parts.length >= 4) {
+                    const imageUrl = parts.slice(3).join('/').trim();
+                    products.push({
+                        category: parts[0].trim(),
+                        name: parts[1].trim(),
+                        price: parseFloat(parts[2].trim()),
+                        image: imageUrl
+                    });
+                }
+            });
+
+            renderCategories(); // عرض الفئات والمنتجات
+            createFilterButtons(); // إنشاء أزرار الفلترة
+            renderCart(); // عرض السلة
         })
         .catch(error => console.error('Error loading products:', error));
 }
 
-// دالة لعرض الفئات
+
+// عند الضغط على زر "اختيار ملف"
+selectFileButton.onclick = () => {
+    const selectedFile = prompt('أدخل اسم الملف (test.txt أو lcd.txt أو abc.txt):');
+    if (selectedFile) {
+        loadProductsFromFile(selectedFile);
+    }
+};
+
+// دالة لعرض الفئات (مثال)
 function renderCategories() {
-    categoriesContainer.innerHTML = '';
-    
+    categoriesContainer.innerHTML = ''; // Clear previous categories
+    const categories = [...new Set(products.map(p => p.category))];
     categories.forEach(category => {
         const categoryDiv = document.createElement('div');
         categoryDiv.className = 'category';
 
         const categoryTitle = document.createElement('h2');
-        categoryTitle.textContent = category.name;
+        categoryTitle.textContent = category;
         categoryDiv.appendChild(categoryTitle);
 
-        const categoryImage = document.createElement('img');
-        categoryImage.src = category.image;
-        categoryImage.alt = category.name;
-        categoryImage.className = 'category-image';
-        categoryDiv.appendChild(categoryImage);
+        const categoryProducts = products.filter(p => p.category === category);
+        categoryProducts.forEach(product => {
+            const productDiv = document.createElement('div');
+            productDiv.className = 'product';
 
-        const categoryProducts = products.filter(p => p.category === category.name);
-        if (categoryProducts.length > 0) {
-            const productsContainer = document.createElement('div');
-            productsContainer.className = 'products-container';
-            
-            categoryProducts.forEach(product => {
-                const productDiv = document.createElement('div');
-                productDiv.className = 'product';
+            // إنشاء وإضافة عنصر الصورة مع التعامل مع الأخطاء
+            const productImage = document.createElement('img');
+            productImage.src = product.image;
+            productImage.alt = product.name;
 
-                // صورة المنتج
-                const productImage = document.createElement('img');
-                productImage.src = product.image;
-                productImage.alt = product.name;
-                productImage.onerror = () => {
-                    productImage.src = 'default-image.jpg';
-                };
-                productDiv.appendChild(productImage);
+            productImage.onerror = () => {
+                productImage.src = 'default-image.jpg';
+            };
 
-                // تفاصيل المنتج
-                const productDetails = document.createElement('div');
-                productDetails.className = 'product-details';
-                
-                let nameHtml = `<strong>${product.name}</strong><br><br>`;
-                
-                // عرض السعر مع الخصم إذا كان متوفراً
-                if (product.discountedPrice) {
-                    nameHtml += `
-                        <span class="old-price">${product.discountedPrice.toFixed(2)} ₪</span>
-                        <span class="price">${product.price.toFixed(2)} ₪</span>
-                    `;
-                } else {
-                    nameHtml += `<span class="price">${product.price.toFixed(2)} ₪</span>`;
-                }
-                
-                productDetails.innerHTML = nameHtml;
-                productDiv.appendChild(productDetails);
+            productDiv.appendChild(productImage);
 
-                // عناصر التحكم في الكمية
-                const quantityDiv = document.createElement('div');
-                quantityDiv.classList.add('quantity-controls');
-                quantityDiv.style.display = 'none';
+            // إنشاء عنصر لعرض الفئة
+            const categoryElement = document.createElement('div');
+            categoryElement.className = "product-category";
+            categoryElement.textContent = product.category; // إضافة اسم الفئة
 
-                const quantityInput = document.createElement('input');
-                quantityInput.type = 'number';
-                quantityInput.value = 1;
-                quantityInput.min = 1;
-                quantityInput.style.width = '50px';
-                quantityInput.addEventListener('focus', () => quantityInput.select());
+            productDiv.appendChild(categoryElement); // إضافة الفئة أسفل الصورة
 
-                const increaseButton = document.createElement('button');
-                increaseButton.textContent = '+';
-                increaseButton.onclick = () => updateQuantity(quantityInput, 1);
+            const productDetails = document.createElement('div');
 
-                const decreaseButton = document.createElement('button');
-                decreaseButton.textContent = '−';
-                decreaseButton.onclick = () => updateQuantity(quantityInput, -1);
+            // تقسيم اسم المنتج عند <br> وتنسيقه
+            const nameParts = product.name.split('<br>');
+            let nameHtml;
+            if (nameParts.length > 1) {
+                // تطبيق تأثير الإضاءة الحمراء فقط على النص بعد أول <br>
+                nameHtml = `
+                    <strong>${nameParts[0]}<br>
+                    <span class="red-glow">${nameParts.slice(1).join('<br>')}</span></strong>
+                `;
+            } else {
+                nameHtml = `<strong>${product.name}</strong>`;
+            }
 
-                quantityDiv.appendChild(decreaseButton);
-                quantityDiv.appendChild(quantityInput);
-                quantityDiv.appendChild(increaseButton);
+            const price = isNaN(product.price) ? "غير متوفر" : product.price.toFixed(2) + " ₪";
+            const priceClass = isNaN(product.price) ? "unavailable" : "";
 
-                // زر إضافة إلى السلة
-                const addToCartButton = document.createElement('button');
-                addToCartButton.innerHTML = '<i class="fas fa-shopping-cart me-2"></i> إضافة للسلة';
-                addToCartButton.classList.add('add-to-cart-btn');
-                addToCartButton.onclick = () => {
-                    addToCart(product, quantityInput.value);
-                    quantityDiv.style.display = 'block';
-                    addToCartButton.style.display = 'none';
-                };
+            productDetails.innerHTML = `
+                ${nameHtml}<br><br>
+                <span class="price ${priceClass}">${price}</span>
+            `;
 
-                // التحقق إذا كان المنتج موجود في السلة
-                const existingProduct = cart.find(item => item.name === product.name);
-                if (existingProduct) {
-                    quantityDiv.style.display = 'block';
-                    addToCartButton.style.display = 'none';
-                    quantityInput.value = existingProduct.quantity;
-                }
+            productDiv.appendChild(productDetails);
 
-                productDiv.appendChild(addToCartButton);
-                productDiv.appendChild(quantityDiv);
-                productsContainer.appendChild(productDiv);
-            });
-            
-            categoryDiv.appendChild(productsContainer);
-        } else {
-            const noProducts = document.createElement('p');
-            noProducts.textContent = 'لا توجد منتجات في هذه الفئة';
-            categoryDiv.appendChild(noProducts);
-        }
+            // Quantity input and control buttons
+            const quantityDiv = document.createElement('div');
+            quantityDiv.classList.add('quantity-controls');
+            quantityDiv.style.display = 'none';
+
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'number';
+            quantityInput.value = 1;
+            quantityInput.min = 1;
+            quantityInput.style.width = '50px';
+            quantityInput.addEventListener('focus', () => quantityInput.select());
+
+            const increaseButton = document.createElement('button');
+            increaseButton.textContent = '+';
+            increaseButton.onclick = () => updateQuantity(quantityInput, 1);
+
+            const decreaseButton = document.createElement('button');
+            decreaseButton.textContent = '−';
+            decreaseButton.onclick = () => updateQuantity(quantityInput, -1);
+
+            quantityDiv.appendChild(decreaseButton);
+            quantityDiv.appendChild(quantityInput);
+            quantityDiv.appendChild(increaseButton);
+
+// Add To Cart Button
+const addToCartButton = document.createElement('button');
+addToCartButton.innerHTML = '<i class="fas fa-shopping-cart me-2"></i> إضافة للسلة';
+addToCartButton.classList.add('add-to-cart-btn');
+
+// تحقق من السعر، وإذا كان غير متوفر، تعطيل الزر وتغيير لونه
+if (isNaN(product.price)) {
+    addToCartButton.disabled = true;  // تعطيل الزر
+    addToCartButton.classList.add('disabled');  // إضافة فئة CSS لتعطيل الزر
+} else {
+    addToCartButton.onclick = () => {
+        addToCart(product, quantityInput.value);  // إضافة المنتج إلى السلة
+        quantityDiv.style.display = 'block';
+        addToCartButton.style.display = 'none';
+    };
+}
+
+// إضافة الزر إلى المنتج
+productDiv.appendChild(addToCartButton);
+
+// تحقق إذا كان المنتج موجودًا في السلة
+const existingProduct = cart.find(item => item.name === product.name);
+if (existingProduct) {
+    quantityDiv.style.display = 'block';
+    addToCartButton.style.display = 'none';
+    quantityInput.value = existingProduct.quantity;
+}
+
+productDiv.appendChild(quantityDiv);
+categoryDiv.appendChild(productDiv);
+
+        });
 
         categoriesContainer.appendChild(categoryDiv);
     });
 }
-
-// تحميل البيانات عند بدء التشغيل
-window.addEventListener('load', () => {
-    loadProductsFromFile('data.js'); // اسم ملف JSON الجديد
-});
-
 function createFilterButtons() {
     const filterButtonsContainer = document.getElementById('filter-buttons');
     filterButtonsContainer.innerHTML = '';
